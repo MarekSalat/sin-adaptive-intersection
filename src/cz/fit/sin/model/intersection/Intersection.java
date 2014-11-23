@@ -42,16 +42,16 @@ public class Intersection implements RoadEndPoint {
     public void setRedLights() {
         for (Orientation _orientation : semaphores.keySet()) {
             for (Direction _direction : semaphores.get(_orientation).keySet()) {
-                setSemaphoreLight(_orientation, _direction, Semaphore.Light.RED);
+                setSemaphoreLight(_orientation, _direction, Light.RED);
             }
         }
     }
 
-    public void setSemaphoreLight(Orientation orientation, Direction direction, Semaphore.Light light) {
+    public void setSemaphoreLight(Orientation orientation, Direction direction, Light light) {
         getSemaphore(orientation, direction).state = light;
     }
 
-    public Semaphore.Light getSemaphoreLight(Orientation orientation, Direction direction){
+    public Light getSemaphoreLight(Orientation orientation, Direction direction){
         return semaphores.get(orientation).get(direction).state;
     }
 

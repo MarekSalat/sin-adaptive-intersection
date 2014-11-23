@@ -1,10 +1,7 @@
 package cz.fit.sin.model.intersectionphases;
 
 import cz.fit.sin.model.IntersectionPhase;
-import cz.fit.sin.model.intersection.Direction;
-import cz.fit.sin.model.intersection.Intersection;
-import cz.fit.sin.model.intersection.Orientation;
-import cz.fit.sin.model.intersection.Semaphore;
+import cz.fit.sin.model.intersection.*;
 import cz.fit.sin.utils.Pair;
 
 import java.util.List;
@@ -33,7 +30,7 @@ public abstract class AbstractPhase  implements IntersectionPhase {
         intersection.setRedLights();
 
         for (Pair<Orientation, Direction> pair : getActiveSemaphoresInPhase()){
-            intersection.setSemaphoreLight(pair.first, pair.second, Semaphore.Light.GREEN);
+            intersection.setSemaphoreLight(pair.first, pair.second, Light.GREEN);
         }
     }
 

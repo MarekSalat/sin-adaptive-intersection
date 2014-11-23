@@ -18,10 +18,6 @@ public class IntRoad implements Road {
     public RoadEndPoint from;
     public RoadEndPoint to;
 
-    public IntRoad(){
-        this(21);
-    }
-
     public IntRoad(int capacity){
         this.capacity = capacity;
         line.put(Direction.LEFT, 0);

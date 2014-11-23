@@ -2,10 +2,7 @@ package cz.fit.sin.model.intersectionphases;
 
 import cz.fit.sin.model.IntersectionPhase;
 import cz.fit.sin.model.WorldBuilder;
-import cz.fit.sin.model.intersection.Direction;
-import cz.fit.sin.model.intersection.Intersection;
-import cz.fit.sin.model.intersection.Orientation;
-import cz.fit.sin.model.intersection.Semaphore;
+import cz.fit.sin.model.intersection.*;
 import cz.fit.sin.model.road.IntRoad;
 import cz.fit.sin.model.road.Road;
 import cz.fit.sin.model.world.World;
@@ -59,21 +56,21 @@ public class AbstractPhaseTest {
 
         phase.setSemaphoreLights(intersection);
 
-        Assert.assertSame(Semaphore.Light.GREEN, intersection.getSemaphoreLight(Orientation.SOUTH, Direction.LEFT));
-        Assert.assertSame(Semaphore.Light.GREEN, intersection.getSemaphoreLight(Orientation.SOUTH, Direction.FORWARD));
-        Assert.assertSame(Semaphore.Light.GREEN, intersection.getSemaphoreLight(Orientation.SOUTH, Direction.RIGHT));
+        Assert.assertSame(Light.GREEN, intersection.getSemaphoreLight(Orientation.SOUTH, Direction.LEFT));
+        Assert.assertSame(Light.GREEN, intersection.getSemaphoreLight(Orientation.SOUTH, Direction.FORWARD));
+        Assert.assertSame(Light.GREEN, intersection.getSemaphoreLight(Orientation.SOUTH, Direction.RIGHT));
 
-        Assert.assertSame(Semaphore.Light.RED, intersection.getSemaphoreLight(Orientation.WEST, Direction.LEFT));
-        Assert.assertSame(Semaphore.Light.RED, intersection.getSemaphoreLight(Orientation.WEST, Direction.FORWARD));
-        Assert.assertSame(Semaphore.Light.GREEN, intersection.getSemaphoreLight(Orientation.WEST, Direction.RIGHT));
+        Assert.assertSame(Light.RED, intersection.getSemaphoreLight(Orientation.WEST, Direction.LEFT));
+        Assert.assertSame(Light.RED, intersection.getSemaphoreLight(Orientation.WEST, Direction.FORWARD));
+        Assert.assertSame(Light.GREEN, intersection.getSemaphoreLight(Orientation.WEST, Direction.RIGHT));
 
-        Assert.assertSame(Semaphore.Light.RED, intersection.getSemaphoreLight(Orientation.NORTH, Direction.LEFT));
-        Assert.assertSame(Semaphore.Light.RED, intersection.getSemaphoreLight(Orientation.NORTH, Direction.FORWARD));
-        Assert.assertSame(Semaphore.Light.RED, intersection.getSemaphoreLight(Orientation.NORTH, Direction.RIGHT));
+        Assert.assertSame(Light.RED, intersection.getSemaphoreLight(Orientation.NORTH, Direction.LEFT));
+        Assert.assertSame(Light.RED, intersection.getSemaphoreLight(Orientation.NORTH, Direction.FORWARD));
+        Assert.assertSame(Light.RED, intersection.getSemaphoreLight(Orientation.NORTH, Direction.RIGHT));
 
-        Assert.assertSame(Semaphore.Light.RED, intersection.getSemaphoreLight(Orientation.EAST, Direction.LEFT));
-        Assert.assertSame(Semaphore.Light.RED, intersection.getSemaphoreLight(Orientation.EAST, Direction.FORWARD));
-        Assert.assertSame(Semaphore.Light.RED, intersection.getSemaphoreLight(Orientation.EAST, Direction.RIGHT));
+        Assert.assertSame(Light.RED, intersection.getSemaphoreLight(Orientation.EAST, Direction.LEFT));
+        Assert.assertSame(Light.RED, intersection.getSemaphoreLight(Orientation.EAST, Direction.FORWARD));
+        Assert.assertSame(Light.RED, intersection.getSemaphoreLight(Orientation.EAST, Direction.RIGHT));
     }
 
     @Test
