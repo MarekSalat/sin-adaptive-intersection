@@ -26,8 +26,8 @@ public interface IntersectionPhase {
 
     /**
      * FrontNum quantifies the number of vehicles in the link between the affected intersection and the downstream
-     * intersections. Information regarding the quantity of vehicles in the front link, left link and
-     * the right link are all sent to the fuzzy controller. This input is important in order to avoid congested links
+     * intersections. Information regarding the quantity of vehicles in the front link, first link and
+     * the second link are all sent to the fuzzy controller. This input is important in order to avoid congested links
      *
      * FrontNum is referred to as the number of the vehicles in the link where vehicles will go to this link during
      * the green phase

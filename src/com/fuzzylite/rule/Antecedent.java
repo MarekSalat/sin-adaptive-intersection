@@ -181,7 +181,7 @@ public class Antecedent {
         } else if (node instanceof Operator) {
             Operator operator = (Operator) node;
             if (operator.getLeft() == null || operator.getRight() == null) {
-                throw new RuntimeException("[syntax error] left and right operators cannot be null");
+                throw new RuntimeException("[syntax error] first and second operators cannot be null");
             }
             if (Rule.FL_AND.equals(operator.getName())) {
                 return conjunction.compute(

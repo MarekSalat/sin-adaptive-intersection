@@ -2,6 +2,7 @@ package cz.fit.sin.model.fuzzy;
 
 import cz.fit.sin.model.IntersectionPhase;
 import cz.fit.sin.model.WorldBuilder;
+import cz.fit.sin.model.intersection.Direction;
 import cz.fit.sin.model.intersection.Intersection;
 import cz.fit.sin.model.intersection.Orientation;
 import cz.fit.sin.model.intersectionphases.SimplePhase;
@@ -39,7 +40,7 @@ public class IntersectionFuzzyEngineTest {
     @Test
     public void testNextPhase() throws Exception {
         Road road = intersection.getIncomingRoadFor(Orientation.SOUTH);
-        road.vehiclesCount = 15;
+        road.line.put(Direction.FORWARD, 15);
 
         IntersectionPhase greenPhase = phases.get(1);
 

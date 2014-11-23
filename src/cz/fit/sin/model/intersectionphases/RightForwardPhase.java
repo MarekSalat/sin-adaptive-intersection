@@ -7,29 +7,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* User: Marek Salát
-* Date: 17.11.14
-* Time: 9:51
+ * User: Marek Salát
+ * Date: 21. 11. 2014
+ * Time: 21:55
  *
- *  <-.    ^
- *      \  |
- *  -.   | |  .->
- *    |  | | |
- *    v  | | |
-*/
-public class SimplePhase extends AbstractPhase {
-
+ *     | | ^
+ *  <-ˇ  | |
+ *       | |  .->
+ *       v | |
+ */
+public class RightForwardPhase extends AbstractPhase {
     List<Pair<Orientation, Direction>> activeSemaphores;
 
-    public SimplePhase(Orientation orientation) {
+    public RightForwardPhase(Orientation orientation) {
         super(orientation);
 
         activeSemaphores = new ArrayList<>();
 
-        activeSemaphores.add(Pair.of(getOrientation(), Direction.LEFT));
         activeSemaphores.add(Pair.of(getOrientation(), Direction.RIGHT));
         activeSemaphores.add(Pair.of(getOrientation(), Direction.FORWARD));
-        activeSemaphores.add(Pair.of(getOrientation().toAbsolute(Direction.LEFT), Direction.RIGHT));
+        activeSemaphores.add(Pair.of(getOrientation().opposite(), Direction.RIGHT));
+        activeSemaphores.add(Pair.of(getOrientation().opposite(), Direction.FORWARD));
     }
 
     @Override

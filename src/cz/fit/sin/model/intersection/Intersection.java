@@ -35,6 +35,10 @@ public class Intersection implements RoadEndPoint {
         return getIncomingRoadFor(orientation).getVehiclesCount();
     }
 
+    public int getIncomingRoadVehicleCount(Orientation orientation, Direction direction){
+        return getIncomingRoadFor(orientation).getVehiclesCount(direction);
+    }
+
     public void setRedLights() {
         for (Orientation _orientation : semaphores.keySet()) {
             for (Direction _direction : semaphores.get(_orientation).keySet()) {

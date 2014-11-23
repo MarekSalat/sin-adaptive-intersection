@@ -189,6 +189,7 @@ public class IntersectionFuzzyEngine {
     public Engine nextPhaseEngine;
     public Engine greenPhaseEngine;
     public Engine decisionEngine;
+    public Engine urgencyEngine;
 
     public InputVariable queueNum = new InputVariable();
     public InputVariable frontNum = new InputVariable();
@@ -206,6 +207,7 @@ public class IntersectionFuzzyEngine {
         nextPhaseEngine = new Engine("next-phase-engine");
         greenPhaseEngine = new Engine("green-phase-engine");
         decisionEngine = new Engine("finalDecision-engine");
+        urgencyEngine =  new Engine("urgency-engine");
 
         queueNum.setName(QUEUE_NUM);
         queueNum.setRange(0.000, MAX);
@@ -290,6 +292,11 @@ public class IntersectionFuzzyEngine {
         decisionEngine.addOutputVariable(finalDecision);
         addRules(decisionEngine, decisionPhaseRules);
 
+//        // Urgency module configuration
+//        urgencyEngine.addInputVariable(inUrgency);
+//        urgencyEngine.addOutputVariable(outUrgency);
+//        addRules(urgencyEngine, urgencyPhaseRules);
+
         //No Conjunction or Disjunction is needed
         greenPhaseEngine.configure("AlgebraicProduct", "AlgebraicSum", "AlgebraicProduct", "AlgebraicSum", "Centroid");
         nextPhaseEngine.configure("AlgebraicProduct", "AlgebraicSum", "AlgebraicProduct", "AlgebraicSum", "Centroid");
@@ -301,7 +308,7 @@ public class IntersectionFuzzyEngine {
         frontNum.setInputValue(greenPhase.getFrontNum(intersection));
 
         greenPhaseEngine.process();
-        double greenPhaseValue = outExtend.defuzzify();
+        double extendPhase = outExtend.defuzzify();
 
         double maxUrgency = 0;
         IntersectionPhase maxUrgentPhase = null;
@@ -322,7 +329,10 @@ public class IntersectionFuzzyEngine {
             }
         }
 
-        inExtend.setInputValue(greenPhaseValue);
+//        inUrgency.setInputValue(maxUrgency);
+//        urgencyEngine.process();
+
+        inExtend.setInputValue(extendPhase);
         inUrgency.setInputValue(maxUrgency);
 
         decisionEngine.process();

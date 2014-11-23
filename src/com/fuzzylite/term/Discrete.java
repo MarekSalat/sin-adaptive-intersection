@@ -121,7 +121,7 @@ public class Discrete extends Term {
             if (Op.isEq(x.get(i), _x_)) {
                 return y.get(i);
             }
-            //approximate on the left
+            //approximate on the first
             if (Op.isLt(x.get(i), _x_)) {
                 lower = i;
             }
