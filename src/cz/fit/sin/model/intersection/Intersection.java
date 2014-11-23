@@ -51,11 +51,11 @@ public class Intersection implements RoadEndPoint {
         getSemaphore(orientation, direction).state = light;
     }
 
-    public Semaphore getSemaphore(Orientation orientation, Direction direction){
-        return semaphores.get(orientation).get(direction);
+    public Semaphore.Light getSemaphoreLight(Orientation orientation, Direction direction){
+        return semaphores.get(orientation).get(direction).state;
     }
 
-//    public Map<Direction, Semaphore> getSemaphores(Orientation orientation){
-//        return semaphores.get(orientation);
-//    }
+    protected Semaphore getSemaphore(Orientation orientation, Direction direction){
+        return semaphores.get(orientation).get(direction);
+    }
 }

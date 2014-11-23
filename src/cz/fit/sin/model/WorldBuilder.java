@@ -4,6 +4,7 @@ import cz.fit.sin.model.intersection.Direction;
 import cz.fit.sin.model.intersection.Intersection;
 import cz.fit.sin.model.intersection.Orientation;
 import cz.fit.sin.model.intersection.Semaphore;
+import cz.fit.sin.model.road.IntRoad;
 import cz.fit.sin.model.road.Road;
 import cz.fit.sin.model.road.endpoints.RoadEnding;
 import cz.fit.sin.model.road.endpoints.RoadSpawn;
@@ -22,6 +23,15 @@ import java.util.Map;
  */
 public class WorldBuilder {
     private final World world = new World();
+
+    public WorldBuilder(){
+        registerFactory(Road.class, new Factory() {
+            @Override
+            public Object create() {
+                return new IntRoad(21);
+            }
+        });
+    }
 
     public static interface Factory<T> {
         T create();
@@ -44,7 +54,6 @@ public class WorldBuilder {
     public World done(){
         return world;
     }
-
 
     public<T> T create(Class<T> klass){
         if (hasFactory(klass))

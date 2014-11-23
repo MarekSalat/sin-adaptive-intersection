@@ -5,6 +5,7 @@ import cz.fit.sin.model.intersection.Direction;
 import cz.fit.sin.model.intersection.Intersection;
 import cz.fit.sin.model.intersection.Orientation;
 import cz.fit.sin.model.intersection.Semaphore;
+import cz.fit.sin.utils.Pair;
 
 import java.util.List;
 
@@ -15,43 +16,7 @@ import java.util.List;
  */
 public abstract class AbstractPhase  implements IntersectionPhase {
 
-    protected static class Pair<L,R> {
-        public final L first;
-        public final R second;
-
-        public Pair(L left, R right) {
-            this.first = left;
-            this.second = right;
-        }
-
-        public static <L,R> Pair<L,R> of(L left, R right){
-            return new Pair<L,R>(left, right);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Pair pair = (Pair) o;
-
-            if (first != null ? !first.equals(pair.first) : pair.first != null) return false;
-            if (second != null ? !second.equals(pair.second) : pair.second != null) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = first != null ? first.hashCode() : 0;
-            result = 31 * result + (second != null ? second.hashCode() : 0);
-            return result;
-        }
-    }
-
     private Orientation orientation;
-
-    public AbstractPhase(){}
 
     public AbstractPhase(Orientation orientation){
         this.orientation = orientation;
@@ -68,7 +33,7 @@ public abstract class AbstractPhase  implements IntersectionPhase {
         intersection.setRedLights();
 
         for (Pair<Orientation, Direction> pair : getActiveSemaphoresInPhase()){
-            intersection.getSemaphore(pair.first, pair.second).state = Semaphore.Light.GREEN;
+            intersection.setSemaphoreLight(pair.first, pair.second, Semaphore.Light.GREEN);
         }
     }
 
@@ -88,11 +53,12 @@ public abstract class AbstractPhase  implements IntersectionPhase {
         final boolean []visited = {false, false, false, false};
 
         for (Pair<Orientation, Direction> pair : getActiveSemaphoresInPhase()) {
-            if(visited[pair.first.ordinal()])
+            Orientation _orientation = pair.first.toAbsolute(pair.second);
+            if(visited[_orientation.ordinal()])
                 continue;
-            visited[pair.first.ordinal()] = true;
+            visited[_orientation.ordinal()] = true;
 
-            frontNum += intersection.getOutgoingRoadVehicleCount(pair.first.toAbsolute(pair.second));
+            frontNum += intersection.getOutgoingRoadVehicleCount(_orientation);
         }
 
         return frontNum;
@@ -100,11 +66,17 @@ public abstract class AbstractPhase  implements IntersectionPhase {
 
     public int getRedTime(Intersection intersection) {
         int total = 0;
-
+        // get total number of vehicles on incoming roads
         for (Orientation _orientation : Orientation.values()){
             total += intersection.getIncomingRoadVehicleCount(_orientation);
         }
 
-        return total - getFrontNum(intersection);
+        int onGreen = 0;
+        // get number of vehicles on incoming roads for green phase
+        for (Pair<Orientation, Direction> pair : getActiveSemaphoresInPhase()) {
+            onGreen += intersection.getIncomingRoadVehicleCount(pair.first, pair.second);
+        }
+
+        return total - onGreen;
     }
 }

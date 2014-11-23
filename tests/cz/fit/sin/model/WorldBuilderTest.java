@@ -3,6 +3,7 @@ package cz.fit.sin.model;
 import cz.fit.sin.model.intersection.Direction;
 import cz.fit.sin.model.intersection.Intersection;
 import cz.fit.sin.model.intersection.Orientation;
+import cz.fit.sin.model.road.IntRoad;
 import cz.fit.sin.model.road.Road;
 import cz.fit.sin.model.world.World;
 import cz.fit.sin.model.world.WorldObject;
@@ -65,12 +66,12 @@ public class WorldBuilderTest {
     @Test
     public void testFoo() throws Exception {
         WorldBuilder wb = new WorldBuilder();
-        Assert.assertFalse(wb.hasFactory(Road.class));
+        Assert.assertTrue(wb.hasFactory(Road.class));
 
         wb.registerFactory(Road.class, new WorldBuilder.Factory() {
             @Override
             public Object create() {
-                return new Road(20);
+                return new IntRoad(20);
             }
         });
 

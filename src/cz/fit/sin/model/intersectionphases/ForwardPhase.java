@@ -2,8 +2,9 @@ package cz.fit.sin.model.intersectionphases;
 
 import cz.fit.sin.model.intersection.Direction;
 import cz.fit.sin.model.intersection.Orientation;
+import cz.fit.sin.utils.Pair;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,15 +19,13 @@ import java.util.List;
  *     v  |
  */
 public class ForwardPhase extends AbstractPhase {
-    List<Pair<Orientation, Direction>> activeSemaphores;
+    List<Pair<Orientation, Direction>> activeSemaphores = Arrays.asList(
+        Pair.of(getOrientation(), Direction.FORWARD),
+        Pair.of(getOrientation().opposite(), Direction.FORWARD)
+    );
 
     public ForwardPhase(Orientation orientation) {
         super(orientation);
-
-        activeSemaphores = new ArrayList<>();
-
-        activeSemaphores.add(Pair.of(getOrientation(), Direction.FORWARD));
-        activeSemaphores.add(Pair.of(getOrientation().opposite(), Direction.FORWARD));
     }
 
     @Override

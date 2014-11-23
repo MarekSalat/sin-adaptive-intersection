@@ -2,8 +2,9 @@ package cz.fit.sin.model.intersectionphases;
 
 import cz.fit.sin.model.intersection.Direction;
 import cz.fit.sin.model.intersection.Orientation;
+import cz.fit.sin.utils.Pair;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,17 +20,15 @@ import java.util.List;
 */
 public class SimplePhase extends AbstractPhase {
 
-    List<Pair<Orientation, Direction>> activeSemaphores;
+    List<Pair<Orientation, Direction>> activeSemaphores = Arrays.asList(
+        Pair.of(getOrientation(), Direction.LEFT),
+        Pair.of(getOrientation(), Direction.RIGHT),
+        Pair.of(getOrientation(), Direction.FORWARD),
+        Pair.of(getOrientation().toAbsolute(Direction.LEFT), Direction.RIGHT)
+    );
 
     public SimplePhase(Orientation orientation) {
         super(orientation);
-
-        activeSemaphores = new ArrayList<>();
-
-        activeSemaphores.add(Pair.of(getOrientation(), Direction.LEFT));
-        activeSemaphores.add(Pair.of(getOrientation(), Direction.RIGHT));
-        activeSemaphores.add(Pair.of(getOrientation(), Direction.FORWARD));
-        activeSemaphores.add(Pair.of(getOrientation().toAbsolute(Direction.LEFT), Direction.RIGHT));
     }
 
     @Override
