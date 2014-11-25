@@ -10,16 +10,12 @@ import java.util.Map;
  * Date: 20. 11. 2014
  * Time: 15:36
  */
-public class IntRoad implements Road {
-    public int capacity = 0;
+public class IntRoad extends AbstractRoad {
 
     public Map<Direction, Integer> line = new HashMap<>();
 
-    public RoadEndPoint from;
-    public RoadEndPoint to;
-
     public IntRoad(int capacity){
-        this.capacity = capacity;
+        super(capacity);
         line.put(Direction.LEFT, 0);
         line.put(Direction.RIGHT, 0);
         line.put(Direction.FORWARD, 0);
@@ -36,9 +32,4 @@ public class IntRoad implements Road {
         return  line.get(direction);
     }
 
-    @Override
-    public void setEndPoints(RoadEndPoint from, RoadEndPoint to){
-        this.from = from;
-        this.to = to;
-    }
 }
