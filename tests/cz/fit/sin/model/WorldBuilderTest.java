@@ -3,8 +3,9 @@ package cz.fit.sin.model;
 import cz.fit.sin.model.intersection.Direction;
 import cz.fit.sin.model.intersection.Intersection;
 import cz.fit.sin.model.intersection.Orientation;
-import cz.fit.sin.model.road.IntRoad;
+import cz.fit.sin.model.road.QueueRoad;
 import cz.fit.sin.model.road.Road;
+import cz.fit.sin.model.vehicles.Car;
 import cz.fit.sin.model.world.World;
 import cz.fit.sin.model.world.WorldObject;
 import junit.framework.Assert;
@@ -64,17 +65,42 @@ public class WorldBuilderTest {
     }
 
     @Test
-    public void testFoo() throws Exception {
+    public void testQueueRoad() throws Exception {
         WorldBuilder wb = new WorldBuilder();
         Assert.assertTrue(wb.hasFactory(Road.class));
 
         wb.registerFactory(Road.class, new WorldBuilder.Factory() {
             @Override
             public Object create() {
-                return new IntRoad(20);
+                return new QueueRoad(1);
             }
         });
 
         Assert.assertNotNull(wb.getFactory(Road.class));
+        QueueRoad road = (QueueRoad) wb.create(Road.class);
+
+        Car car = new Car();
+        Assert.assertTrue(road.putVehicle(Direction.FORWARD, car));
+        Assert.assertFalse(road.putVehicle(Direction.FORWARD, new Car()));
+
+        Assert.assertEquals(1, road.getVehiclesCount());
+        Assert.assertEquals(1, road.getVehiclesCount(Direction.FORWARD));
+        Assert.assertEquals(0, road.getVehiclesCount(Direction.LEFT));
+        Assert.assertEquals(0, road.getVehiclesCount(Direction.RIGHT));
+
+        Assert.assertTrue(road.isFirst(car));
+        Assert.assertTrue(road.isFirst(Direction.FORWARD, car));
+        Assert.assertFalse(road.isFirst(Direction.LEFT, car));
+        Assert.assertFalse(road.isFirst(Direction.RIGHT, car));
+
+        road.removeFirstVehicle(Direction.FORWARD);
+
+        Assert.assertEquals(0, road.getVehiclesCount(Direction.FORWARD));
+        Assert.assertEquals(0, road.getVehiclesCount(Direction.LEFT));
+        Assert.assertEquals(0, road.getVehiclesCount(Direction.RIGHT));
+
+        Assert.assertFalse(road.isFirst(Direction.FORWARD, car));
+        Assert.assertFalse(road.isFirst(Direction.LEFT, car));
+        Assert.assertFalse(road.isFirst(Direction.RIGHT, car));
     }
 }
