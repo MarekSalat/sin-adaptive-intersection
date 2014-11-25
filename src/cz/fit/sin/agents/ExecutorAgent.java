@@ -10,8 +10,8 @@ public class ExecutorAgent extends Agent  {
 	@Override
 	protected void setup() {
 		System.out.println("ExecutorAgent");
-		gui = new GuiRoads();
-		gui.setVisible(true);
+//		gui = new GuiRoads();
+//		gui.setVisible(true);
 	}
 	
 }

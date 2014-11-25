@@ -23,8 +23,11 @@ public class QueueRoad extends AbstractRoad{
         line.put(Direction.FORWARD, new LinkedList<Vehicle>());
     }
 
-    public void putVehicle(Direction direction, Vehicle vehicle){
+    public boolean putVehicle(Direction direction, Vehicle vehicle){
+        if(getVehiclesCount() >= capacity)
+            return false;
         line.get(direction).addLast(vehicle);
+        return true;
     }
 
     public boolean isFirst(Vehicle vehicle){
@@ -32,6 +35,7 @@ public class QueueRoad extends AbstractRoad{
     }
 
     public boolean isFirst(Direction direction, Vehicle vehicle){
+        if(line.get(direction).size() <= 0) return false;
         return line.get(direction).getFirst() == vehicle;
     }
 
