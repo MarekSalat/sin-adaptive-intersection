@@ -7,7 +7,19 @@ public class CarAgent extends Agent {
 
 	@Override
 	protected void setup() {
-		System.out.println("CarAgent");
+		
+		/*kontrola argumentu*/
+		Object args[] = getArguments();
+		if (args.length < 2) {
+			System.err.println("Unexpected arguments for CarAgent. Call with <src> <dst>");
+			doDelete();
+		}
+		
+		
+		
+		
+		
+		
 	}
 	
 }
