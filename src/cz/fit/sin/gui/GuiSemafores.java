@@ -28,8 +28,6 @@ class GuiSemafores extends JComponent{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 10 * 0.1f));
 		
-		System.out.println("semafore");
-		
         
         //g.drawString("ahoj", 20, 20);
         
