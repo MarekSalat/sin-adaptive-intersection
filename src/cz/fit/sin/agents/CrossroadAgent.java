@@ -60,6 +60,7 @@ public class CrossroadAgent extends Agent {
 				
 		/*chovani*/
 		addBehaviour(new LightsBehaviour());
+		//addBehaviour(new GuiRefreshBehaviour());
 	}	
 	
 	/*vygeneruje svet*/
