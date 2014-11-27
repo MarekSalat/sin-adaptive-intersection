@@ -1,6 +1,6 @@
+=\=\=\=\=\=\=
+<<<<<<<=HEAD
+>>>>>>>=branch 'master' of https\://github.com/MarekSalat/SIN-Adaptive-intersection.git
 eclipse.preferences.version=1
-<<<<<<< HEAD
-encoding/<project>=UTF-8
-=======
 encoding//src/cz/fit/sin/gui/GuiRoads.java=UTF-8
->>>>>>> branch 'master' of https://github.com/MarekSalat/SIN-Adaptive-intersection.git
+encoding/<project>=UTF-8
