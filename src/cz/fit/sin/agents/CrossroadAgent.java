@@ -1,12 +1,9 @@
 package cz.fit.sin.agents;
 
-import java.util.Arrays;
 import java.util.List;
-
+import java.util.ArrayList;
 import jade.core.Agent;
-
 import cz.fit.sin.gui.GuiRoads;
-
 import cz.fit.sin.model.IntersectionPhase;
 import cz.fit.sin.model.WorldBuilder;
 import cz.fit.sin.model.fuzzy.IntersectionFuzzyEngine;
@@ -19,14 +16,13 @@ import cz.fit.sin.model.intersectionphases.RightForwardPhase;
 import cz.fit.sin.model.intersectionphases.SimplePhase;
 import cz.fit.sin.model.world.WorldObject;
 import cz.fit.sin.model.world.World;
-
 import cz.fit.sin.behaviour.LightsBehaviour;
 
 @SuppressWarnings("serial")
 public class CrossroadAgent extends Agent {		
 	private IntersectionFuzzyEngine engine;
 	private List<IntersectionPhase> phases;
-	private IntersectionPhase greenPhase;	
+	public IntersectionPhase greenPhase;	
 	private WorldBuilder wb;
 	private GuiRoads gui;
 	
@@ -38,23 +34,23 @@ public class CrossroadAgent extends Agent {
 		prepareWorld();	
 		
 		/*inicializace fazi*/
-		phases = Arrays.asList(
-            new SimplePhase(Orientation.NORTH),
-            new SimplePhase(Orientation.EAST),
-            new SimplePhase(Orientation.SOUTH),
-            new SimplePhase(Orientation.WEST),
-            new ForwardPhase(Orientation.NORTH),
-            new ForwardPhase(Orientation.WEST),
-            new LeftPhase(Orientation.NORTH),
-            new LeftPhase(Orientation.WEST),
-            new LeftRightPhase(Orientation.NORTH),
-            new LeftRightPhase(Orientation.EAST),
-            new LeftRightPhase(Orientation.SOUTH),
-            new LeftRightPhase(Orientation.WEST),
-            new RightForwardPhase(Orientation.NORTH),
-            new RightForwardPhase(Orientation.WEST)
-        );
-		
+		phases = new ArrayList<IntersectionPhase>();
+		phases.add(new SimplePhase(Orientation.NORTH));
+		phases.add(new SimplePhase(Orientation.EAST));
+		phases.add(new SimplePhase(Orientation.SOUTH));
+		phases.add(new SimplePhase(Orientation.WEST));
+		phases.add(new ForwardPhase(Orientation.NORTH));
+		phases.add(new ForwardPhase(Orientation.WEST));
+		phases.add(new LeftPhase(Orientation.NORTH));
+		phases.add(new LeftPhase(Orientation.WEST));
+		phases.add(new LeftRightPhase(Orientation.NORTH));
+		phases.add(new LeftRightPhase(Orientation.EAST));
+		phases.add(new SimplePhase(Orientation.NORTH));
+		phases.add(new LeftRightPhase(Orientation.SOUTH));
+		phases.add(new LeftRightPhase(Orientation.WEST));
+		phases.add(new RightForwardPhase(Orientation.NORTH));
+		phases.add(new RightForwardPhase(Orientation.WEST));
+
 		/*inicializace*/
 		setGreenPhase(phases.get(0));		
 				
