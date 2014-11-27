@@ -51,7 +51,7 @@ public class GuiRoads extends JFrame{
 	
 	private JTextField	roads_x, roads_y;
 
-	public GuiRoads(final ExecutorAgent executorAgent) {
+	public GuiRoads(final CrossroadAgent executorAgent) {
 		super();
 		
 		// ---
@@ -137,7 +137,11 @@ public class GuiRoads extends JFrame{
 		// === -----------------------
 		// === -----------------------
 		// === -----------------------
+<<<<<<< HEAD
 		// === SÍ� KØIŽOVATEK --------
+=======
+		// === S͍ K�I�OVATEK --------
+>>>>>>> branch 'master' of https://github.com/MarekSalat/SIN-Adaptive-intersection.git
 		// === -----------------------
 		// === -----------------------
 		// === -----------------------
@@ -197,7 +201,11 @@ public class GuiRoads extends JFrame{
         JLabel label_1 = new JLabel("Roads - cols:");
         JLabel label_2 = new JLabel("Roads - rows:");
 		 
+<<<<<<< HEAD
         // do sloupeèku
+=======
+        // do sloupe�ku
+>>>>>>> branch 'master' of https://github.com/MarekSalat/SIN-Adaptive-intersection.git
         layout.setHorizontalGroup(layout.createSequentialGroup()
 
                 .addGroup(layout.createParallelGroup(LEADING)
@@ -218,7 +226,11 @@ public class GuiRoads extends JFrame{
         layout.linkSize(SwingConstants.HORIZONTAL, btnStart, btnStop, btnAddCar);
         layout.linkSize(SwingConstants.HORIZONTAL, this.roads_x, this.roads_y);
  
+<<<<<<< HEAD
         // do øádku
+=======
+        // do ��dku
+>>>>>>> branch 'master' of https://github.com/MarekSalat/SIN-Adaptive-intersection.git
         layout.setVerticalGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(BASELINE)
 					.addComponent(btnStart)
@@ -325,7 +337,7 @@ public class GuiRoads extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			roadsSimpleGen.ChangeElements();
+			roadsSimpleGen.ChangeSemPhases();
 			
 		}
 		
