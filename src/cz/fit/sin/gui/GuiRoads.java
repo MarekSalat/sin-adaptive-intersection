@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import cz.fit.sin.agents.ExecutorAgent;
+import cz.fit.sin.agents.CrossroadAgent;
 
 public class GuiRoads extends JFrame{
 	private static final long serialVersionUID = 7563499771061984518L;
@@ -137,7 +137,7 @@ public class GuiRoads extends JFrame{
 		// === -----------------------
 		// === -----------------------
 		// === -----------------------
-		// === SÕç KÿIéOVATEK --------
+		// === S√çÔøΩ K√òI≈ΩOVATEK --------
 		// === -----------------------
 		// === -----------------------
 		// === -----------------------
@@ -197,7 +197,7 @@ public class GuiRoads extends JFrame{
         JLabel label_1 = new JLabel("Roads - cols:");
         JLabel label_2 = new JLabel("Roads - rows:");
 		 
-        // do sloupeËku
+        // do sloupe√®ku
         layout.setHorizontalGroup(layout.createSequentialGroup()
 
                 .addGroup(layout.createParallelGroup(LEADING)
@@ -218,7 +218,7 @@ public class GuiRoads extends JFrame{
         layout.linkSize(SwingConstants.HORIZONTAL, btnStart, btnStop, btnAddCar);
         layout.linkSize(SwingConstants.HORIZONTAL, this.roads_x, this.roads_y);
  
-        // do ¯·dku
+        // do √∏√°dku
         layout.setVerticalGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(BASELINE)
 					.addComponent(btnStart)
