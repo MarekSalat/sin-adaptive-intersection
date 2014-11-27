@@ -3,8 +3,8 @@ package cz.fit.sin.gui;
 import static javax.swing.GroupLayout.Alignment.BASELINE;
 import static javax.swing.GroupLayout.Alignment.LEADING;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,27 +21,19 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-
 import cz.fit.sin.agents.ExecutorAgent;
 
 public class GuiRoads extends JFrame{
 	private static final long serialVersionUID = 7563499771061984518L;
-
-	private static final int default_width  = 700;
-	private static final int default_height = 600;
 	
 	// ---
-	private GuiRoads gui;
-	private ExecutorAgent mainAgent;
-	private GuiRoadsGenerator roadsGenerator;
+	//private ExecutorAgent 	  executorAgent;
+	//private GuiRoadsGenerator roadsGenerator;
+	private GuiRoadsSimpleGen roadsSimpleGen;
 	
 	// --- Menu
 	private JMenuBar  jmenubar;
@@ -60,19 +51,19 @@ public class GuiRoads extends JFrame{
 	
 	private JTextField	roads_x, roads_y;
 
-	public GuiRoads(final ExecutorAgent mainAgent) {
+	public GuiRoads(final ExecutorAgent executorAgent) {
 		super();
 		
 		// ---
-		this.gui 		= this;
-		this.mainAgent 	= mainAgent;
-		
-		Dimension screenSize = this.getToolkit().getScreenSize();
+		//this.executorAgent 	= executorAgent;
 		
 		// ---
 		this.setTitle("SIN - Adaptive intersection");
-		this.setMinimumSize(new Dimension(default_width, default_height));
-		this.setMaximumSize(new Dimension(screenSize.width, screenSize.height));
+		
+		this.setMinimumSize(new Dimension(Gui.default_width, Gui.default_height));
+		
+		
+		this.setResizable(false);
 		this.setLocationRelativeTo(null); 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -122,27 +113,36 @@ public class GuiRoads extends JFrame{
 		// === SET MAIN CONTAINER
 		this.container = new JPanel();
 		this.container.setBorder(new EmptyBorder(10, 10, 10, 10));
-		//this.container.setBackground(new Color(255, 255, 255));
 		setContentPane(this.container);
-		this.container.setLayout(new BoxLayout(this.container, BoxLayout.PAGE_AXIS));
-		this.container.setAlignmentX(Component.LEFT_ALIGNMENT);
+		//this.container.setLayout(new BoxLayout(this.container, BoxLayout.LINE_AXIS));
+		this.container.setLayout(new BorderLayout());
 		
 		// === SET BOX WITH MENU & STATS
 		this.box 	 = new JPanel();
-		this.box.setMinimumSize(new Dimension(700, 100));
-		this.box.setMaximumSize(new Dimension(screenSize.width, 100));
-		//this.box.setBackground(new Color(255, 255, 0));
-		this.box.setAlignmentX(Component.LEFT_ALIGNMENT);
+		this.container.add(this.box, BorderLayout.WEST);
 
 		// === SET CONTENT WITH ROADS
-		this.content = new JPanel();
+		this.content = new GuiRoadsSimpleGen();
+		this.content.setMinimumSize(new Dimension(Gui.default_width, Gui.default_height));
+		this.content.setPreferredSize(new Dimension(Gui.default_width, Gui.default_height));
+		this.content.setMaximumSize(new Dimension(Gui.default_width, Gui.default_height));
+		
 		this.content.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100)));
 		this.content.setBackground(new Color(255, 255, 255));
-		this.content.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-		// === ADD TO MAIN CONTAINER
-		this.container.add(this.box);
 		
+		this.roadsSimpleGen = (GuiRoadsSimpleGen)this.content;
+		
+		this.container.add(this.content, BorderLayout.EAST);		
+
+		// === -----------------------
+		// === -----------------------
+		// === -----------------------
+		// === SÕç KÿIéOVATEK --------
+		// === -----------------------
+		// === -----------------------
+		// === -----------------------
+
+		/*
 		JScrollPane pane = new JScrollPane(this.content);
 		//pane.setBackground(new Color(0, 0, 0));
 		pane.setBorder(BorderFactory.createEmptyBorder());
@@ -155,18 +155,15 @@ public class GuiRoads extends JFrame{
 		this.roadsGenerator.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.roadsGenerator.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		this.content.add(this.roadsGenerator);
-		
-		try {
-			roadsGenerator.Generate(Integer.parseInt(Gui.default_silnice_x), Integer.parseInt(Gui.default_silnice_y));
-		} 
-		catch (NumberFormatException e) {
-			
-		} 
-		catch (Exception e) {
-			
-		}
+		*/
 
-		// === ADD GROUP LAYOUT TO BOX
+		// === -----------------------
+		// === -----------------------
+		// === -----------------------
+		// === ADD GROUP LAYOUT TO BOX 
+		// === -----------------------
+		// === -----------------------
+		// === -----------------------
         GroupLayout layout = new GroupLayout(this.box);
         this.box.setLayout(layout);
         layout.setAutoCreateGaps(true);
@@ -249,8 +246,8 @@ public class GuiRoads extends JFrame{
         this.btnAddCar.setEnabled(false);
         
         // text
-        this.roads_x.setEditable(true);
-        this.roads_y.setEditable(true);
+        this.roads_x.setEditable(false);
+        this.roads_y.setEditable(false);
 		
 	}
 	
@@ -271,7 +268,7 @@ public class GuiRoads extends JFrame{
 	        // text
 	        roads_x.setEditable(false);
 	        roads_y.setEditable(false);
-
+	        /*
 	        int x,y;
 	        try{
 		        x = Integer.parseInt(roads_x.getText().toString());
@@ -280,14 +277,23 @@ public class GuiRoads extends JFrame{
 	        catch(NumberFormatException e){
 	        	x = 0;
 	        	y = 0;
-	        }
+	        }*/
 	        
 	        try{
-	        	roadsGenerator.Generate(x, y);
+	        	roadsSimpleGen.Generate();
+	        	
+	        	
+	        	
+	        	//executorAgent.prepareWorld(x, y);
 	        }
 	        catch(Exception e){
 	        	System.out.println(e.toString());
 	        	JOptionPane.showMessageDialog(null, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+	        	
+	        	
+				System.out.println("----------------");
+				System.out.println("Stop simulation");
+				
 	        	_initDeafult();
 	        }
 		}
@@ -303,7 +309,7 @@ public class GuiRoads extends JFrame{
 			_initDeafult();
 			
 			try{
-	        	roadsGenerator.ClearRoads();
+				roadsSimpleGen.ClearRoads();
 	        }
 	        catch(Exception e){
 	        	System.out.println(e.getMessage());
@@ -318,8 +324,9 @@ public class GuiRoads extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO
-			System.out.println("- add car ");
+			
+			roadsSimpleGen.ChangeElements();
+			
 		}
 		
 	}
@@ -328,7 +335,7 @@ public class GuiRoads extends JFrame{
 		
 		public void actionPerformed(ActionEvent e){
 			
-			// okno pro help
+			new MenuHelp().setVisible(true);
 	        
 		}
 		
