@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import cz.fit.sin.agents.ExecutorAgent;
+import cz.fit.sin.agents.CrossroadAgent;
 
 public class GuiRoads extends JFrame{
 	private static final long serialVersionUID = 7563499771061984518L;
@@ -51,7 +51,7 @@ public class GuiRoads extends JFrame{
 	
 	private JTextField	roads_x, roads_y;
 
-	public GuiRoads(final ExecutorAgent executorAgent) {
+	public GuiRoads(final CrossroadAgent executorAgent) {
 		super();
 		
 		// ---
@@ -137,7 +137,10 @@ public class GuiRoads extends JFrame{
 		// === -----------------------
 		// === -----------------------
 		// === -----------------------
-		// === S͍ K�I�OVATEK --------
+
+		// === SÍ� KØIŽOVATEK --------
+
+		//github.com/MarekSalat/SIN-Adaptive-intersection.git
 		// === -----------------------
 		// === -----------------------
 		// === -----------------------
@@ -197,7 +200,9 @@ public class GuiRoads extends JFrame{
         JLabel label_1 = new JLabel("Roads - cols:");
         JLabel label_2 = new JLabel("Roads - rows:");
 		 
-        // do sloupe�ku
+
+        // do sloupeèku
+
         layout.setHorizontalGroup(layout.createSequentialGroup()
 
                 .addGroup(layout.createParallelGroup(LEADING)
@@ -218,7 +223,9 @@ public class GuiRoads extends JFrame{
         layout.linkSize(SwingConstants.HORIZONTAL, btnStart, btnStop, btnAddCar);
         layout.linkSize(SwingConstants.HORIZONTAL, this.roads_x, this.roads_y);
  
-        // do ��dku
+
+        // do øádku
+
         layout.setVerticalGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(BASELINE)
 					.addComponent(btnStart)

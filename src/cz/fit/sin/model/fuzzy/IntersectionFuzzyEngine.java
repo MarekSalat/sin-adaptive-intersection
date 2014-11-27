@@ -8,6 +8,7 @@ import com.fuzzylite.term.Ramp;
 import com.fuzzylite.term.Triangle;
 import com.fuzzylite.variable.InputVariable;
 import com.fuzzylite.variable.OutputVariable;
+
 import cz.fit.sin.model.IntersectionPhase;
 import cz.fit.sin.model.intersection.Intersection;
 
