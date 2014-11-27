@@ -137,7 +137,7 @@ public class GuiRoads extends JFrame{
 		// === -----------------------
 		// === -----------------------
 		// === -----------------------
-		// === SÕç KÿIéOVATEK --------
+		// === SÕç KÔøΩIÔøΩOVATEK --------
 		// === -----------------------
 		// === -----------------------
 		// === -----------------------
@@ -197,7 +197,7 @@ public class GuiRoads extends JFrame{
         JLabel label_1 = new JLabel("Roads - cols:");
         JLabel label_2 = new JLabel("Roads - rows:");
 		 
-        // do sloupeËku
+        // do sloupeÔøΩku
         layout.setHorizontalGroup(layout.createSequentialGroup()
 
                 .addGroup(layout.createParallelGroup(LEADING)
@@ -218,7 +218,7 @@ public class GuiRoads extends JFrame{
         layout.linkSize(SwingConstants.HORIZONTAL, btnStart, btnStop, btnAddCar);
         layout.linkSize(SwingConstants.HORIZONTAL, this.roads_x, this.roads_y);
  
-        // do ¯·dku
+        // do ÔøΩÔøΩdku
         layout.setVerticalGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(BASELINE)
 					.addComponent(btnStart)
@@ -325,7 +325,7 @@ public class GuiRoads extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			roadsSimpleGen.ChangeElements();
+			roadsSimpleGen.ChangeSemPhases();
 			
 		}
 		
