@@ -94,7 +94,8 @@ public class GuiDrawingCars extends JComponent{
 	
 	private void carsInQueue(int i, int start, int dle_y, int go_back){
 
-		g.setColor(new Color(234, 171, 2));
+		//g.setColor(new Color(234, 171, 2));
+		g.setColor(new Color(51, 208, 247));
 		
 		int posun_z = 0;
 		
@@ -116,7 +117,7 @@ public class GuiDrawingCars extends JComponent{
 		
 		if(this.cars[i] > 3){
 
-	        g.setColor(new Color(204, 0, 0));
+	        g.setColor(new Color(255, 255, 255));
 	        g.setFont(new Font("SansSerif", Font.BOLD, 16));
 	        
 	        int cars = this.cars[i] - 3;

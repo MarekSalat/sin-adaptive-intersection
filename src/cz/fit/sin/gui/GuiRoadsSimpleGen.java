@@ -2,6 +2,13 @@ package cz.fit.sin.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GuiRoadsSimpleGen extends JPanel{
@@ -90,6 +97,81 @@ public class GuiRoadsSimpleGen extends JPanel{
 		this.drawingroad.repaint();
 		
 		System.out.println("Change semaphore phases");
+	}
+	
+	public void ChangeIconPhases(JLabel imagephase, int phase){
+		String img 			  	= Gui.phase_no;
+		BufferedImage oldImage 	= null;
+		BufferedImage newImage 	= null;
+		int rotation			= 0;
+		
+		if(this.semPhases == null){
+			System.out.println("Nejsou nastaveny semafory!");
+			return;
+		}
+		
+		switch(phase){
+		
+			case 0:
+				img		 = Gui.phase_simple;
+				rotation = 0;
+				break;
+
+			case 1:
+				img		 = Gui.phase_simple;
+				rotation = -90;
+				break;
+				
+			case 2:
+				img		 = Gui.phase_simple;
+				rotation = 180;
+				break;
+
+			case 3:
+				img		 = Gui.phase_simple;
+				rotation = 90;
+				break;
+				
+			case -1:
+			default:
+				img		 = Gui.phase_no;
+				rotation = 0;
+				break;
+		}
+		
+		System.out.println(phase);
+		
+		/*
+		phases.add(new SimplePhase(Orientation.NORTH));
+		phases.add(new SimplePhase(Orientation.EAST));
+		phases.add(new SimplePhase(Orientation.SOUTH));
+		phases.add(new SimplePhase(Orientation.WEST));
+		phases.add(new ForwardPhase(Orientation.NORTH));
+		phases.add(new ForwardPhase(Orientation.WEST));
+		phases.add(new LeftPhase(Orientation.NORTH));
+		phases.add(new LeftPhase(Orientation.WEST));
+		phases.add(new LeftRightPhase(Orientation.NORTH));
+		phases.add(new LeftRightPhase(Orientation.EAST));		
+		phases.add(new LeftRightPhase(Orientation.SOUTH));
+		phases.add(new LeftRightPhase(Orientation.WEST));
+		phases.add(new RightForwardPhase(Orientation.NORTH));
+		phases.add(new RightForwardPhase(Orientation.WEST));
+		*/		
+				
+		try {
+			oldImage = ImageIO.read(new File(img));
+			newImage = new BufferedImage(oldImage.getHeight(), oldImage.getWidth(), oldImage.getType());
+			Graphics2D graphics = (Graphics2D) newImage.getGraphics();
+			graphics.rotate(Math.toRadians(rotation), newImage.getWidth() / 2, newImage.getHeight() / 2);
+			graphics.drawImage(oldImage, 0, 0, oldImage.getWidth(), oldImage.getHeight(), null);
+
+			
+			imagephase.setIcon(new ImageIcon(newImage));
+		} 
+		catch (IOException e) {
+			
+		}
+		// --
 	}
 	
 	private void DefaultCars(){

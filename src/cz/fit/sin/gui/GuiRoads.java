@@ -11,8 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -48,7 +54,7 @@ public class GuiRoads extends JFrame{
 	private JPanel 		content;
 	
 	private JButton		btnStart, btnStop, btnAddCar;
-	
+	private JLabel		imagephase;
 	private JTextField	roads_x, roads_y;
 	private JLabel  	number_cars;
 
@@ -186,6 +192,17 @@ public class GuiRoads extends JFrame{
 		btnAddCar.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		btnAddCar.addActionListener(new ListenerBtnAddCar());
 		
+		// === IMAGE WITH PHASES
+		BufferedImage myPicture = null;
+		try {
+			myPicture = ImageIO.read(new File(Gui.phase_no));
+		} 
+		catch (IOException e) {
+			
+		}
+		this.imagephase = new JLabel();
+		this.imagephase.setIcon(new ImageIcon(myPicture));
+		
 		// === ADD ELEM TO BOX - textfield
 		this.roads_x = new JTextField(Gui.default_silnice_x);  
 		this.roads_x.setHorizontalAlignment(JTextField.CENTER);
@@ -209,46 +226,42 @@ public class GuiRoads extends JFrame{
         layout.setHorizontalGroup(layout.createSequentialGroup()
 
                 .addGroup(layout.createParallelGroup(LEADING)
-            			.addComponent(btnStart)
-            			.addComponent(btnStop)
-            			.addComponent(btnAddCar)
-            			.addComponent(label_3)
-                		 )
-                 .addGroup(layout.createParallelGroup(LEADING)
-              			.addComponent(this.number_cars)
-              			//.addComponent(label_2)
-                  		 )
-                 /*
-                 .addGroup(layout.createParallelGroup(LEADING)
-             			.addComponent(this.roads_x)
-             			.addComponent(this.roads_y)
-                 		 )*/
+            			 .addComponent(btnStart)
+            			 .addComponent(btnStop)
+            			 .addComponent(btnAddCar)
+            			 .addComponent(this.imagephase)
+            			 
+            			 .addGroup(layout.createSequentialGroup()
+             		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(label_3)
+	          		            		  )
+	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(this.number_cars)
+	         		            		  )
+
+	          		             )
+            		     )
+                
         );
         
-        layout.linkSize(SwingConstants.HORIZONTAL, btnStart, btnStop, btnAddCar);
-        //layout.linkSize(SwingConstants.HORIZONTAL, this.roads_x, this.roads_y);
+        layout.linkSize(SwingConstants.HORIZONTAL, btnStart, btnStop, btnAddCar, this.imagephase);
  
 
-        // do øádku
+        // do řádku
 
         layout.setVerticalGroup(layout.createSequentialGroup()
-            .addGroup(layout.createParallelGroup(BASELINE)
-					.addComponent(btnStart)
-					//.addComponent(label_1)
-					//.addComponent(this.roads_x)
-		    		)
+    		.addComponent(btnStart)
+            .addComponent(btnStop)
+            .addComponent(btnAddCar)
+            .addComponent(this.imagephase)
             .addGroup(layout.createParallelGroup(LEADING)
-        			.addComponent(btnStop)
-        			//.addComponent(label_2)
-        			//.addComponent(this.roads_y)
-            		)
-            .addGroup(layout.createParallelGroup(LEADING)
-        			.addComponent(btnAddCar)
-            		)
-            .addGroup(layout.createParallelGroup(LEADING)
-            		.addComponent(label_3)
-            		.addComponent(this.number_cars)
-            		)		
+
+                    .addGroup(layout.createParallelGroup(BASELINE)
+                    		.addComponent(label_3)
+                    		.addComponent(this.number_cars)
+                    		)
+
+            		)	
         );
  
         pack();
@@ -267,6 +280,9 @@ public class GuiRoads extends JFrame{
         
         // stats
 		this.number_cars.setText("0");
+
+		// phase
+		roadsSimpleGen.ChangeIconPhases(this.imagephase, -1);
 		
 	}
 	
@@ -339,6 +355,7 @@ public class GuiRoads extends JFrame{
 		
 	}
 	
+	
 	private class ListenerBtnAddCar implements ActionListener{
 
 		@Override
@@ -364,6 +381,7 @@ public class GuiRoads extends JFrame{
 		
 	}
 	
+	
 	private class ListenerAbout implements ActionListener{
 		
 		public void actionPerformed(ActionEvent e){
@@ -374,11 +392,14 @@ public class GuiRoads extends JFrame{
 		
 	}
 	
+	
 	/* === ReDrawing === */
 	
-	public void setSemaphores(int semPhases[]){
+	public void setSemaphores(int semPhases[], int phase){
 		roadsSimpleGen.ChangeSemPhases(semPhases);
+		roadsSimpleGen.ChangeIconPhases(this.imagephase, phase);
 	}
+	
 	
 	public void setCars(int cars[]){
 		roadsSimpleGen.ChangeCars(cars);
@@ -391,6 +412,7 @@ public class GuiRoads extends JFrame{
 		this.number_cars.setText(Integer.toString(count));
 		System.out.println("Cars: " + count);
 	}
+	
 	
 	/**=========== MAIN
 	 * @param args ====

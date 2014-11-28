@@ -20,4 +20,13 @@ public class Gui {
 	
 	// BARVY
 	
+	// FÁZE
+
+	public static final String phase_no 			= "images/phase_no.png";
+	public static final String phase_forward 		= "images/phase_forward.png";
+	public static final String phase_left 			= "images/phase_left.png";
+	public static final String phase_left_right		= "images/phase_left_right.png";
+	public static final String phase_right_forward 	= "images/phase_right_forward.png";
+	public static final String phase_simple 		= "images/phase_simple.png";
+	
 }
