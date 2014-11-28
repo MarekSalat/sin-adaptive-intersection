@@ -98,6 +98,8 @@ public class GuiDrawingCars extends JComponent{
 		
 		int posun_z = 0;
 		
+		// výpis aut
+		
 		for(int x = 0; x < this.cars[i] && x < 3; x++){
         	posun_z = go_back == 1 ? (x * 30) : (x * -30);
 			
@@ -109,6 +111,8 @@ public class GuiDrawingCars extends JComponent{
         	}
 			
 		}
+		
+		// přidání popisku, když je moc aut
 		
 		if(this.cars[i] > 3){
 
