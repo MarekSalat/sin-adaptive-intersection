@@ -11,8 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Random;
-
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -33,7 +31,7 @@ public class GuiRoads extends JFrame{
 	private static final long serialVersionUID = 7563499771061984518L;
 	
 	// ---
-	//private ExecutorAgent 	  executorAgent;
+	private CrossroadAgent 	  crossroadAgent;
 	//private GuiRoadsGenerator roadsGenerator;
 	private GuiRoadsSimpleGen roadsSimpleGen;
 	
@@ -54,11 +52,11 @@ public class GuiRoads extends JFrame{
 	private JTextField	roads_x, roads_y;
 	private JLabel  	number_cars;
 
-	public GuiRoads(final CrossroadAgent executorAgent) {
+	public GuiRoads(final CrossroadAgent crossroadAgent) {
 		super();
 		
 		// ---
-		//this.executorAgent 	= executorAgent;
+		this.crossroadAgent 	= crossroadAgent;
 		
 		// ---
 		this.setTitle("SIN - Adaptive intersection");
@@ -304,8 +302,7 @@ public class GuiRoads extends JFrame{
 	        	roadsSimpleGen.Generate();
 	        	
 	        	
-	        	
-	        	//executorAgent.prepareWorld(x, y);
+	        	crossroadAgent.startSimulation();
 	        }
 	        catch(Exception e){
 	        	System.out.println(e.toString());
