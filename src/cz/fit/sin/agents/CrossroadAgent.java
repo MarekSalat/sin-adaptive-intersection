@@ -2,7 +2,6 @@ package cz.fit.sin.agents;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
 import jade.core.Agent;
 import cz.fit.sin.gui.GuiRoads;
 import cz.fit.sin.gui.Semaphores;
@@ -22,6 +21,8 @@ import cz.fit.sin.model.road.IntRoad;
 import cz.fit.sin.model.world.WorldObject;
 import cz.fit.sin.model.world.World;
 import cz.fit.sin.behaviour.LightsBehaviour;
+import cz.fit.sin.behaviour.MoveCarBehaviour;
+import cz.fit.sin.behaviour.SpawnCarBehaviour;
 
 @SuppressWarnings("serial")
 public class CrossroadAgent extends Agent {		
@@ -62,8 +63,10 @@ public class CrossroadAgent extends Agent {
 	}	
 	
 	/*simulace*/
-	public void startSimulation() {		
-		addBehaviour(new LightsBehaviour());
+	public void startSimulation() {	
+		refreshSemaphores();
+		addBehaviour(new LightsBehaviour(this, 5000));
+		addBehaviour(new MoveCarBehaviour(this, 1000));
 	}
 	
 	/*vygeneruje svet*/
@@ -118,9 +121,14 @@ public class CrossroadAgent extends Agent {
 		return engine;
 	}
 	
+	/*je zelena*/
+	public boolean isGreen(String name, Orientation orientation, Direction direction) {
+		return getIntersection(name).getSemaphoreLight(orientation, direction).equals(Light.GREEN);
+	}
+	
 	/*test svetel*/
 	public int getColor(String name, Orientation orientation, Direction direction) {		
-		return (getIntersection(name).getSemaphoreLight(orientation, direction).equals(Light.GREEN) ? 1 : 0);
+		return isGreen(name, orientation, direction) ? 1 : 0;
 	}
 		
 	/*pregeneruje semafory*/
@@ -156,40 +164,18 @@ public class CrossroadAgent extends Agent {
 		this.cars[Semaphores.EAST_RIGHT]    = getIncomingIntRoadCount("Main", Orientation.EAST, Direction.RIGHT); 
 		gui.setCars(cars);
 	}
-	
-	/*nahodny smer*/
-	public Orientation getRandomOrientation() {
-		Random rand = new Random();
-		int n = rand.nextInt(4) + 1;
-		switch (n) {
-			case 1: return Orientation.NORTH;
-			case 2: return Orientation.EAST;
-			case 3: return Orientation.SOUTH;
-			case 4: return Orientation.WEST;
-			default: return Orientation.WEST;		
-		}
-	}
-	
-	/*nahodny cil*/
-	public Direction getRandomDirection() {
-		Random rand = new Random();
-		int n = rand.nextInt(3) + 1;
-		switch (n) {
-			case 1: return Direction.FORWARD;
-			case 2: return Direction.LEFT;
-			case 3: return Direction.RIGHT;	
-			default: return Direction.RIGHT;	
-		}
-	}
-	
+		
 	/*prida auto*/
-	public void addCar() {
-		Direction direction = getRandomDirection();
-		Orientation orientation = getRandomOrientation();
-		IntRoad road = getIncomingIntRoad("Main", orientation);		
-		int n = getIncomingIntRoadCount("Main", orientation, direction);		
-		road.line.put(direction, (n + 1));		
-		System.out.println("auto");
+	public void addCar() {		
+		addBehaviour(new SpawnCarBehaviour());
+	}
+	
+	/*odebere auto*/
+	public void removeCar(Orientation orientation, Direction direction) {
+		IntRoad road = getIncomingIntRoad("Main", orientation);	
+		int n = getIncomingIntRoadCount("Main", orientation, direction);
+		if (n >= 1) road.line.put(direction, (n - 1));	
+		System.out.println("- auto");
 		refreshCars();
 	}
 }
