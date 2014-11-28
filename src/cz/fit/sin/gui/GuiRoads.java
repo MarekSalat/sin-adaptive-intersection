@@ -259,7 +259,7 @@ public class GuiRoads extends JFrame{
 		// buttons
 		this.btnStart.setEnabled(true);
         this.btnStop.setEnabled(false);
-        this.btnAddCar.setEnabled(true);
+        this.btnAddCar.setEnabled(false);
         
         // text
         this.roads_x.setEditable(false);
