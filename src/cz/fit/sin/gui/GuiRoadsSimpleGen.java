@@ -114,22 +114,72 @@ public class GuiRoadsSimpleGen extends JPanel{
 		
 			case 0:
 				img		 = Gui.phase_simple;
-				rotation = 0;
+				rotation = 180; // naopak
 				break;
 
 			case 1:
 				img		 = Gui.phase_simple;
-				rotation = -90;
+				rotation = 90;
 				break;
 				
 			case 2:
 				img		 = Gui.phase_simple;
-				rotation = 180;
+				rotation = 0;
 				break;
 
 			case 3:
 				img		 = Gui.phase_simple;
-				rotation = 90;
+				rotation = -90;
+				break;
+
+			case 4:
+				img		 = Gui.phase_forward;
+				rotation = 180;
+				break;
+
+			case 5:
+				img		 = Gui.phase_forward;
+				rotation = -90;
+				break;
+
+			case 6:
+				img		 = Gui.phase_left;
+				rotation = 180;
+				break;
+				
+			case 7:
+				img		 = Gui.phase_left;
+				rotation = -90;
+				break;
+
+			case 8:
+				img		 = Gui.phase_left_right;
+				rotation = 180;
+				break;
+
+			case 9:
+				img		 = Gui.phase_left_right;
+				rotation = -90;
+				break;
+
+			case 10:
+				img		 = Gui.phase_left_right;
+				rotation = 0;
+				break;
+
+			case 11:
+				img		 = Gui.phase_left_right;
+				rotation = +90;
+				break;
+
+			case 12:
+				img		 = Gui.phase_right_forward;
+				rotation = 180;
+				break;
+
+			case 13:
+				img		 = Gui.phase_right_forward;
+				rotation = -90;
 				break;
 				
 			case -1:
@@ -139,25 +189,6 @@ public class GuiRoadsSimpleGen extends JPanel{
 				break;
 		}
 		
-		System.out.println(phase);
-		
-		/*
-		phases.add(new SimplePhase(Orientation.NORTH));
-		phases.add(new SimplePhase(Orientation.EAST));
-		phases.add(new SimplePhase(Orientation.SOUTH));
-		phases.add(new SimplePhase(Orientation.WEST));
-		phases.add(new ForwardPhase(Orientation.NORTH));
-		phases.add(new ForwardPhase(Orientation.WEST));
-		phases.add(new LeftPhase(Orientation.NORTH));
-		phases.add(new LeftPhase(Orientation.WEST));
-		phases.add(new LeftRightPhase(Orientation.NORTH));
-		phases.add(new LeftRightPhase(Orientation.EAST));		
-		phases.add(new LeftRightPhase(Orientation.SOUTH));
-		phases.add(new LeftRightPhase(Orientation.WEST));
-		phases.add(new RightForwardPhase(Orientation.NORTH));
-		phases.add(new RightForwardPhase(Orientation.WEST));
-		*/		
-				
 		try {
 			oldImage = ImageIO.read(new File(img));
 			newImage = new BufferedImage(oldImage.getHeight(), oldImage.getWidth(), oldImage.getType());

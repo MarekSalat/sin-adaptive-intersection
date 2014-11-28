@@ -94,8 +94,8 @@ public class GuiDrawingCars extends JComponent{
 	
 	private void carsInQueue(int i, int start, int dle_y, int go_back){
 
-		//g.setColor(new Color(234, 171, 2));
-		g.setColor(new Color(51, 208, 247));
+		g.setColor(new Color(234, 171, 2));
+		//g.setColor(new Color(51, 208, 247));
 		
 		int posun_z = 0;
 		
