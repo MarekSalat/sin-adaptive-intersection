@@ -18,6 +18,6 @@ public class LightsBehaviour extends TickerBehaviour {
 		IntersectionPhase newPhase = c.getEngine().nextPhase(c.getIntersection("Main"), c.getIntersectionList(), c.getGreenPhase());		
 		if (!newPhase.equals(c.getGreenPhase())) System.out.println("zmena");
 		c.setGreenPhase(newPhase);	
-		c.refreshSemaphores();		
+		c.refreshSemaphores();	
 	}
 }

@@ -63,8 +63,8 @@ public class CrossroadAgent extends Agent {
 	}	
 	
 	/*simulace*/
-	public void startSimulation() {	
-		refreshSemaphores();
+	public void startSimulation() {
+		refreshSemaphores();		
 		addBehaviour(new LightsBehaviour(this, 5000));
 		addBehaviour(new MoveCarBehaviour(this, 1000));
 	}
@@ -105,7 +105,7 @@ public class CrossroadAgent extends Agent {
 		return phases;
 	}
 	
-	/*vrati fazi*/
+	/*vrati aktualni fazi*/
 	public IntersectionPhase getGreenPhase() {
 		return greenPhase;
 	}
@@ -145,7 +145,7 @@ public class CrossroadAgent extends Agent {
 		this.lights[Semaphores.EAST_FORWARD] 	= getColor("Main", Orientation.EAST, Direction.FORWARD);  
 		this.lights[Semaphores.EAST_LEFT] 		= getColor("Main", Orientation.EAST, Direction.LEFT);   
 		this.lights[Semaphores.EAST_RIGHT] 		= getColor("Main", Orientation.EAST, Direction.RIGHT);  
-		gui.setSemaphores(lights);
+		gui.setSemaphores(lights, getPhaseNumber());
 	}
 	
 	/*pregeneruje auta*/
@@ -163,8 +163,50 @@ public class CrossroadAgent extends Agent {
 		this.cars[Semaphores.EAST_LEFT]     = getIncomingIntRoadCount("Main", Orientation.EAST, Direction.LEFT);  
 		this.cars[Semaphores.EAST_RIGHT]    = getIncomingIntRoadCount("Main", Orientation.EAST, Direction.RIGHT); 
 		gui.setCars(cars);
+	}	
+
+	/*vrati cislo faze*/
+	public int getPhaseNumber() {
+		int n = 0;
+		if (getGreenPhase().equals(phases.get(0))) n = 0;
+		if (getGreenPhase().equals(phases.get(1))) n = 1;
+		if (getGreenPhase().equals(phases.get(2))) n = 2;
+		if (getGreenPhase().equals(phases.get(3))) n = 3;
+		if (getGreenPhase().equals(phases.get(4))) n = 4;
+		if (getGreenPhase().equals(phases.get(5))) n = 5;
+		if (getGreenPhase().equals(phases.get(6))) n = 6;
+		if (getGreenPhase().equals(phases.get(7))) n = 7;
+		if (getGreenPhase().equals(phases.get(8))) n = 8;
+		if (getGreenPhase().equals(phases.get(9))) n = 9;
+		if (getGreenPhase().equals(phases.get(10))) n = 10;
+		if (getGreenPhase().equals(phases.get(11))) n = 11;
+		if (getGreenPhase().equals(phases.get(12))) n = 12;
+		if (getGreenPhase().equals(phases.get(13))) n = 13;		
+		return n;
 	}
-		
+	
+	/*vypise aktualni fazi*/
+	public void printPhase() {		
+		switch (getPhaseNumber()) {
+			case 0: System.out.println("faze 0");
+			case 1: System.out.println("faze 1");
+			case 2: System.out.println("faze 2");
+			case 3: System.out.println("faze 3");
+			case 4: System.out.println("faze 4");
+			case 5: System.out.println("faze 5");
+			case 6: System.out.println("faze 6");
+			case 7: System.out.println("faze 7");
+			case 8: System.out.println("faze 8");
+			case 9: System.out.println("faze 9");
+			case 10: System.out.println("faze 10");
+			case 11: System.out.println("faze 11");
+			case 12: System.out.println("faze 12");
+			case 13: System.out.println("faze 13");
+			case 14: System.out.println("faze 14");
+			default: System.err.println("Chyba - neznama faze");
+		}
+	}
+				
 	/*prida auto*/
 	public void addCar() {		
 		addBehaviour(new SpawnCarBehaviour());
