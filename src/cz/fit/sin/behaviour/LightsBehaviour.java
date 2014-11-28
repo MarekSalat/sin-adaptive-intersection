@@ -27,31 +27,31 @@ public class LightsBehaviour extends CyclicBehaviour {
 			e.printStackTrace();
 		}   
 		
-		/*if (i == 1) {
+		if (i == 1) {
 			IntRoad road = (IntRoad) c.getIntersection("Main").getIncomingRoadFor(Orientation.SOUTH);
 			road.line.put(Direction.RIGHT, 5);
 			road.line.put(Direction.FORWARD, 15);
 			road.line.put(Direction.LEFT, 15);
-		}*/		
+		}		
 		
-		/*if (i == 10) {
+		if (i == 10) {
 			IntRoad road = (IntRoad) c.getIntersection("Main").getIncomingRoadFor(Orientation.EAST);
 			road.line.put(Direction.RIGHT, 5);
 			road.line.put(Direction.FORWARD, 15);
 			road.line.put(Direction.LEFT, 15);						
-		}*/
+		}
 		
-		/*if (i == 15) {
+		if (i == 15) {
 			IntRoad road = (IntRoad) c.getIntersection("Main").getIncomingRoadFor(Orientation.WEST);
 			road.line.put(Direction.RIGHT, 15);
 			road.line.put(Direction.FORWARD, 1);
 			road.line.put(Direction.LEFT, 1);							
-		}*/
+		}		
 		
-		
-		//i++;
+		i++;
 			
 		//if (!newPhase.equals(c.getGreenPhase())) System.out.println("zmena");
-		c.setGreenPhase(newPhase);		
+		c.setGreenPhase(newPhase);	
+		c.refreshSemaphores();
 	}
 }
