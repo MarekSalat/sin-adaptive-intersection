@@ -18,14 +18,7 @@ public class LightsBehaviour extends CyclicBehaviour {
 		System.out.print(i);
 		System.out.println(c.getGreenPhase().toString());
 		
-		IntersectionPhase newPhase = c.getEngine().nextPhase(c.getIntersection("Main"), c.getIntersectionList(), c.getGreenPhase());
-		
-		/*spi*/
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}   
+		IntersectionPhase newPhase = c.getEngine().nextPhase(c.getIntersection("Main"), c.getIntersectionList(), c.getGreenPhase());  
 		
 		if (i == 1) {
 			IntRoad road = (IntRoad) c.getIntersection("Main").getIncomingRoadFor(Orientation.SOUTH);
@@ -52,6 +45,13 @@ public class LightsBehaviour extends CyclicBehaviour {
 			
 		//if (!newPhase.equals(c.getGreenPhase())) System.out.println("zmena");
 		c.setGreenPhase(newPhase);	
-		c.refreshSemaphores();
+		c.refreshSemaphores();	
+		
+		/*spi*/
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} 		
 	}
 }

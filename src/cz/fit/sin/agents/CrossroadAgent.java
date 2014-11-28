@@ -126,4 +126,9 @@ public class CrossroadAgent extends Agent {
 		this.lights[Semaphores.EAST_RIGHT] = getColor("Main", Orientation.EAST, Direction.RIGHT);  
 		gui.setSemaphores(lights);
 	}
+	
+	/*prida auto*/
+	public void addCar() {
+		System.out.println("auto");
+	}
 }
