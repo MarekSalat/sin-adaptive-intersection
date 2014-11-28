@@ -110,6 +110,8 @@ public class GuiRoadsSimpleGen extends JPanel{
 			return;
 		}
 		
+		System.out.println("Change on: " + phase);
+		
 		switch(phase){
 		
 			case 0:
@@ -119,7 +121,7 @@ public class GuiRoadsSimpleGen extends JPanel{
 
 			case 1:
 				img		 = Gui.phase_simple;
-				rotation = 90;
+				rotation = -90;
 				break;
 				
 			case 2:
@@ -129,7 +131,7 @@ public class GuiRoadsSimpleGen extends JPanel{
 
 			case 3:
 				img		 = Gui.phase_simple;
-				rotation = -90;
+				rotation = 90;
 				break;
 
 			case 4:
