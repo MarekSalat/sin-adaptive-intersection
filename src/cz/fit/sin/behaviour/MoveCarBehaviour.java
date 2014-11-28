@@ -26,6 +26,6 @@ public class MoveCarBehaviour extends TickerBehaviour {
 		if (c.isGreen("Main", Orientation.WEST, Direction.RIGHT)	&& c.getIncomingIntRoadCount("Main", Orientation.WEST, Direction.RIGHT) >= 1)		c.removeCar(Orientation.WEST, Direction.RIGHT);	
 		if (c.isGreen("Main", Orientation.EAST, Direction.FORWARD)	&& c.getIncomingIntRoadCount("Main", Orientation.EAST, Direction.FORWARD) >= 1)		c.removeCar(Orientation.EAST, Direction.FORWARD); 
 		if (c.isGreen("Main", Orientation.EAST, Direction.LEFT)		&& c.getIncomingIntRoadCount("Main", Orientation.EAST, Direction.LEFT) >= 1)		c.removeCar(Orientation.EAST, Direction.LEFT); 
-		if (c.isGreen("Main", Orientation.EAST, Direction.RIGHT)	&& c.getIncomingIntRoadCount("Main", Orientation.EAST, Direction.RIGHT) >= 1)		c.removeCar(Orientation.EAST, Direction.RIGHT); 
+		if (c.isGreen("Main", Orientation.EAST, Direction.RIGHT)	&& c.getIncomingIntRoadCount("Main", Orientation.EAST, Direction.RIGHT) >= 1)		c.removeCar(Orientation.EAST, Direction.RIGHT); 		
 	}
 }

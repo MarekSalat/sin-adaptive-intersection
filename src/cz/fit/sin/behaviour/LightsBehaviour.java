@@ -16,6 +16,6 @@ public class LightsBehaviour extends TickerBehaviour {
 		CrossroadAgent c = (CrossroadAgent) myAgent;		
 		IntersectionPhase newPhase = c.getEngine().nextPhase(c.getIntersection("Main"), c.getIntersectionList(), c.getGreenPhase());		
 		c.setGreenPhase(newPhase);	
-		c.refreshSemaphores();	
+		c.refreshSemaphores();			
 	}
 }

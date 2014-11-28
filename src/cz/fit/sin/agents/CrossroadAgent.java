@@ -146,7 +146,6 @@ public class CrossroadAgent extends Agent {
 		this.lights[Semaphores.EAST_LEFT] 		= getColor("Main", Orientation.EAST, Direction.LEFT);   
 		this.lights[Semaphores.EAST_RIGHT] 		= getColor("Main", Orientation.EAST, Direction.RIGHT);  
 		gui.setSemaphores(lights, getPhaseNumber());
-		printPhase();
 	}
 	
 	/*pregeneruje auta*/
