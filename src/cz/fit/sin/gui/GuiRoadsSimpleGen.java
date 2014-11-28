@@ -19,43 +19,12 @@ public class GuiRoadsSimpleGen extends JPanel{
 		// SET PHASES
 		
 		this.semPhases = new int[12];
-
-		this.semPhases[Semaphores.NORTH_FORWARD] = 0; 
-		this.semPhases[Semaphores.NORTH_LEFT]    = 0; 
-		this.semPhases[Semaphores.NORTH_RIGHT]   = 0; 
-
-		this.semPhases[Semaphores.SOUTH_FORWARD] = 0; 
-		this.semPhases[Semaphores.SOUTH_LEFT]    = 0; 
-		this.semPhases[Semaphores.SOUTH_RIGHT]   = 0; 
-
-		this.semPhases[Semaphores.WEST_FORWARD]  = 0; 
-		this.semPhases[Semaphores.WEST_LEFT]     = 0; 
-		this.semPhases[Semaphores.WEST_RIGHT]    = 0; 
-
-		this.semPhases[Semaphores.EAST_FORWARD]  = 0; 
-		this.semPhases[Semaphores.EAST_LEFT]     = 0; 
-		this.semPhases[Semaphores.EAST_RIGHT]    = 0; 
+		this.DefaultsemPhases();
 		
 		// SET CARS
 		
 		this.countCars = new int[12];
-
-		this.countCars[Semaphores.NORTH_FORWARD] = 0; 
-		this.countCars[Semaphores.NORTH_LEFT]    = 0; 
-		this.countCars[Semaphores.NORTH_RIGHT]   = 0; 
-
-		this.countCars[Semaphores.SOUTH_FORWARD] = 0; 
-		this.countCars[Semaphores.SOUTH_LEFT]    = 0; 
-		this.countCars[Semaphores.SOUTH_RIGHT]   = 0; 
-
-		this.countCars[Semaphores.WEST_FORWARD]  = 0; 
-		this.countCars[Semaphores.WEST_LEFT]     = 0; 
-		this.countCars[Semaphores.WEST_RIGHT]    = 0; 
-
-		this.countCars[Semaphores.EAST_FORWARD]  = 0; 
-		this.countCars[Semaphores.EAST_LEFT]     = 0; 
-		this.countCars[Semaphores.EAST_RIGHT]    = 0; 
-		
+		this.DefaultCars();
 	}
 	
 	public void Generate(){
@@ -92,6 +61,26 @@ public class GuiRoadsSimpleGen extends JPanel{
 		this.updateUI();
 	}
 	
+	private void DefaultsemPhases(){
+
+		this.semPhases[Semaphores.NORTH_FORWARD] = 0; 
+		this.semPhases[Semaphores.NORTH_LEFT]    = 0; 
+		this.semPhases[Semaphores.NORTH_RIGHT]   = 0; 
+
+		this.semPhases[Semaphores.SOUTH_FORWARD] = 0; 
+		this.semPhases[Semaphores.SOUTH_LEFT]    = 0; 
+		this.semPhases[Semaphores.SOUTH_RIGHT]   = 0; 
+
+		this.semPhases[Semaphores.WEST_FORWARD]  = 0; 
+		this.semPhases[Semaphores.WEST_LEFT]     = 0; 
+		this.semPhases[Semaphores.WEST_RIGHT]    = 0; 
+
+		this.semPhases[Semaphores.EAST_FORWARD]  = 0; 
+		this.semPhases[Semaphores.EAST_LEFT]     = 0; 
+		this.semPhases[Semaphores.EAST_RIGHT]    = 0; 
+		
+	}
+	
 	public void ChangeSemPhases(int semPhases[]){
 		
 		for(int i = 0; i < this.semPhases.length && i < semPhases.length; i++){
@@ -99,10 +88,39 @@ public class GuiRoadsSimpleGen extends JPanel{
 		}
 
 		this.drawingroad.repaint();
+		
+		System.out.println("Change semaphore phases");
 	}
 	
-	public void ChangeCars(){
+	private void DefaultCars(){
 
+		this.countCars[Semaphores.NORTH_FORWARD] = 0; 
+		this.countCars[Semaphores.NORTH_LEFT]    = 0; 
+		this.countCars[Semaphores.NORTH_RIGHT]   = 0; 
+
+		this.countCars[Semaphores.SOUTH_FORWARD] = 0; 
+		this.countCars[Semaphores.SOUTH_LEFT]    = 0; 
+		this.countCars[Semaphores.SOUTH_RIGHT]   = 0; 
+
+		this.countCars[Semaphores.WEST_FORWARD]  = 0; 
+		this.countCars[Semaphores.WEST_LEFT]     = 0; 
+		this.countCars[Semaphores.WEST_RIGHT]    = 0; 
+
+		this.countCars[Semaphores.EAST_FORWARD]  = 0; 
+		this.countCars[Semaphores.EAST_LEFT]     = 0; 
+		this.countCars[Semaphores.EAST_RIGHT]    = 0; 
+		
+	}
+	
+	public void ChangeCars(int cars[]){
+
+		for(int i = 0; i < this.countCars.length && i < cars.length; i++){
+			this.countCars[i] = cars[i];
+		}
+
+		this.drawingroad.repaint();
+		
+		System.out.println("Change cars");
 		
 		/*
 		System.out.println("- change sem phases and cars ");
@@ -127,6 +145,10 @@ public class GuiRoadsSimpleGen extends JPanel{
 	}
 		
 	public void ClearRoads(){
+
+		this.DefaultsemPhases();
+		this.DefaultCars();
+		
 		this.setBackground(new Color(255, 255, 255));
 		this.removeAll(); 
 		this.updateUI();
