@@ -38,7 +38,7 @@ public class MenuHelp extends JFrame {
 
         jLabel3.setText("Autors: ");
 
-        jLabel4.setText("Tom·ö Trkal, Marek Sal·t, Jakub Voneö");
+        jLabel4.setText("Tom√°≈° Trkal, Marek Sal√°t, Jakub Vone≈°");
 
         jLabel5.setText("...");
 

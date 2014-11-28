@@ -52,6 +52,7 @@ public class GuiRoads extends JFrame{
 	private JButton		btnStart, btnStop, btnAddCar;
 	
 	private JTextField	roads_x, roads_y;
+	private JLabel  	number_cars;
 
 	public GuiRoads(final CrossroadAgent executorAgent) {
 		super();
@@ -199,9 +200,11 @@ public class GuiRoads extends JFrame{
         this.roads_y.setMaximumSize(new Dimension(screenSize.width, 20));
         
         // === ADD ELEM TO BOX - jlabel
-        JLabel label_1 = new JLabel("Roads - cols:");
-        JLabel label_2 = new JLabel("Roads - rows:");
-		 
+        //JLabel label_1   = new JLabel("Roads - cols:");
+        //JLabel label_2   = new JLabel("Roads - rows:");
+        JLabel label_3   = new JLabel("Number of cars:");
+        this.number_cars = new JLabel("0");
+        this.number_cars.setMinimumSize(new Dimension( 30, 16 ));
 
         // do sloupeèku
 
@@ -211,19 +214,21 @@ public class GuiRoads extends JFrame{
             			.addComponent(btnStart)
             			.addComponent(btnStop)
             			.addComponent(btnAddCar)
+            			.addComponent(label_3)
                 		 )
                  .addGroup(layout.createParallelGroup(LEADING)
-              			.addComponent(label_1)
-              			.addComponent(label_2)
+              			.addComponent(this.number_cars)
+              			//.addComponent(label_2)
                   		 )
+                 /*
                  .addGroup(layout.createParallelGroup(LEADING)
              			.addComponent(this.roads_x)
              			.addComponent(this.roads_y)
-                 		 )
+                 		 )*/
         );
         
         layout.linkSize(SwingConstants.HORIZONTAL, btnStart, btnStop, btnAddCar);
-        layout.linkSize(SwingConstants.HORIZONTAL, this.roads_x, this.roads_y);
+        //layout.linkSize(SwingConstants.HORIZONTAL, this.roads_x, this.roads_y);
  
 
         // do øádku
@@ -231,17 +236,21 @@ public class GuiRoads extends JFrame{
         layout.setVerticalGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(BASELINE)
 					.addComponent(btnStart)
-					.addComponent(label_1)
-					.addComponent(this.roads_x)
+					//.addComponent(label_1)
+					//.addComponent(this.roads_x)
 		    		)
             .addGroup(layout.createParallelGroup(LEADING)
         			.addComponent(btnStop)
-        			.addComponent(label_2)
-        			.addComponent(this.roads_y)
+        			//.addComponent(label_2)
+        			//.addComponent(this.roads_y)
             		)
             .addGroup(layout.createParallelGroup(LEADING)
         			.addComponent(btnAddCar)
             		)
+            .addGroup(layout.createParallelGroup(LEADING)
+            		.addComponent(label_3)
+            		.addComponent(this.number_cars)
+            		)		
         );
  
         pack();
@@ -257,6 +266,9 @@ public class GuiRoads extends JFrame{
         // text
         this.roads_x.setEditable(false);
         this.roads_y.setEditable(false);
+        
+        // stats
+		this.number_cars.setText("0");
 		
 	}
 	
@@ -361,6 +373,14 @@ public class GuiRoads extends JFrame{
 	
 	public void setCars(int cars[]){
 		roadsSimpleGen.ChangeCars(cars);
+		
+		int count = 0;
+		for (int i = 0; i < cars.length; i++){
+			count += cars[i];
+		}
+		
+		this.number_cars.setText(Integer.toString(count));
+		System.out.println("Cars: " + count);
 	}
 	
 	/**=========== MAIN
