@@ -303,6 +303,7 @@ public class GuiRoads extends JFrame{
 	        	
 	        	
 	        	crossroadAgent.startSimulation();
+	        	
 	        }
 	        catch(Exception e){
 	        	System.out.println(e.toString());
