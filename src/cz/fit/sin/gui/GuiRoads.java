@@ -332,8 +332,6 @@ public class GuiRoads extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			roadsSimpleGen.ChangeSemPhases();
-			
 		}
 		
 	}
@@ -346,6 +344,12 @@ public class GuiRoads extends JFrame{
 	        
 		}
 		
+	}
+	
+	/* === ReDrawing === */
+	
+	public void setSemaphores(int semPhases[]){
+		roadsSimpleGen.ChangeSemPhases(semPhases);
 	}
 	
 	/**=========== MAIN

@@ -92,8 +92,19 @@ public class GuiRoadsSimpleGen extends JPanel{
 		this.updateUI();
 	}
 	
-	public void ChangeSemPhases(){
+	public void ChangeSemPhases(int semPhases[]){
+		
+		for(int i = 0; i < this.semPhases.length && i < semPhases.length; i++){
+			this.semPhases[i] = semPhases[i];
+		}
 
+		this.drawingroad.repaint();
+	}
+	
+	public void ChangeCars(){
+
+		
+		/*
 		System.out.println("- change sem phases and cars ");
 
 		for(int i = 0; i < this.semPhases.length; i++){
@@ -110,10 +121,9 @@ public class GuiRoadsSimpleGen extends JPanel{
 			//System.out.println(this.countCars[i]);
 			
 			//this.updateUI();
-			this.drawingroad.repaint();
 			//this.semafores.setSemPhases(this.semPhases);
 		}
-		
+		*/
 	}
 		
 	public void ClearRoads(){
