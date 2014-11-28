@@ -2,6 +2,7 @@ package cz.fit.sin.agents;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 import jade.core.Agent;
 import cz.fit.sin.gui.GuiRoads;
 import cz.fit.sin.gui.Semaphores;
@@ -17,6 +18,7 @@ import cz.fit.sin.model.intersectionphases.LeftPhase;
 import cz.fit.sin.model.intersectionphases.LeftRightPhase;
 import cz.fit.sin.model.intersectionphases.RightForwardPhase;
 import cz.fit.sin.model.intersectionphases.SimplePhase;
+import cz.fit.sin.model.road.IntRoad;
 import cz.fit.sin.model.world.WorldObject;
 import cz.fit.sin.model.world.World;
 import cz.fit.sin.behaviour.LightsBehaviour;
@@ -29,6 +31,7 @@ public class CrossroadAgent extends Agent {
 	private WorldBuilder wb;
 	private GuiRoads gui;
 	private int lights[];
+	private int cars[];
 	
 	@Override
 	protected void setup() {
@@ -36,6 +39,7 @@ public class CrossroadAgent extends Agent {
 		engine = new IntersectionFuzzyEngine();
 		gui = new GuiRoads(this);
 		lights = new int[12];
+		cars = new int[12];
 		prepareWorld();	
 		
 		/*inicializace fazi*/
@@ -49,8 +53,7 @@ public class CrossroadAgent extends Agent {
 		phases.add(new LeftPhase(Orientation.NORTH));
 		phases.add(new LeftPhase(Orientation.WEST));
 		phases.add(new LeftRightPhase(Orientation.NORTH));
-		phases.add(new LeftRightPhase(Orientation.EAST));
-		phases.add(new SimplePhase(Orientation.NORTH));
+		phases.add(new LeftRightPhase(Orientation.EAST));		
 		phases.add(new LeftRightPhase(Orientation.SOUTH));
 		phases.add(new LeftRightPhase(Orientation.WEST));
 		phases.add(new RightForwardPhase(Orientation.NORTH));
@@ -84,6 +87,16 @@ public class CrossroadAgent extends Agent {
 		return getWorld().findByName(Intersection.class, name).object;
 	}
 	
+	/*vrati cestu*/
+	public IntRoad getIncomingIntRoad(String intersection, Orientation orientation) {
+		return (IntRoad) getIntersection(intersection).getIncomingRoadFor(orientation);
+	} 
+	
+	/*vrati pocet aut na ceste*/
+	public int getIncomingIntRoadCount(String intersection, Orientation orientation, Direction direction) {		
+		return getIncomingIntRoad(intersection, orientation).getVehiclesCount(direction);
+	}
+	
 	/*vrati seznam fazi*/
 	public List<IntersectionPhase> getIntersectionList() {
 		return phases;
@@ -112,23 +125,71 @@ public class CrossroadAgent extends Agent {
 		
 	/*pregeneruje semafory*/
 	public void refreshSemaphores() {
-		this.lights[Semaphores.NORTH_FORWARD] = getColor("Main", Orientation.NORTH, Direction.FORWARD);	
-		this.lights[Semaphores.NORTH_LEFT] = getColor("Main", Orientation.NORTH, Direction.LEFT);	
-		this.lights[Semaphores.NORTH_RIGHT] = getColor("Main", Orientation.NORTH, Direction.RIGHT);	
-		this.lights[Semaphores.SOUTH_FORWARD] = getColor("Main", Orientation.SOUTH, Direction.FORWARD);	
-		this.lights[Semaphores.SOUTH_LEFT] = getColor("Main", Orientation.SOUTH, Direction.LEFT);	
-		this.lights[Semaphores.SOUTH_RIGHT] = getColor("Main", Orientation.SOUTH, Direction.RIGHT);	 
-		this.lights[Semaphores.WEST_FORWARD] = getColor("Main", Orientation.WEST, Direction.FORWARD);	
-		this.lights[Semaphores.WEST_LEFT] = getColor("Main", Orientation.WEST, Direction.LEFT);   
-		this.lights[Semaphores.WEST_RIGHT] = getColor("Main", Orientation.WEST, Direction.RIGHT);  		
-		this.lights[Semaphores.EAST_FORWARD] = getColor("Main", Orientation.EAST, Direction.FORWARD);  
-		this.lights[Semaphores.EAST_LEFT] = getColor("Main", Orientation.EAST, Direction.LEFT);   
-		this.lights[Semaphores.EAST_RIGHT] = getColor("Main", Orientation.EAST, Direction.RIGHT);  
+		this.lights[Semaphores.NORTH_FORWARD] 	= getColor("Main", Orientation.NORTH, Direction.FORWARD);	
+		this.lights[Semaphores.NORTH_LEFT] 		= getColor("Main", Orientation.NORTH, Direction.LEFT);	
+		this.lights[Semaphores.NORTH_RIGHT]		= getColor("Main", Orientation.NORTH, Direction.RIGHT);	
+		this.lights[Semaphores.SOUTH_FORWARD] 	= getColor("Main", Orientation.SOUTH, Direction.FORWARD);	
+		this.lights[Semaphores.SOUTH_LEFT] 		= getColor("Main", Orientation.SOUTH, Direction.LEFT);	
+		this.lights[Semaphores.SOUTH_RIGHT] 	= getColor("Main", Orientation.SOUTH, Direction.RIGHT);	 
+		this.lights[Semaphores.WEST_FORWARD] 	= getColor("Main", Orientation.WEST, Direction.FORWARD);	
+		this.lights[Semaphores.WEST_LEFT] 		= getColor("Main", Orientation.WEST, Direction.LEFT);   
+		this.lights[Semaphores.WEST_RIGHT] 		= getColor("Main", Orientation.WEST, Direction.RIGHT);  		
+		this.lights[Semaphores.EAST_FORWARD] 	= getColor("Main", Orientation.EAST, Direction.FORWARD);  
+		this.lights[Semaphores.EAST_LEFT] 		= getColor("Main", Orientation.EAST, Direction.LEFT);   
+		this.lights[Semaphores.EAST_RIGHT] 		= getColor("Main", Orientation.EAST, Direction.RIGHT);  
 		gui.setSemaphores(lights);
+	}
+	
+	/*pregeneruje auta*/
+	public void refreshCars() {
+		this.cars[Semaphores.NORTH_FORWARD] = getIncomingIntRoadCount("Main", Orientation.NORTH, Direction.FORWARD); 
+		this.cars[Semaphores.NORTH_LEFT]    = getIncomingIntRoadCount("Main", Orientation.NORTH, Direction.LEFT);  
+		this.cars[Semaphores.NORTH_RIGHT]   = getIncomingIntRoadCount("Main", Orientation.NORTH, Direction.RIGHT); 
+		this.cars[Semaphores.SOUTH_FORWARD] = getIncomingIntRoadCount("Main", Orientation.SOUTH, Direction.FORWARD); 
+		this.cars[Semaphores.SOUTH_LEFT]    = getIncomingIntRoadCount("Main", Orientation.SOUTH, Direction.LEFT); 
+		this.cars[Semaphores.SOUTH_RIGHT]   = getIncomingIntRoadCount("Main", Orientation.SOUTH, Direction.RIGHT); 
+		this.cars[Semaphores.WEST_FORWARD]  = getIncomingIntRoadCount("Main", Orientation.WEST, Direction.FORWARD); 
+		this.cars[Semaphores.WEST_LEFT]     = getIncomingIntRoadCount("Main", Orientation.WEST, Direction.LEFT); 
+		this.cars[Semaphores.WEST_RIGHT]    = getIncomingIntRoadCount("Main", Orientation.WEST, Direction.RIGHT); 
+		this.cars[Semaphores.EAST_FORWARD]  = getIncomingIntRoadCount("Main", Orientation.EAST, Direction.FORWARD);  
+		this.cars[Semaphores.EAST_LEFT]     = getIncomingIntRoadCount("Main", Orientation.EAST, Direction.LEFT);  
+		this.cars[Semaphores.EAST_RIGHT]    = getIncomingIntRoadCount("Main", Orientation.EAST, Direction.RIGHT); 
+		gui.setCars(cars);
+	}
+	
+	/*nahodny smer*/
+	public Orientation getRandomOrientation() {
+		Random rand = new Random();
+		int n = rand.nextInt(4) + 1;
+		switch (n) {
+			case 1: return Orientation.NORTH;
+			case 2: return Orientation.EAST;
+			case 3: return Orientation.SOUTH;
+			case 4: return Orientation.WEST;
+			default: return Orientation.WEST;		
+		}
+	}
+	
+	/*nahodny cil*/
+	public Direction getRandomDirection() {
+		Random rand = new Random();
+		int n = rand.nextInt(3) + 1;
+		switch (n) {
+			case 1: return Direction.FORWARD;
+			case 2: return Direction.LEFT;
+			case 3: return Direction.RIGHT;	
+			default: return Direction.RIGHT;	
+		}
 	}
 	
 	/*prida auto*/
 	public void addCar() {
+		Direction direction = getRandomDirection();
+		Orientation orientation = getRandomOrientation();
+		IntRoad road = getIncomingIntRoad("Main", orientation);		
+		int n = getIncomingIntRoadCount("Main", orientation, direction);		
+		road.line.put(direction, (n + 1));		
 		System.out.println("auto");
+		refreshCars();
 	}
 }
