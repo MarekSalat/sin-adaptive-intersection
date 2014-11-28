@@ -350,6 +350,16 @@ public class GuiRoads extends JFrame{
 			}
 			setCars(auta);
 			*/
+
+	        try{
+	        	
+	        	crossroadAgent.addCar();
+	        	
+	        }
+	        catch(Exception e){
+	        	System.out.println(e.toString());
+	        	JOptionPane.showMessageDialog(null, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+	        }
 		}
 		
 	}
