@@ -345,12 +345,13 @@ public class GuiRoads extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+			/*
 			int auta[] = new int[12];
 			for(int i = 0; i < auta.length; i ++){
 				auta[i] = new Random().nextInt(10);
 			}
 			setCars(auta);
+			*/
 		}
 		
 	}
