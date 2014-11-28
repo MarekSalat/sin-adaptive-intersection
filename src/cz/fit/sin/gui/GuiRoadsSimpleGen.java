@@ -2,19 +2,21 @@ package cz.fit.sin.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import javax.swing.JPanel;
 
 public class GuiRoadsSimpleGen extends JPanel{
 	private static final long serialVersionUID = 2900831093884735835L;
 	
 	private GuiDrawingRoad drawingroad;
-	private GuiSemafores   semafores;
+	private GuiDrawingCars drawingcars;
 	
 	public int semPhases[];
+	public int countCars[];
 
 	public GuiRoadsSimpleGen() {
 		super();
+		
+		// SET PHASES
 		
 		this.semPhases = new int[12];
 
@@ -22,23 +24,41 @@ public class GuiRoadsSimpleGen extends JPanel{
 		this.semPhases[Semaphores.NORTH_LEFT]    = 0; 
 		this.semPhases[Semaphores.NORTH_RIGHT]   = 0; 
 
-		this.semPhases[Semaphores.NORTH_FORWARD] = 0; 
-		this.semPhases[Semaphores.NORTH_LEFT]    = 0; 
-		this.semPhases[Semaphores.NORTH_RIGHT]   = 0; 
+		this.semPhases[Semaphores.SOUTH_FORWARD] = 0; 
+		this.semPhases[Semaphores.SOUTH_LEFT]    = 0; 
+		this.semPhases[Semaphores.SOUTH_RIGHT]   = 0; 
 
-		this.semPhases[Semaphores.WEST_FORWARD]  = 1; 
-		this.semPhases[Semaphores.WEST_LEFT]     = 1; 
-		this.semPhases[Semaphores.WEST_RIGHT]    = 1; 
+		this.semPhases[Semaphores.WEST_FORWARD]  = 0; 
+		this.semPhases[Semaphores.WEST_LEFT]     = 0; 
+		this.semPhases[Semaphores.WEST_RIGHT]    = 0; 
 
-		this.semPhases[Semaphores.EAST_FORWARD]  = 1; 
-		this.semPhases[Semaphores.EAST_LEFT]     = 1; 
-		this.semPhases[Semaphores.EAST_RIGHT]    = 1; 
+		this.semPhases[Semaphores.EAST_FORWARD]  = 0; 
+		this.semPhases[Semaphores.EAST_LEFT]     = 0; 
+		this.semPhases[Semaphores.EAST_RIGHT]    = 0; 
+		
+		// SET CARS
+		
+		this.countCars = new int[12];
+
+		this.countCars[Semaphores.NORTH_FORWARD] = 0; 
+		this.countCars[Semaphores.NORTH_LEFT]    = 0; 
+		this.countCars[Semaphores.NORTH_RIGHT]   = 0; 
+
+		this.countCars[Semaphores.SOUTH_FORWARD] = 0; 
+		this.countCars[Semaphores.SOUTH_LEFT]    = 0; 
+		this.countCars[Semaphores.SOUTH_RIGHT]   = 0; 
+
+		this.countCars[Semaphores.WEST_FORWARD]  = 0; 
+		this.countCars[Semaphores.WEST_LEFT]     = 0; 
+		this.countCars[Semaphores.WEST_RIGHT]    = 0; 
+
+		this.countCars[Semaphores.EAST_FORWARD]  = 0; 
+		this.countCars[Semaphores.EAST_LEFT]     = 0; 
+		this.countCars[Semaphores.EAST_RIGHT]    = 0; 
 		
 	}
 	
 	public void Generate(){
-		Dimension size = this.getSize();
-		System.out.println(size.width + " " + size.height);
 		
 		// === mám jednu křižovatku, postačí border layout
 		// === jinak by se hodil např grid layout ... řádky sloupce pro více křižovatek
@@ -49,29 +69,32 @@ public class GuiRoadsSimpleGen extends JPanel{
 		//this.setLayout(new GridLayout(1, 2));
 		
 		
-		// === ROAD
+		// === ROAD + SEMAPHORES
 
 		
-		drawingroad = new GuiDrawingRoad();
-		drawingroad.setLayout(new BorderLayout());
-		this.add(drawingroad, BorderLayout.CENTER);
+		this.drawingroad = new GuiDrawingRoad();
+		this.drawingroad.setSemPhases(this.semPhases);
 		
-		// na křižovatku přidáme semafory
+		this.drawingroad.setLayout(new BorderLayout());
+		this.add(this.drawingroad, BorderLayout.CENTER);
 		
-		this.semafores = new GuiSemafores();
-		this.semafores.setSemPhases(this.semPhases);
-		drawingroad.add(this.semafores, BorderLayout.CENTER);
+		
+		// === ROAD + SEMAPHORES
+		
+		this.drawingcars = new GuiDrawingCars();
+		this.drawingcars.setCars(this.countCars);
+		
+		// do křižovatky přidáme auta
+		this.drawingroad.add(this.drawingcars, BorderLayout.CENTER);
 
+		// aktualizace
 		this.repaint();
 		this.updateUI();
 	}
 	
 	public void ChangeSemPhases(){
 
-		System.out.println("- change sem phases ");
-		
-		//drawingroad.setLocation(50, 40);
-		
+		System.out.println("- change sem phases and cars ");
 
 		for(int i = 0; i < this.semPhases.length; i++){
 		
@@ -82,8 +105,12 @@ public class GuiRoadsSimpleGen extends JPanel{
 				this.semPhases[i] = 1;
 			}
 			
+			this.countCars[i] = (int)(Math.random()*20);
+			
+			//System.out.println(this.countCars[i]);
+			
 			//this.updateUI();
-			this.semafores.repaint();
+			this.drawingroad.repaint();
 			//this.semafores.setSemPhases(this.semPhases);
 		}
 		
