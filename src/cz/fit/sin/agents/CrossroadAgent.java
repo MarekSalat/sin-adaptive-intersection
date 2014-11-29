@@ -67,8 +67,8 @@ public class CrossroadAgent extends Agent {
 	/*simulace*/
 	public void startSimulation() {
 		refreshSemaphores();		
-		//addBehaviour(new LightsBehaviour(this, 2000));
-		//addBehaviour(new MoveCarBehaviour(this, 500));
+		addBehaviour(new LightsBehaviour(this, 2000));
+		addBehaviour(new MoveCarBehaviour(this, 500));
 	}
 	
 	/*vygeneruje svet*/
@@ -220,12 +220,10 @@ public class CrossroadAgent extends Agent {
 	public boolean addCarToIncomingRoad(Orientation orientation, Direction direction) {
 		IntRoad road = (IntRoad) getIncomingRoad("Main", orientation);
 		if (road.isFull() || direction.equals(Direction.CURRENT))
-			return false;
-		
-		System.out.println("start:\t" + getVehicleCountOnIncomingRoad("Main", orientation, direction));		/*SMAZAT*/
-		road.line.put(direction, (road.getVehiclesCount() + 1));
-		System.out.println("end:\t" + getVehicleCountOnIncomingRoad("Main", orientation, direction));		/*SMAZAT*/
-		
+			return false;		
+	
+		//road.line.put(direction, (road.getVehiclesCount() + 1)); //VRACI CHYBNY POCET!!!!
+		road.line.put(direction, getVehicleCountOnIncomingRoad("Main", orientation, direction) + 1);		
 		return true;
 	}
 }
