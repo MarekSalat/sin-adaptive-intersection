@@ -5,6 +5,7 @@ import cz.fit.sin.behaviour.MoveCarBehaviour;
 import cz.fit.sin.behaviour.SpawnCarBehaviour;
 import cz.fit.sin.gui.GuiRoads;
 import cz.fit.sin.gui.Semaphores;
+import cz.fit.sin.gui.GuiDrawingCars;
 import cz.fit.sin.model.IntersectionPhase;
 import cz.fit.sin.model.WorldBuilder;
 import cz.fit.sin.model.fuzzy.IntersectionFuzzyEngine;
@@ -31,7 +32,8 @@ public class CrossroadAgent extends Agent {
 	private WorldBuilder worldBuilder;
 	private GuiRoads gui;
 	private int lights[];
-	private int cars[];
+	private int incomingCars[];
+	private int outgoingCars[];
 	
 	@Override
 	protected void setup() {
@@ -39,7 +41,8 @@ public class CrossroadAgent extends Agent {
 		engine = new IntersectionFuzzyEngine();
 		gui = new GuiRoads(this);
 		lights = new int[12];
-		cars = new int[12];
+		incomingCars = new int[12];
+		outgoingCars = new int[4];
 		prepareWorld();	
 		
 		/*inicializace fazi*/
@@ -94,14 +97,24 @@ public class CrossroadAgent extends Agent {
 		return getWorld().findByName(Intersection.class, name).object;
 	}
 	
-	/*vrati cestu*/
+	/*vrati prichozi cestu*/
 	public Road getIncomingRoad(String name, Orientation orientation) {
 		return getIntersection(name).getIncomingRoadFor(orientation);
 	} 
 	
-	/*vrati pocet aut na ceste*/
+	/*vrati odchozi cestu*/
+	public Road getOutgoingRoad(String name, Orientation orientation) {
+		return getIntersection(name).getOutgoingRoadFor(orientation);
+	}
+	
+	/*vrati pocet aut na prichozi ceste*/
 	public int getVehicleCountOnIncomingRoad(String name, Orientation orientation, Direction direction) {
 		return getIncomingRoad(name, orientation).getVehiclesCount(direction);
+	}
+	
+	/*vrati pocet aut na odchozi ceste*/
+	public int getVehicleCountOnOutgoingRoad(String name, Orientation orientation) {
+		return getOutgoingRoad(name, orientation).getVehiclesCount();
 	}
 	
 	/*vrati seznam fazi*/
@@ -149,10 +162,16 @@ public class CrossroadAgent extends Agent {
 	public void refreshCars() {
 		for (Integer index : Semaphores.MAPPING.keySet()) {
 			Pair<Orientation, Direction> pair = Semaphores.MAPPING.get(index);
-			this.cars[index] = getVehicleCountOnIncomingRoad("Main", pair.first, pair.second);
+			this.incomingCars[index] = getVehicleCountOnIncomingRoad("Main", pair.first, pair.second);
 		}
+		
+		this.outgoingCars[Semaphores.LEAVE_NORTH] = getVehicleCountOnOutgoingRoad("Main", Orientation.NORTH);
+		this.outgoingCars[Semaphores.LEAVE_SOUTH] = getVehicleCountOnOutgoingRoad("Main", Orientation.SOUTH);
+		this.outgoingCars[Semaphores.LEAVE_WEST] = getVehicleCountOnOutgoingRoad("Main", Orientation.WEST);
+		this.outgoingCars[Semaphores.LEAVE_EAST] = getVehicleCountOnOutgoingRoad("Main", Orientation.EAST);
 
-		gui.setCars(cars);
+		gui.setCars(incomingCars);
+		gui.setLeaveCars(outgoingCars);
 	}	
 
 	/*vrati cislo faze*/
@@ -184,7 +203,7 @@ public class CrossroadAgent extends Agent {
 			return false;
 
 		road.line.put(Direction.FORWARD, road.line.get(Direction.FORWARD)-1);
-
+        
 		return true;
 	}
 
