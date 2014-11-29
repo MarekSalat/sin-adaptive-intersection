@@ -220,10 +220,9 @@ public class CrossroadAgent extends Agent {
 	public boolean addCarToIncomingRoad(Orientation orientation, Direction direction) {
 		IntRoad road = (IntRoad) getIncomingRoad("Main", orientation);
 		if (road.isFull() || direction.equals(Direction.CURRENT))
-			return false;		
-	
-		//road.line.put(direction, (road.getVehiclesCount() + 1)); //VRACI CHYBNY POCET!!!!
-		road.line.put(direction, getVehicleCountOnIncomingRoad("Main", orientation, direction) + 1);		
+			return false;	
+		
+		road.line.put(direction, (road.getVehiclesCount(direction) + 1));		
 		return true;
 	}
 }
