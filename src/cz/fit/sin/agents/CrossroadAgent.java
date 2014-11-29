@@ -5,7 +5,6 @@ import cz.fit.sin.behaviour.MoveCarBehaviour;
 import cz.fit.sin.behaviour.SpawnCarBehaviour;
 import cz.fit.sin.gui.GuiRoads;
 import cz.fit.sin.gui.Semaphores;
-import cz.fit.sin.gui.GuiDrawingCars;
 import cz.fit.sin.model.IntersectionPhase;
 import cz.fit.sin.model.WorldBuilder;
 import cz.fit.sin.model.fuzzy.IntersectionFuzzyEngine;
@@ -52,19 +51,19 @@ public class CrossroadAgent extends Agent {
 		phases.add(new SimplePhase(Orientation.SOUTH));
 		phases.add(new SimplePhase(Orientation.WEST));
 
-//		phases.add(new ForwardPhase(Orientation.NORTH));
-//		phases.add(new ForwardPhase(Orientation.WEST));
-//
-//		phases.add(new LeftPhase(Orientation.NORTH));
-//		phases.add(new LeftPhase(Orientation.WEST));
-//
-//		phases.add(new LeftRightPhase(Orientation.NORTH));
-//		phases.add(new LeftRightPhase(Orientation.EAST));
-//		phases.add(new LeftRightPhase(Orientation.SOUTH));
-//		phases.add(new LeftRightPhase(Orientation.WEST));
-//
-//		phases.add(new RightForwardPhase(Orientation.NORTH));
-//		phases.add(new RightForwardPhase(Orientation.WEST));
+		phases.add(new ForwardPhase(Orientation.NORTH));
+		phases.add(new ForwardPhase(Orientation.WEST));
+
+		phases.add(new LeftPhase(Orientation.NORTH));
+		phases.add(new LeftPhase(Orientation.WEST));
+
+		phases.add(new LeftRightPhase(Orientation.NORTH));
+		phases.add(new LeftRightPhase(Orientation.EAST));
+		phases.add(new LeftRightPhase(Orientation.SOUTH));
+		phases.add(new LeftRightPhase(Orientation.WEST));
+
+		phases.add(new RightForwardPhase(Orientation.NORTH));
+		phases.add(new RightForwardPhase(Orientation.WEST));
 
 		setGreenPhase(phases.get(0));	
 	}	
