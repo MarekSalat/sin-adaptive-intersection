@@ -15,6 +15,7 @@ public class GuiRoadsSimpleGen extends JPanel{
 	
 	public int semPhases[];
 	public int countCars[];
+	public int countLeaveCars[];
 
 	public GuiRoadsSimpleGen() {
 		super();
@@ -28,6 +29,11 @@ public class GuiRoadsSimpleGen extends JPanel{
 		
 		this.countCars = new int[12];
 		this.defaultCars();
+		
+		// SET LEAVE CARS
+		
+		this.countLeaveCars = new int[4];
+		this.defaultLeaveCars();
 	}
 	
 	public void generate(){
@@ -54,7 +60,7 @@ public class GuiRoadsSimpleGen extends JPanel{
 		// === ROAD + SEMAPHORES
 		
 		this.drawingcars = new GuiDrawingCars();
-		this.drawingcars.setCars(this.countCars);
+		this.drawingcars.setCars(this.countCars, this.countLeaveCars);
 		
 		// do křižovatky přidáme auta
 		this.drawingroad.add(this.drawingcars, BorderLayout.CENTER);
@@ -78,8 +84,6 @@ public class GuiRoadsSimpleGen extends JPanel{
 		}
 
 		this.drawingroad.repaint();
-		
-		System.out.println("Change semaphore phases");
 	}
 	
 	public void changeIconPhases(JLabel imagephase, int phase){
@@ -99,7 +103,7 @@ public class GuiRoadsSimpleGen extends JPanel{
 		
 			case 0:
 				img		 = Gui.PHASE_SIMPLE;
-				rotation = 180; // naopak
+				rotation = 180; 
 				break;
 
 			case 1:
@@ -203,14 +207,28 @@ public class GuiRoadsSimpleGen extends JPanel{
 		}
 
 		this.drawingroad.repaint();
-		
-		System.out.println("Change cars");
+	}
+	
+	private void defaultLeaveCars(){
+		for(int i = 0; i < this.countLeaveCars.length; i++){
+			this.countLeaveCars[i] = 0;
+		}
+	}
+	
+	public void changeLeaveCars(int cars[]){
+
+		for(int i = 0; i < this.countLeaveCars.length && i < cars.length; i++){
+			this.countLeaveCars[i] = cars[i];
+		}
+
+		this.drawingroad.repaint();
 	}
 		
 	public void clearRoads(){
 
 		this.defaultSemaphorePhases();
 		this.defaultCars();
+		this.defaultLeaveCars();
 		
 		this.setBackground(new Color(255, 255, 255));
 		this.removeAll(); 

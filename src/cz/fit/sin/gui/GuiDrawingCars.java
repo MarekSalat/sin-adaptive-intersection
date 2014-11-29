@@ -8,9 +8,11 @@ public class GuiDrawingCars extends JComponent{
 	
 	private Graphics g;
 	private int 	 cars[];
+	private int 	 leavecars[];
 	
-	public void setCars(int cars[]){
+	public void setCars(int cars[], int leavecars[]){
 		this.cars = cars;
+		this.leavecars = leavecars;
 	}
 
 	@Override
@@ -18,13 +20,14 @@ public class GuiDrawingCars extends JComponent{
 		this.g = g;
 		
 		this.drawingCars();
+		this.drawingLeaveCars();
 	}
 	
 	private void drawingCars(){
 		
 		for(int i = 0; i < this.cars.length; i++){
 			
-			// === umístění semaforu
+			// === umístění aut
 			switch(i){
 			
 				// === NORTH
@@ -82,8 +85,44 @@ public class GuiDrawingCars extends JComponent{
 				case Semaphores.EAST_RIGHT:
 					this.carsInQueue(i, 158, 0, 0);
 					break;
-				
-				
+					
+			}
+			
+		}
+		
+	}
+	
+	private void drawingLeaveCars(){
+		
+		for(int i = 0; i < this.leavecars.length; i++){
+			
+			// === umístění aut
+			switch(i){
+			
+				// === NORTH
+			
+				case Semaphores.LEAVE_NORTH:
+					this.carsInLeave(i, 296, 1, 0);
+					break;
+					
+				// === SOUTH
+
+				case Semaphores.LEAVE_SOUTH:
+					this.carsInLeave(i, 158, 1, 1);
+					break;
+					
+				// === WEST
+
+				case Semaphores.LEAVE_WEST:
+					this.carsInLeave(i, 158, 0, 0);
+					break;
+					
+				// === EAST
+
+				case Semaphores.LEAVE_EAST:
+					this.carsInLeave(i, 296, 0, 1);
+					break;
+					
 			}
 			
 		}
@@ -137,6 +176,60 @@ public class GuiDrawingCars extends JComponent{
 	        	g.drawString("+" + Integer.toString(cars), 471, start + (46+10) / 2);
 	        }
 		}
+		
+	}
+	
+	private void carsInLeave(int i, int start, int dle_y, int go_back){
+		Graphics2D g2 = (Graphics2D) g;
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 5 * 0.1f));
+
+		g.setColor(new Color(234, 171, 2));
+		//g.setColor(new Color(51, 208, 247));
+		
+		int posun_z = 0;
+		
+		// výpis aut
+		
+		for(int x = 0; x < this.leavecars[i] && x < 3; x++){
+        	posun_z = go_back == 1 ? (x * 30) : (x * -30);
+			
+        	if(dle_y == 1){
+        		g.fillRect(start + (46-18) / 2, (go_back == 1 ? 444 : 31) - posun_z, 18, 25);
+        	}
+        	else{
+        		g.fillRect((go_back == 1 ? 444 : 31) - posun_z, start + (46-18) / 2, 25, 18);
+        	}
+			
+		}
+		
+		// přidání popisku, když je moc aut
+		
+		if(this.leavecars[i] > 3){
+
+	        g.setColor(new Color(255, 255, 255));
+	        g.setFont(new Font("SansSerif", Font.BOLD, 16));
+	        
+	        int cars = this.leavecars[i] - 3;
+	        
+	        if(dle_y == 1 && go_back == 1){
+	        	// NORTH
+		        g.drawString("+" + Integer.toString(cars), start + (46-22) / 2, 490);
+	        }
+	        else if(dle_y == 1 && go_back == 0){
+	        	// SOUTH
+	        	g.drawString("+" + Integer.toString(cars), start + (46-22) / 2, 20);
+	        }
+	        else if(dle_y == 0 && go_back == 1){
+	        	// WEST
+	        	g.drawString("+" + Integer.toString(cars), 471, start + (46+10) / 2);
+	        }
+	        else if(dle_y == 0 && go_back == 0){
+	        	// EAST
+	        	g.drawString("+" + Integer.toString(cars), 1, start + (46+10) / 2);
+	        }
+		}
+		
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 10 * 0.1f));
 		
 	}
 
