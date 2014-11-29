@@ -62,7 +62,7 @@ public class IntersectionFuzzyEngine {
         "if "+QUEUE_NUM+" is "+VL+" and "+FRONT_NUM+" is "+VL+" then "+OUT_URGENCY+" is "+M,
     };
     public static String []nextPhaseRules = {
-        "if "+QUEUE_NUM+" is "+ZERO+" then "+OUT_URGENCY+" is "+ZERO,
+//        "if "+QUEUE_NUM+" is "+ZERO+" then "+OUT_URGENCY+" is "+ZERO,
 
         "if "+QUEUE_NUM+" is "+S+" and "+FRONT_NUM+" is "+S +" and "+RED_TIME+" is "+S + " then "+OUT_URGENCY+" is "+S,
         "if "+QUEUE_NUM+" is "+S+" and "+FRONT_NUM+" is "+S +" and "+RED_TIME+" is "+M + " then "+OUT_URGENCY+" is "+S,
@@ -134,7 +134,7 @@ public class IntersectionFuzzyEngine {
     };
 
     public static String []greenPhaseRules = {
-        "if "+QUEUE_NUM+" is "+ZERO+" then "+OUT_EXTEND+" is "+ZERO,
+//        "if "+QUEUE_NUM+" is "+ZERO+" then "+OUT_EXTEND+" is "+ZERO,
 
         "if "+QUEUE_NUM+" is "+S+" and "+FRONT_NUM+" is "+S +" then "+OUT_EXTEND+" is "+S,
         "if "+QUEUE_NUM+" is "+S+" and "+FRONT_NUM+" is "+M +" then "+OUT_EXTEND+" is "+S,
@@ -213,9 +213,9 @@ public class IntersectionFuzzyEngine {
      *
      *    a <  b        a >  b
      */
-    class SawToothTerm extends Ramp {
+    class SawtoothTerm extends Ramp {
 
-        public SawToothTerm(String name, double start, double end) {
+        public SawtoothTerm(String name, double start, double end) {
             super(name, start, end);
         }
 
@@ -229,7 +229,7 @@ public class IntersectionFuzzyEngine {
                 return 0.0;
             }
 
-            if (Op.isGt(start, end) && (Op.isLt(x, end) || Op.isGt(x, start))) {
+            if (Op.isGt(start, end) && (Op.isLE(x, end) || Op.isGE(x, start))) {
                 return 0.0;
             }
 
@@ -245,7 +245,7 @@ public class IntersectionFuzzyEngine {
 
         queueNum.setName(QUEUE_NUM);
         queueNum.setRange(0.000, MAX);
-        queueNum.addTerm(new Constant(ZERO, 0));
+//        queueNum.addTerm(new Constant(ZERO, 0));
         queueNum.addTerm(new Ramp(S, 7, 0));
         queueNum.addTerm(new Triangle(M, 0, 14));
         queueNum.addTerm(new Triangle (L, 7, 21));
@@ -253,16 +253,16 @@ public class IntersectionFuzzyEngine {
 
         frontNum.setName(FRONT_NUM);
         frontNum.setRange(0.000, MAX);
-        frontNum.addTerm(new Constant(ZERO, 0));
-        frontNum.addTerm(new SawToothTerm(S, 7, 0));
+//        frontNum.addTerm(new Constant(ZERO, 0));
+        frontNum.addTerm(new Ramp(S, 7, 0));
         frontNum.addTerm(new Triangle (M, 0, 14));
         frontNum.addTerm(new Triangle (L, 7, 21));
         frontNum.addTerm(new Ramp(VL, 14, 21));
 
         redTime.setName(RED_TIME);
         redTime.setRange(0.000, MAX);
-        redTime.addTerm(new Constant(ZERO, 0));
-        redTime.addTerm(new SawToothTerm(S, 2, 0));
+//        redTime.addTerm(new Constant(ZERO, 0));
+        redTime.addTerm(new Ramp(S, 2, 0));
         redTime.addTerm(new Triangle (M, 0, 4));
         redTime.addTerm(new Triangle (L, 2, 6));
         redTime.addTerm(new Ramp(VL, 4, 6));
@@ -338,11 +338,22 @@ public class IntersectionFuzzyEngine {
     }
 
     public IntersectionPhase nextPhase(Intersection intersection, List<IntersectionPhase> phases, IntersectionPhase greenPhase){
-        queueNum.setInputValue(greenPhase.getQueueNum(intersection));
-        frontNum.setInputValue(greenPhase.getFrontNum(intersection));
+        int greenPhaseQueueNum = greenPhase.getQueueNum(intersection);
+        int greenPhaseFrontNum = greenPhase.getFrontNum(intersection);
+
+
+        queueNum.setInputValue(greenPhaseQueueNum);
+        frontNum.setInputValue(greenPhaseFrontNum);
+
 
         greenPhaseEngine.process();
         double extendPhase = outExtend.defuzzify();
+
+        System.out.println(
+            greenPhase.toString() + " (extend "+extendPhase+") |> " +
+            "queueNum=" + greenPhaseQueueNum + ", " +
+            "frontNum=" + greenPhaseFrontNum
+        );
 
         double maxUrgency = 0;
         IntersectionPhase maxUrgentPhase = null;
@@ -350,12 +361,23 @@ public class IntersectionFuzzyEngine {
             if(phase == greenPhase)
                 continue;
 
-            queueNum.setInputValue(phase.getQueueNum(intersection));
-            frontNum.setInputValue(phase.getFrontNum(intersection));
-            redTime.setInputValue(phase.getRedTime(intersection));
+            int phaseQueueNum = phase.getQueueNum(intersection);
+            int phaseFrontNum = phase.getFrontNum(intersection);
+            int phaseRedTime = phase.getRedTime(intersection);
+
+            queueNum.setInputValue(phaseQueueNum);
+            frontNum.setInputValue(phaseFrontNum);
+            redTime.setInputValue(phaseRedTime);
 
             nextPhaseEngine.process();
             double urgency = outUrgency.defuzzify();
+
+            System.out.println(
+                phase.toString() + " (urgency "+urgency+") |> " +
+                "queueNum="  + phaseQueueNum + ", "+
+                "frontNum=" + phaseFrontNum + ", "+
+                "redTime="+phaseRedTime
+            );
 
             if(urgency >= maxUrgency){
                 maxUrgency = urgency;
