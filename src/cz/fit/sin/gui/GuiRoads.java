@@ -38,7 +38,6 @@ public class GuiRoads extends JFrame{
 	
 	// ---
 	private CrossroadAgent 	  crossroadAgent;
-	//private GuiRoadsGenerator roadsGenerator;
 	private GuiRoadsSimpleGen roadsSimpleGen;
 	
 	// --- Menu
