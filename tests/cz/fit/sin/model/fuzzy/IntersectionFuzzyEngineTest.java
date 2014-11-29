@@ -5,7 +5,7 @@ import cz.fit.sin.model.WorldBuilder;
 import cz.fit.sin.model.intersection.Direction;
 import cz.fit.sin.model.intersection.Intersection;
 import cz.fit.sin.model.intersection.Orientation;
-import cz.fit.sin.model.intersectionphases.*;
+import cz.fit.sin.model.intersectionphases.SimplePhase;
 import cz.fit.sin.model.road.IntRoad;
 import cz.fit.sin.model.world.World;
 import org.junit.Assert;
@@ -69,11 +69,21 @@ public class IntersectionFuzzyEngineTest {
 
     @Test
     public void testNextPhase_foo() throws Exception {
-        // 11ec4639 (extend  ???) |> queueNum=0, frontNum=0
 
+        engine.queueNum.setInputValue(17);
+        engine.frontNum.setInputValue(0);
+        engine.redTime.setInputValue(27);
+
+        engine.nextPhaseEngine.process();
+        double urgency = engine.outUrgency.defuzzify();
+        System.out.print("urgency="+urgency);
+        Assert.assertTrue(urgency > 0.0);
+
+        // 11ec4639 (extend  ???) |> queueNum=0,  frontNum=0
         // 10bfbefc (urgency ???) |> queueNum=11, frontNum=0, redTime=33
         // 1c939afb (urgency ???) |> queueNum=16, frontNum=0, redTime=28
         // 1ea3e365 (urgency ???) |> queueNum=17, frontNum=0, redTime=27
+
         simplePhases = Arrays.asList(
                 new IntersectionPhase() {
 

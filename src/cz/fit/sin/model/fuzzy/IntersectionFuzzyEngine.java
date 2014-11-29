@@ -6,6 +6,7 @@ import com.fuzzylite.rule.Rule;
 import com.fuzzylite.rule.RuleBlock;
 import com.fuzzylite.term.Constant;
 import com.fuzzylite.term.Ramp;
+import com.fuzzylite.term.Trapezoid;
 import com.fuzzylite.term.Triangle;
 import com.fuzzylite.variable.InputVariable;
 import com.fuzzylite.variable.OutputVariable;
@@ -22,12 +23,12 @@ import java.util.List;
 public class IntersectionFuzzyEngine {
     public final static int MAX = 192;
     public final static String ZERO = "ZERO";
-    public final static String S = "SML";
-    public final static String M = "MDM";
-    public final static String L = "LRG";
-    public final static String VL = "LRG";
-    public final static String YES = "YES";
-    public final static String NO = "NO";
+    public final static String S = "S";
+    public final static String M = "M";
+    public final static String L = "L";
+    public final static String VL = "VL";
+    public final static String YES = "Y";
+    public final static String NO = "N";
 
     public final static String QUEUE_NUM = "QueueNum";
     public final static String FRONT_NUM = "FrontNum";
@@ -62,7 +63,7 @@ public class IntersectionFuzzyEngine {
         "if "+QUEUE_NUM+" is "+VL+" and "+FRONT_NUM+" is "+VL+" then "+OUT_URGENCY+" is "+M,
     };
     public static String []nextPhaseRules = {
-//        "if "+QUEUE_NUM+" is "+ZERO+" then "+OUT_URGENCY+" is "+ZERO,
+        "if "+QUEUE_NUM+" is "+ZERO+" then "+OUT_URGENCY+" is "+ZERO,
 
         "if "+QUEUE_NUM+" is "+S+" and "+FRONT_NUM+" is "+S +" and "+RED_TIME+" is "+S + " then "+OUT_URGENCY+" is "+S,
         "if "+QUEUE_NUM+" is "+S+" and "+FRONT_NUM+" is "+S +" and "+RED_TIME+" is "+M + " then "+OUT_URGENCY+" is "+S,
@@ -134,7 +135,7 @@ public class IntersectionFuzzyEngine {
     };
 
     public static String []greenPhaseRules = {
-//        "if "+QUEUE_NUM+" is "+ZERO+" then "+OUT_EXTEND+" is "+ZERO,
+        "if "+QUEUE_NUM+" is "+ZERO+" then "+OUT_EXTEND+" is "+ZERO,
 
         "if "+QUEUE_NUM+" is "+S+" and "+FRONT_NUM+" is "+S +" then "+OUT_EXTEND+" is "+S,
         "if "+QUEUE_NUM+" is "+S+" and "+FRONT_NUM+" is "+M +" then "+OUT_EXTEND+" is "+S,
@@ -237,6 +238,17 @@ public class IntersectionFuzzyEngine {
         }
     }
 
+    class Peak extends Constant {
+        public Peak(String name, double value) {
+            super(name, value);
+        }
+
+        @Override
+        public double membership(double x) {
+            return Op.isEq(value, x) ? 1.0 : 0.0;
+        }
+    }
+
     public IntersectionFuzzyEngine() {
         nextPhaseEngine = new Engine("next-phase-engine");
         greenPhaseEngine = new Engine("green-phase-engine");
@@ -245,36 +257,42 @@ public class IntersectionFuzzyEngine {
 
         queueNum.setName(QUEUE_NUM);
         queueNum.setRange(0.000, MAX);
-//        queueNum.addTerm(new Constant(ZERO, 0));
-        queueNum.addTerm(new Ramp(S, 7, 0));
+        queueNum.addTerm(new Peak(ZERO, 0));
+        queueNum.addTerm(new SawtoothTerm(S, 7, 0));
         queueNum.addTerm(new Triangle(M, 0, 14));
         queueNum.addTerm(new Triangle (L, 7, 21));
-        queueNum.addTerm(new Ramp(VL, 14, 21));
+        queueNum.addTerm(new Trapezoid(VL, 14, 21, MAX-1, MAX));
 
         frontNum.setName(FRONT_NUM);
         frontNum.setRange(0.000, MAX);
-//        frontNum.addTerm(new Constant(ZERO, 0));
+//        frontNum.addTerm(new Peak(ZERO, 0));
         frontNum.addTerm(new Ramp(S, 7, 0));
         frontNum.addTerm(new Triangle (M, 0, 14));
         frontNum.addTerm(new Triangle (L, 7, 21));
-        frontNum.addTerm(new Ramp(VL, 14, 21));
+        frontNum.addTerm(new Trapezoid(VL, 14, 21, MAX-1, MAX));
 
         redTime.setName(RED_TIME);
         redTime.setRange(0.000, MAX);
-//        redTime.addTerm(new Constant(ZERO, 0));
+//        redTime.addTerm(new Peak(ZERO, 0));
         redTime.addTerm(new Ramp(S, 2, 0));
         redTime.addTerm(new Triangle (M, 0, 4));
         redTime.addTerm(new Triangle (L, 2, 6));
-        redTime.addTerm(new Ramp(VL, 4, 6));
+        redTime.addTerm(new Trapezoid(VL, 4, 6, MAX-1, MAX));
 
         outUrgency.setName(OUT_URGENCY);
         outUrgency.setRange(0.000, MAX);
         outUrgency.setDefaultValue(0);
-        outUrgency.addTerm(new Constant(ZERO, 0));
-        outUrgency.addTerm(new Constant(S, 2));
-        outUrgency.addTerm(new Constant(M, 4));
-        outUrgency.addTerm(new Constant(L, 6));
-        outUrgency.addTerm(new Constant(VL, 8));
+//        outUrgency.addTerm(new Peak(ZERO, 0));
+//        outUrgency.addTerm(new Peak(S, 2));
+//        outUrgency.addTerm(new Peak(M, 4));
+//        outUrgency.addTerm(new Peak(L, 6));
+//        outUrgency.addTerm(new Peak(VL, 8));
+        outUrgency.addTerm(new Ramp(ZERO, 2, 0));
+        outUrgency.addTerm(new Triangle(S, 0, 4));
+        outUrgency.addTerm(new Triangle(M, 2, 6));
+        outUrgency.addTerm(new Triangle(L, 4, 8));
+        outUrgency.addTerm(new Trapezoid(VL, 6, 8, MAX-1, MAX));
+
 
         inUrgency.setName(IN_URGENCY);
         inUrgency.setRange(0.000, MAX);
@@ -282,7 +300,7 @@ public class IntersectionFuzzyEngine {
         inUrgency.addTerm(new Triangle(S, 0, 4));
         inUrgency.addTerm(new Triangle(M, 2, 6));
         inUrgency.addTerm(new Triangle(L, 4, 8));
-        inUrgency.addTerm(new Ramp(VL, 6, 8));
+        inUrgency.addTerm(new Trapezoid(VL, 6, 8, MAX-1, MAX));
 
         outExtend.setName(OUT_EXTEND);
         outExtend.setRange(0.000, MAX);
@@ -291,7 +309,7 @@ public class IntersectionFuzzyEngine {
         outExtend.addTerm(new Triangle (S, 0, 4));
         outExtend.addTerm(new Triangle (M, 2, 6));
         outExtend.addTerm(new Triangle (L, 4, 8));
-        outExtend.addTerm(new Ramp(VL, 6, 8));
+        outExtend.addTerm(new Trapezoid(VL, 6, 8, MAX-1, MAX));
 
         inExtend.setName(IN_EXTEND);
         inExtend.setRange(0.000, MAX);
@@ -299,13 +317,13 @@ public class IntersectionFuzzyEngine {
         inExtend.addTerm(new Triangle(S, 0, 4));
         inExtend.addTerm(new Triangle(M, 2, 6));
         inExtend.addTerm(new Triangle(L, 4, 8));
-        inExtend.addTerm(new Ramp(VL, 6, 8));
+        inExtend.addTerm(new Trapezoid(VL, 6, 8, MAX-1, MAX));
 
         finalDecision.setName(DECISION);
         finalDecision.setDefaultValue(-1);
         finalDecision.setRange(-1, 1);
-        finalDecision.addTerm(new Constant(YES, 1));
-        finalDecision.addTerm(new Constant(NO, -1));
+        finalDecision.addTerm(new Peak(YES, 1));
+        finalDecision.addTerm(new Peak(NO, -1));
 
         // Green phase configuration
         greenPhaseEngine.addInputVariable(queueNum);
@@ -340,7 +358,6 @@ public class IntersectionFuzzyEngine {
     public IntersectionPhase nextPhase(Intersection intersection, List<IntersectionPhase> phases, IntersectionPhase greenPhase){
         int greenPhaseQueueNum = greenPhase.getQueueNum(intersection);
         int greenPhaseFrontNum = greenPhase.getFrontNum(intersection);
-
 
         queueNum.setInputValue(greenPhaseQueueNum);
         frontNum.setInputValue(greenPhaseFrontNum);
