@@ -238,52 +238,16 @@ public class GuiRoads extends JFrame{
             			 .addGroup(layout.createSequentialGroup()
              		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 			            		          .addComponent(label_3)
-	          		            		  )
-	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-			            		          .addComponent(this.number_cars)
-	         		            		  )
-
-	          		             )
-            		     
-
-            			 .addGroup(layout.createSequentialGroup()
-             		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 			            		          .addComponent(label_4)
-	          		            		  )
-	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-			            		          .addComponent(this.leave_cars_north)
-	         		            		  )
-
-	          		             )
-            		     
-            		     
-            			 .addGroup(layout.createSequentialGroup()
-             		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 			            		          .addComponent(label_5)
-	          		            		  )
-	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-			            		          .addComponent(this.leave_cars_south)
-	         		            		  )
-
-	          		             )
-	          		     
-            			 .addGroup(layout.createSequentialGroup()
-             		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 			            		          .addComponent(label_6)
-	          		            		  )
-	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-			            		          .addComponent(this.leave_cars_west)
-	         		            		  )
-
-	          		             )
-	          		             
-	          		             
-            		     
-            			 .addGroup(layout.createSequentialGroup()
-             		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 			            		          .addComponent(label_7)
 	          		            		  )
 	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(this.number_cars)
+			            		          .addComponent(this.leave_cars_north)
+			            		          .addComponent(this.leave_cars_south)
+			            		          .addComponent(this.leave_cars_west)
 			            		          .addComponent(this.leave_cars_east)
 	         		            		  )
 
@@ -291,8 +255,9 @@ public class GuiRoads extends JFrame{
             		     )
                 
         );
-        
+
         layout.linkSize(SwingConstants.HORIZONTAL, btnStart, btnStop, btnAddCar, this.imagephase);
+        layout.linkSize(SwingConstants.HORIZONTAL, this.number_cars, this.leave_cars_north, this.leave_cars_south, this.leave_cars_west, this.leave_cars_east);
  
 
         // do řádku
@@ -308,37 +273,37 @@ public class GuiRoads extends JFrame{
                     		.addComponent(label_3)
                     		.addComponent(this.number_cars)
                     		)
-                    		)
                     		
+             )  		
             .addGroup(layout.createParallelGroup(LEADING)
 
-        	                .addGroup(layout.createParallelGroup(BASELINE)
-        	                		.addComponent(label_4)
-        	                		.addComponent(this.leave_cars_north)
-        	                		)
-        	                		)
-        	                        .addGroup(layout.createParallelGroup(LEADING)
+	                .addGroup(layout.createParallelGroup(BASELINE)
+	                		.addComponent(label_4)
+	                		.addComponent(this.leave_cars_north)
+	                		)
+	        )
+        	.addGroup(layout.createParallelGroup(LEADING)
         	                		
-        	                .addGroup(layout.createParallelGroup(BASELINE)
-        	                		.addComponent(label_5)
-        	                		.addComponent(this.leave_cars_south)
-        	                		)
-        	                		)
-        	                        .addGroup(layout.createParallelGroup(LEADING)
+	                .addGroup(layout.createParallelGroup(BASELINE)
+	                		.addComponent(label_5)
+	                		.addComponent(this.leave_cars_south)
+	                		)
+        	)
+        	.addGroup(layout.createParallelGroup(LEADING)
         	                		
-        	                .addGroup(layout.createParallelGroup(BASELINE)
-        	                		.addComponent(label_6)
-        	                		.addComponent(this.leave_cars_west)
-        	                		)
-        	                		)
-        	                        .addGroup(layout.createParallelGroup(LEADING)
+	                .addGroup(layout.createParallelGroup(BASELINE)
+	                		.addComponent(label_6)
+	                		.addComponent(this.leave_cars_west)
+	                		)
+        	)
+        	.addGroup(layout.createParallelGroup(LEADING)
         	                		
-        	                .addGroup(layout.createParallelGroup(BASELINE)
-        	                		.addComponent(label_7)
-        	                		.addComponent(this.leave_cars_east)
-        	                		)
+	                .addGroup(layout.createParallelGroup(BASELINE)
+	                		.addComponent(label_7)
+	                		.addComponent(this.leave_cars_east)
+	                		)
 
-            		)	
+           )	
         );
  
         pack();
