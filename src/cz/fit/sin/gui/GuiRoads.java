@@ -1,12 +1,11 @@
 package cz.fit.sin.gui;
 
-import static javax.swing.GroupLayout.Alignment.BASELINE;
-import static javax.swing.GroupLayout.Alignment.LEADING;
+import cz.fit.sin.agents.CrossroadAgent;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -15,23 +14,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
-import cz.fit.sin.agents.CrossroadAgent;
+import static javax.swing.GroupLayout.Alignment.BASELINE;
+import static javax.swing.GroupLayout.Alignment.LEADING;
 
 public class GuiRoads extends JFrame{
 	private static final long serialVersionUID = 7563499771061984518L;
@@ -67,7 +51,7 @@ public class GuiRoads extends JFrame{
 		// ---
 		this.setTitle("SIN - Adaptive intersection");
 		
-		this.setMinimumSize(new Dimension(Gui.default_width, Gui.default_height));
+		this.setMinimumSize(new Dimension(Gui.DEFAULT_WIDTH, Gui.DEFAULT_HEIGHT));
 		
 		
 		this.setResizable(false);
@@ -130,9 +114,9 @@ public class GuiRoads extends JFrame{
 
 		// === SET CONTENT WITH ROADS
 		this.content = new GuiRoadsSimpleGen();
-		this.content.setMinimumSize(new Dimension(Gui.default_width, Gui.default_height));
-		this.content.setPreferredSize(new Dimension(Gui.default_width, Gui.default_height));
-		this.content.setMaximumSize(new Dimension(Gui.default_width, Gui.default_height));
+		this.content.setMinimumSize(new Dimension(Gui.DEFAULT_WIDTH, Gui.DEFAULT_HEIGHT));
+		this.content.setPreferredSize(new Dimension(Gui.DEFAULT_WIDTH, Gui.DEFAULT_HEIGHT));
+		this.content.setMaximumSize(new Dimension(Gui.DEFAULT_WIDTH, Gui.DEFAULT_HEIGHT));
 		
 		this.content.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100)));
 		this.content.setBackground(new Color(255, 255, 255));
@@ -195,7 +179,7 @@ public class GuiRoads extends JFrame{
 		// === IMAGE WITH PHASES
 		BufferedImage myPicture = null;
 		try {
-			myPicture = ImageIO.read(new File(Gui.phase_no));
+			myPicture = ImageIO.read(new File(Gui.PHASE_NO));
 		} 
 		catch (IOException e) {
 			
@@ -204,12 +188,12 @@ public class GuiRoads extends JFrame{
 		this.imagephase.setIcon(new ImageIcon(myPicture));
 		
 		// === ADD ELEM TO BOX - textfield
-		this.roads_x = new JTextField(Gui.default_silnice_x);  
+		this.roads_x = new JTextField(Gui.DEFAULT_ROAD_X);
 		this.roads_x.setHorizontalAlignment(JTextField.CENTER);
         this.roads_x.setPreferredSize( new Dimension( 30, 20 ) ); 
         this.roads_x.setMaximumSize(new Dimension(screenSize.width, 20));
 
-		this.roads_y = new JTextField(Gui.default_silnice_y);  
+		this.roads_y = new JTextField(Gui.DEFAULT_ROAD_Y);
 		this.roads_y.setHorizontalAlignment(JTextField.CENTER);
         this.roads_y.setPreferredSize( new Dimension( 30, 20 ) ); 
         this.roads_y.setMaximumSize(new Dimension(screenSize.width, 20));
@@ -282,7 +266,7 @@ public class GuiRoads extends JFrame{
 		this.number_cars.setText("0");
 
 		// phase
-		roadsSimpleGen.ChangeIconPhases(this.imagephase, -1);
+		roadsSimpleGen.changeIconPhases(this.imagephase, -1);
 		
 	}
 	
@@ -315,7 +299,7 @@ public class GuiRoads extends JFrame{
 	        }*/
 	        
 	        try{
-	        	roadsSimpleGen.Generate();
+	        	roadsSimpleGen.generate();
 	        	
 	        	
 	        	crossroadAgent.startSimulation();
@@ -344,7 +328,7 @@ public class GuiRoads extends JFrame{
 			_initDeafult();
 			
 			try{
-				roadsSimpleGen.ClearRoads();
+				roadsSimpleGen.clearRoads();
 	        }
 	        catch(Exception e){
 	        	System.out.println(e.getMessage());
@@ -396,13 +380,13 @@ public class GuiRoads extends JFrame{
 	/* === ReDrawing === */
 	
 	public void setSemaphores(int semPhases[], int phase){
-		roadsSimpleGen.ChangeSemPhases(semPhases);
-		roadsSimpleGen.ChangeIconPhases(this.imagephase, phase);
+		roadsSimpleGen.changeSemPhases(semPhases);
+		roadsSimpleGen.changeIconPhases(this.imagephase, phase);
 	}
 	
 	
 	public void setCars(int cars[]){
-		roadsSimpleGen.ChangeCars(cars);
+		roadsSimpleGen.changeCars(cars);
 		
 		int count = 0;
 		for (int i = 0; i < cars.length; i++){

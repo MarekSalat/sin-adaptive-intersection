@@ -1,9 +1,7 @@
 package cz.fit.sin.gui;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import javax.swing.JComponent;
+import javax.swing.*;
+import java.awt.*;
 
 public class GuiDrawingCars extends JComponent{
 	private static final long serialVersionUID = 1316313123878901987L;

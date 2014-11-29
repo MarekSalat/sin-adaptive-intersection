@@ -1,15 +1,11 @@
 package cz.fit.sin.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Graphics2D;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class GuiRoadsSimpleGen extends JPanel{
 	private static final long serialVersionUID = 2900831093884735835L;
@@ -26,15 +22,15 @@ public class GuiRoadsSimpleGen extends JPanel{
 		// SET PHASES
 		
 		this.semPhases = new int[12];
-		this.DefaultsemPhases();
+		this.defaultSemaphorePhases();
 		
 		// SET CARS
 		
 		this.countCars = new int[12];
-		this.DefaultCars();
+		this.defaultCars();
 	}
 	
-	public void Generate(){
+	public void generate(){
 		
 		// === mám jednu křižovatku, postačí border layout
 		// === jinak by se hodil např grid layout ... řádky sloupce pro více křižovatek
@@ -68,27 +64,14 @@ public class GuiRoadsSimpleGen extends JPanel{
 		this.updateUI();
 	}
 	
-	private void DefaultsemPhases(){
-
-		this.semPhases[Semaphores.NORTH_FORWARD] = 0; 
-		this.semPhases[Semaphores.NORTH_LEFT]    = 0; 
-		this.semPhases[Semaphores.NORTH_RIGHT]   = 0; 
-
-		this.semPhases[Semaphores.SOUTH_FORWARD] = 0; 
-		this.semPhases[Semaphores.SOUTH_LEFT]    = 0; 
-		this.semPhases[Semaphores.SOUTH_RIGHT]   = 0; 
-
-		this.semPhases[Semaphores.WEST_FORWARD]  = 0; 
-		this.semPhases[Semaphores.WEST_LEFT]     = 0; 
-		this.semPhases[Semaphores.WEST_RIGHT]    = 0; 
-
-		this.semPhases[Semaphores.EAST_FORWARD]  = 0; 
-		this.semPhases[Semaphores.EAST_LEFT]     = 0; 
-		this.semPhases[Semaphores.EAST_RIGHT]    = 0; 
+	private void defaultSemaphorePhases(){
+		for (Integer index : Semaphores.MAPPING.keySet()) {
+			this.semPhases[index] = 0;
+		}
 		
 	}
 	
-	public void ChangeSemPhases(int semPhases[]){
+	public void changeSemPhases(int semPhases[]){
 		
 		for(int i = 0; i < this.semPhases.length && i < semPhases.length; i++){
 			this.semPhases[i] = semPhases[i];
@@ -99,8 +82,8 @@ public class GuiRoadsSimpleGen extends JPanel{
 		System.out.println("Change semaphore phases");
 	}
 	
-	public void ChangeIconPhases(JLabel imagephase, int phase){
-		String img 			  	= Gui.phase_no;
+	public void changeIconPhases(JLabel imagephase, int phase){
+		String img 			  	= Gui.PHASE_NO;
 		BufferedImage oldImage 	= null;
 		BufferedImage newImage 	= null;
 		int rotation			= 0;
@@ -115,78 +98,78 @@ public class GuiRoadsSimpleGen extends JPanel{
 		switch(phase){
 		
 			case 0:
-				img		 = Gui.phase_simple;
+				img		 = Gui.PHASE_SIMPLE;
 				rotation = 180; // naopak
 				break;
 
 			case 1:
-				img		 = Gui.phase_simple;
+				img		 = Gui.PHASE_SIMPLE;
 				rotation = -90;
 				break;
 				
 			case 2:
-				img		 = Gui.phase_simple;
+				img		 = Gui.PHASE_SIMPLE;
 				rotation = 0;
 				break;
 
 			case 3:
-				img		 = Gui.phase_simple;
+				img		 = Gui.PHASE_SIMPLE;
 				rotation = 90;
 				break;
 
 			case 4:
-				img		 = Gui.phase_forward;
+				img		 = Gui.PHASE_FORWARD;
 				rotation = 180;
 				break;
 
 			case 5:
-				img		 = Gui.phase_forward;
+				img		 = Gui.PHASE_FORWARD;
 				rotation = -90;
 				break;
 
 			case 6:
-				img		 = Gui.phase_left;
+				img		 = Gui.PHASE_LEFT;
 				rotation = 180;
 				break;
 				
 			case 7:
-				img		 = Gui.phase_left;
+				img		 = Gui.PHASE_LEFT;
 				rotation = -90;
 				break;
 
 			case 8:
-				img		 = Gui.phase_left_right;
+				img		 = Gui.PHASE_LEFT_RIGHT;
 				rotation = 180;
 				break;
 
 			case 9:
-				img		 = Gui.phase_left_right;
+				img		 = Gui.PHASE_LEFT_RIGHT;
 				rotation = -90;
 				break;
 
 			case 10:
-				img		 = Gui.phase_left_right;
+				img		 = Gui.PHASE_LEFT_RIGHT;
 				rotation = 0;
 				break;
 
 			case 11:
-				img		 = Gui.phase_left_right;
+				img		 = Gui.PHASE_LEFT_RIGHT;
 				rotation = +90;
 				break;
 
 			case 12:
-				img		 = Gui.phase_right_forward;
+				img		 = Gui.PHASE_RIGHT_FORWARD;
 				rotation = 180;
 				break;
 
 			case 13:
-				img		 = Gui.phase_right_forward;
+				img		 = Gui.PHASE_RIGHT_FORWARD;
 				rotation = -90;
 				break;
 				
 			case -1:
 			default:
-				img		 = Gui.phase_no;
+				img		 = Gui.PHASE_NO;
 				rotation = 0;
 				break;
 		}
@@ -207,27 +190,13 @@ public class GuiRoadsSimpleGen extends JPanel{
 		// --
 	}
 	
-	private void DefaultCars(){
-
-		this.countCars[Semaphores.NORTH_FORWARD] = 0; 
-		this.countCars[Semaphores.NORTH_LEFT]    = 0; 
-		this.countCars[Semaphores.NORTH_RIGHT]   = 0; 
-
-		this.countCars[Semaphores.SOUTH_FORWARD] = 0; 
-		this.countCars[Semaphores.SOUTH_LEFT]    = 0; 
-		this.countCars[Semaphores.SOUTH_RIGHT]   = 0; 
-
-		this.countCars[Semaphores.WEST_FORWARD]  = 0; 
-		this.countCars[Semaphores.WEST_LEFT]     = 0; 
-		this.countCars[Semaphores.WEST_RIGHT]    = 0; 
-
-		this.countCars[Semaphores.EAST_FORWARD]  = 0; 
-		this.countCars[Semaphores.EAST_LEFT]     = 0; 
-		this.countCars[Semaphores.EAST_RIGHT]    = 0; 
-		
+	private void defaultCars(){
+		for (Integer index : Semaphores.MAPPING.keySet()) {
+			this.countCars[index] = 0;
+		}
 	}
 	
-	public void ChangeCars(int cars[]){
+	public void changeCars(int cars[]){
 
 		for(int i = 0; i < this.countCars.length && i < cars.length; i++){
 			this.countCars[i] = cars[i];
@@ -238,10 +207,10 @@ public class GuiRoadsSimpleGen extends JPanel{
 		System.out.println("Change cars");
 	}
 		
-	public void ClearRoads(){
+	public void clearRoads(){
 
-		this.DefaultsemPhases();
-		this.DefaultCars();
+		this.defaultSemaphorePhases();
+		this.defaultCars();
 		
 		this.setBackground(new Color(255, 255, 255));
 		this.removeAll(); 

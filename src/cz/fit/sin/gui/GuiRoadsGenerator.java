@@ -1,16 +1,14 @@
 package cz.fit.sin.gui;
 
 
-import java.awt.Color;
-import java.awt.Component;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 /* ===========================================
- * ======== SÌù k¯iûovatek - generov·nÌ ======
+ * ======== SÔøΩ kÔøΩiÔøΩovatek - generovÔøΩnÔøΩ ======
  * ===========================================
  */
 class GuiRoadsGenerator extends JTable {
@@ -25,21 +23,17 @@ class GuiRoadsGenerator extends JTable {
 	// --- 
 	private DefaultTableModel model;
 	
-	public GuiRoadsGenerator() {
-		super();
-	}
-	
 	@Override
 	public boolean isCellEditable(int row, int column) {
 		return false;
 	}
 	
-	public void ClearRoads(){
+	public void clearRoads(){
 		this.model = (DefaultTableModel) this.getModel();
 		this.model.setRowCount(0);
 	}
 		
-	public void Generate(int x, int y) throws Exception{
+	public void generate(int x, int y) throws Exception{
 		this.x = (int)x;
 		this.y = (int)y;
 
@@ -54,7 +48,7 @@ class GuiRoadsGenerator extends JTable {
 		
 		System.out.println("Cols: " + this.cols + " Rows: " + this.rows);
 		
-		this.GenerateTable();
+		this.generateTable();
 		Cells bunky = new Cells();
 		this.setDefaultRenderer(Object.class, bunky);
 		
@@ -62,7 +56,7 @@ class GuiRoadsGenerator extends JTable {
 		this.setTableSettings();
 	}
 	
-	private void GenerateTable(){
+	private void generateTable(){
 		this.model = new DefaultTableModel(this.rows, this.cols);
 		this.setModel(this.model);
 	}
@@ -158,12 +152,12 @@ class GuiRoadsGenerator extends JTable {
 			else if((i-1) % 3 == 0){
 				System.out.print(i + " ");
 				
-				this.setRowHeight(i, Gui.delka_silnice);
+				this.setRowHeight(i, Gui.ROAD_LENGTH);
 			}
 			else{
 				//System.out.print(i + " ");
 				
-				this.setRowHeight(i, Gui.sirka_silnice);
+				this.setRowHeight(i, Gui.ROAD_WIDTH);
 			}
 		}
 		
@@ -178,25 +172,25 @@ class GuiRoadsGenerator extends JTable {
 			else if((i-1) % 3 == 0){
 				System.out.print(i + " ");
 				
-				this.getColumnModel().getColumn(i).setPreferredWidth(Gui.delka_silnice);
+				this.getColumnModel().getColumn(i).setPreferredWidth(Gui.ROAD_LENGTH);
 			}
 			else{
 				//System.out.print(i + " ");
 
-				this.getColumnModel().getColumn(i).setPreferredWidth(Gui.sirka_silnice);
+				this.getColumnModel().getColumn(i).setPreferredWidth(Gui.ROAD_WIDTH);
 			}
 		}
 		
 		// BORDER
-		this.setRowHeight(0, 			 Gui.konec_silnice);
-		this.setRowHeight(this.rows - 1, Gui.konec_silnice);
+		this.setRowHeight(0, 			 Gui.ROAD_END);
+		this.setRowHeight(this.rows - 1, Gui.ROAD_END);
 
-		this.getColumnModel().getColumn(0)				.setMinWidth		(Gui.konec_silnice);
-		this.getColumnModel().getColumn(0)				.setPreferredWidth	(Gui.konec_silnice);
-		this.getColumnModel().getColumn(0)				.setMaxWidth		(Gui.konec_silnice);
-		this.getColumnModel().getColumn(this.rows - 1)	.setMinWidth		(Gui.konec_silnice);
-		this.getColumnModel().getColumn(this.rows - 1)	.setPreferredWidth	(Gui.konec_silnice);
-		this.getColumnModel().getColumn(this.rows - 1)	.setMaxWidth		(Gui.konec_silnice);
+		this.getColumnModel().getColumn(0)				.setMinWidth		(Gui.ROAD_END);
+		this.getColumnModel().getColumn(0)				.setPreferredWidth	(Gui.ROAD_END);
+		this.getColumnModel().getColumn(0)				.setMaxWidth		(Gui.ROAD_END);
+		this.getColumnModel().getColumn(this.rows - 1)	.setMinWidth		(Gui.ROAD_END);
+		this.getColumnModel().getColumn(this.rows - 1)	.setPreferredWidth	(Gui.ROAD_END);
+		this.getColumnModel().getColumn(this.rows - 1)	.setMaxWidth		(Gui.ROAD_END);
 	}
 	
 	private void setTableSettings(){

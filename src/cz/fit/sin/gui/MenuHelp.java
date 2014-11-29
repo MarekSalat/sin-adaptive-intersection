@@ -1,10 +1,7 @@
 package cz.fit.sin.gui;
 
-import java.awt.Dimension;
-import java.awt.Font;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
+import java.awt.*;
 
 public class MenuHelp extends JFrame {
 	private static final long serialVersionUID = 5552158158412475406L;
@@ -17,7 +14,7 @@ public class MenuHelp extends JFrame {
     
     public MenuHelp() {
 
-		this.setMinimumSize(new Dimension(Gui.default_width/2, Gui.default_height/2));
+		this.setMinimumSize(new Dimension(Gui.DEFAULT_WIDTH /2, Gui.DEFAULT_HEIGHT /2));
 		this.setLocationRelativeTo(null); 
     	
         initComponents();

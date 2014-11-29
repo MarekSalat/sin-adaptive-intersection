@@ -1,10 +1,8 @@
-package cz.fit.sin.model.fuzzy;
+package cz.fit.sin.model.intersection;
 
 import cz.fit.sin.model.IntersectionPhase;
 import cz.fit.sin.model.WorldBuilder;
-import cz.fit.sin.model.intersection.Direction;
-import cz.fit.sin.model.intersection.Intersection;
-import cz.fit.sin.model.intersection.Orientation;
+import cz.fit.sin.model.fuzzy.IntersectionFuzzyEngine;
 import cz.fit.sin.model.intersectionphases.*;
 import cz.fit.sin.model.road.IntRoad;
 import cz.fit.sin.model.world.World;

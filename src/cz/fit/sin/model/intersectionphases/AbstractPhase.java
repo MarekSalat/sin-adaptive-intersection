@@ -51,6 +51,7 @@ public abstract class AbstractPhase  implements IntersectionPhase {
 
         for (Pair<Orientation, Direction> pair : getActiveSemaphoresInPhase()) {
             Orientation _orientation = pair.first.toAbsolute(pair.second);
+
             if(visited[_orientation.ordinal()])
                 continue;
             visited[_orientation.ordinal()] = true;

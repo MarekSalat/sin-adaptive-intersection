@@ -5,6 +5,7 @@ import cz.fit.sin.model.intersection.Semaphore;
 import cz.fit.sin.model.road.Road;
 import cz.fit.sin.model.road.endpoints.RoadEnding;
 import cz.fit.sin.model.road.endpoints.RoadSpawn;
+import cz.fit.sin.model.vehicles.Vehicle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class World {
     public List<WorldObject<Road>> roads = new ArrayList<>();
     public List<WorldObject<RoadSpawn>> spawns = new ArrayList<>();
     public List<WorldObject<RoadEnding>> ends = new ArrayList<>();
+    public List<WorldObject<Vehicle>> vehicles = new ArrayList<>();
 
     public<T> List getAll(Class<T> klass){
         if(klass.equals(Intersection.class))
@@ -38,6 +40,9 @@ public class World {
 
         if(klass.equals(RoadEnding.class))
             return ends;
+
+        if(klass.equals(Vehicle.class))
+            return vehicles;
 
         return null;
     }

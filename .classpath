@@ -3,15 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-<<<<<<< HEAD
 	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/jade.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin1"/>
-=======
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/Users/Niro/workspace/SIN-Xroad-master/libs/jade.jar"/>
-	<classpathentry kind="lib" path="C:/_Programming/Java/GIT/SIN-Adaptive-intersection/lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="output" path="bin"/>
->>>>>>> branch 'master' of https://github.com/MarekSalat/SIN-Adaptive-intersection.git
 </classpath>

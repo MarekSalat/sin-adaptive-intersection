@@ -5,9 +5,12 @@ import cz.fit.sin.model.intersection.Intersection;
 import cz.fit.sin.model.intersection.Orientation;
 import cz.fit.sin.model.intersection.Semaphore;
 import cz.fit.sin.model.road.IntRoad;
+import cz.fit.sin.model.road.QueueRoad;
 import cz.fit.sin.model.road.Road;
 import cz.fit.sin.model.road.endpoints.RoadEnding;
 import cz.fit.sin.model.road.endpoints.RoadSpawn;
+import cz.fit.sin.model.vehicles.Car;
+import cz.fit.sin.model.vehicles.Vehicle;
 import cz.fit.sin.model.world.Properties;
 import cz.fit.sin.model.world.World;
 import cz.fit.sin.model.world.WorldObject;
@@ -89,6 +92,20 @@ public class WorldBuilder {
     }
 
     public ConnectResult connect(WorldObject<Intersection> a, WorldObject<Intersection> b, Orientation bAt) {
+
+        registerFactory(Road.class, new Factory() {
+            @Override
+            public Object create() {
+                return new QueueRoad(21);
+            }
+        });
+
+        create(Road.class);
+
+        WorldObject<Vehicle> car = add(Vehicle.class);
+
+        ((QueueRoad) world.spawns.get(0).object.road).putVehicle(Direction.FORWARD, car.object);
+
         // createSimpleWorld roads
         WorldObject<Road> a2b = add(Road.class);
         WorldObject<Road> b2a = add(Road.class);
@@ -191,6 +208,19 @@ public class WorldBuilder {
      */
     public static World createSimpleWorld(){
         WorldBuilder wb = new WorldBuilder();
+
+        wb.registerFactory(Road.class, new Factory() {
+            @Override
+            public Object create() {
+                return new QueueRoad(22);
+            }
+        });
+        wb.registerFactory(Vehicle.class, new Factory() {
+            @Override
+            public Object create() {
+                return new Car();
+            }
+        });
 
         WorldObject<Intersection> a = wb.add(Intersection.class);
         a.properties.name = "A";

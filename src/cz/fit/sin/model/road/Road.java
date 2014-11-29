@@ -8,6 +8,9 @@ import cz.fit.sin.model.intersection.Direction;
  * Time: 13:26
  */
 public interface Road {
+    boolean isFull();
+    boolean isEmpty();
+
     int getVehiclesCount();
 
     int getVehiclesCount(Direction direction);

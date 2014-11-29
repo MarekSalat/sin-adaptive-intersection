@@ -13,9 +13,12 @@ public class LightsBehaviour extends TickerBehaviour {
 	
 	@Override
 	public void onTick() {
-		CrossroadAgent c = (CrossroadAgent) myAgent;		
-		IntersectionPhase newPhase = c.getEngine().nextPhase(c.getIntersection("Main"), c.getIntersectionList(), c.getGreenPhase());		
-		c.setGreenPhase(newPhase);	
-		c.refreshSemaphores();			
+		CrossroadAgent agent = (CrossroadAgent) myAgent;
+		IntersectionPhase newPhase = agent.getEngine().nextPhase(agent.getIntersection("Main"), agent.getIntersectionPhases(), agent.getGreenPhase());
+		if (agent.getGreenPhase() == newPhase)
+			return;
+
+		agent.setGreenPhase(newPhase);
+		agent.refreshSemaphores();
 	}
 }

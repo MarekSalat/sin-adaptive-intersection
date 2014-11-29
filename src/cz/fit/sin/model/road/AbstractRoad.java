@@ -20,4 +20,14 @@ public abstract class AbstractRoad implements Road {
         this.from = from;
         this.to = to;
     }
+
+    @Override
+    public boolean isFull(){
+        return getVehiclesCount() >= capacity;
+    }
+
+    @Override
+    public boolean isEmpty(){
+        return getVehiclesCount() <= 0;
+    }
 }

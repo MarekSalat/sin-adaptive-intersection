@@ -1,50 +1,41 @@
 package cz.fit.sin.behaviour;
 
-import java.util.Random;
-
 import cz.fit.sin.agents.CrossroadAgent;
 import cz.fit.sin.model.intersection.Direction;
 import cz.fit.sin.model.intersection.Orientation;
-import cz.fit.sin.model.road.IntRoad;
 import jade.core.behaviours.OneShotBehaviour;
+
+import java.util.Random;
 
 @SuppressWarnings("serial")
 public class SpawnCarBehaviour extends OneShotBehaviour {
-	
+	Random rand = new Random();
+
 	@Override
 	public void action() {
-		CrossroadAgent c = (CrossroadAgent) myAgent;
-		Direction direction = getRandomDirection();
-		Orientation orientation = getRandomOrientation();
-		IntRoad road = c.getIncomingIntRoad("Main", orientation);
-		int n = c.getIncomingIntRoadCount("Main", orientation, direction);		
-		road.line.put(direction, (n + 1));		
-		System.out.println("+ auto");
-		c.refreshCars();
-	}
-	
-	/*nahodny smer*/
-	public Orientation getRandomOrientation() {
-		Random rand = new Random();
-		int n = rand.nextInt(4) + 1;
-		switch (n) {
-			case 1: return Orientation.NORTH;
-			case 2: return Orientation.EAST;
-			case 3: return Orientation.SOUTH;
-			case 4: return Orientation.WEST;
-			default: return Orientation.WEST;		
+		CrossroadAgent agent = (CrossroadAgent) myAgent;
+
+		for (int i = 0; i < 4*3; i++) {
+			Direction direction = getRandomDirection();
+			Orientation orientation = getRandomOrientation();
+
+			if (!agent.addCarToIncomingRoad(orientation, direction)) {
+				continue;
+			}
+
+			System.out.println("+ auto");
+			agent.refreshCars();
+			break;
 		}
+	}
+
+	/*nahodny smer*/
+	private Orientation getRandomOrientation() {
+		return Orientation.values()[rand.nextInt(4)];
 	}
 	
 	/*nahodny cil*/
-	public Direction getRandomDirection() {
-		Random rand = new Random();
-		int n = rand.nextInt(3) + 1;
-		switch (n) {
-			case 1: return Direction.FORWARD;
-			case 2: return Direction.LEFT;
-			case 3: return Direction.RIGHT;	
-			default: return Direction.RIGHT;	
-		}
+	private Direction getRandomDirection() {
+		return Direction.values()[rand.nextInt(3) + 1];
 	}
 }
