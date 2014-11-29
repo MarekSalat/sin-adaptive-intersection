@@ -1,5 +1,7 @@
 package cz.fit.sin.model.road;
 
+import cz.fit.sin.model.intersection.Direction;
+
 /**
  * User: Marek Salát
  * Date: 25. 11. 2014
@@ -29,5 +31,10 @@ public abstract class AbstractRoad implements Road {
     @Override
     public boolean isEmpty(){
         return getVehiclesCount() <= 0;
+    }
+
+    @Override
+    public boolean isEmpty(Direction direction){
+        return getVehiclesCount(direction) <= 0;
     }
 }

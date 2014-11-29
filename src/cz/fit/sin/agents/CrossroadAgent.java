@@ -69,8 +69,8 @@ public class CrossroadAgent extends Agent {
 	/*simulace*/
 	public void startSimulation() {
 		refreshSemaphores();		
-		addBehaviour(new LightsBehaviour(this, 8000));
-		addBehaviour(new MoveCarBehaviour(this, 2000));
+		addBehaviour(new LightsBehaviour(this, 2000));
+		addBehaviour(new MoveCarBehaviour(this, 500));
 	}
 	
 	/*vygeneruje svet*/
@@ -169,7 +169,7 @@ public class CrossroadAgent extends Agent {
 		IntRoad currentRoad = (IntRoad) getIntersection("Main").getIncomingRoadFor(orientation);
 		IntRoad nextRoad = (IntRoad) getIntersection("Main").getOutgoingRoadFor(orientation.toAbsolute(direction));
 
-		if (!isSemaphoreGreen("Main", orientation, direction) || currentRoad.isEmpty() || nextRoad.isFull() || direction.equals(Direction.CURRENT))
+		if (direction.equals(Direction.CURRENT) || !isSemaphoreGreen("Main", orientation, direction) || currentRoad.isEmpty(direction) || nextRoad.isFull())
 			return false;
 
 		currentRoad.line.put(direction, currentRoad.line.get(direction)-1);
@@ -180,7 +180,7 @@ public class CrossroadAgent extends Agent {
 
 	public boolean removeCarFromOutgoingRoad(Orientation orientation, Direction direction) {
 		IntRoad road = (IntRoad) getIntersection("Main").getOutgoingRoadFor(orientation.toAbsolute(direction));
-		if (road.isEmpty() || direction.equals(Direction.CURRENT))
+		if (direction.equals(Direction.CURRENT) || road.isEmpty(Direction.FORWARD))
 			return false;
 
 		road.line.put(Direction.FORWARD, road.line.get(Direction.FORWARD)-1);
