@@ -18,6 +18,7 @@ public class LightsBehaviour extends TickerBehaviour {
 //		if (agent.getGreenPhase() == newPhase)
 //			return;
 
+		System.out.println("Semaphore phase change");
 		agent.setGreenPhase(newPhase);
 		agent.refreshSemaphores();
 	}

@@ -23,8 +23,8 @@ public class SimplePhase extends AbstractPhase {
     List<Pair<Orientation, Direction>> activeSemaphores = Arrays.asList(
         Pair.of(getOrientation(), Direction.LEFT),
         Pair.of(getOrientation(), Direction.RIGHT),
-        Pair.of(getOrientation(), Direction.FORWARD),
-        Pair.of(getOrientation().toAbsolute(Direction.LEFT), Direction.RIGHT)
+        Pair.of(getOrientation(), Direction.FORWARD)
+        //Pair.of(getOrientation().toAbsolute(Direction.LEFT), Direction.RIGHT)
     );
 
     public SimplePhase(Orientation orientation) {

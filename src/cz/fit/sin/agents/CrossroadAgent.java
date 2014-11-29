@@ -49,19 +49,19 @@ public class CrossroadAgent extends Agent {
 		phases.add(new SimplePhase(Orientation.SOUTH));
 		phases.add(new SimplePhase(Orientation.WEST));
 
-		phases.add(new ForwardPhase(Orientation.NORTH));
-		phases.add(new ForwardPhase(Orientation.WEST));
-
-		phases.add(new LeftPhase(Orientation.NORTH));
-		phases.add(new LeftPhase(Orientation.WEST));
-
-		phases.add(new LeftRightPhase(Orientation.NORTH));
-		phases.add(new LeftRightPhase(Orientation.EAST));		
-		phases.add(new LeftRightPhase(Orientation.SOUTH));
-		phases.add(new LeftRightPhase(Orientation.WEST));
-
-		phases.add(new RightForwardPhase(Orientation.NORTH));
-		phases.add(new RightForwardPhase(Orientation.WEST));
+//		phases.add(new ForwardPhase(Orientation.NORTH));
+//		phases.add(new ForwardPhase(Orientation.WEST));
+//
+//		phases.add(new LeftPhase(Orientation.NORTH));
+//		phases.add(new LeftPhase(Orientation.WEST));
+//
+//		phases.add(new LeftRightPhase(Orientation.NORTH));
+//		phases.add(new LeftRightPhase(Orientation.EAST));
+//		phases.add(new LeftRightPhase(Orientation.SOUTH));
+//		phases.add(new LeftRightPhase(Orientation.WEST));
+//
+//		phases.add(new RightForwardPhase(Orientation.NORTH));
+//		phases.add(new RightForwardPhase(Orientation.WEST));
 
 		setGreenPhase(phases.get(0));	
 	}	

@@ -1,6 +1,7 @@
 package cz.fit.sin.model.fuzzy;
 
 import com.fuzzylite.Engine;
+import com.fuzzylite.Op;
 import com.fuzzylite.rule.Rule;
 import com.fuzzylite.rule.RuleBlock;
 import com.fuzzylite.term.Constant;
@@ -8,7 +9,6 @@ import com.fuzzylite.term.Ramp;
 import com.fuzzylite.term.Triangle;
 import com.fuzzylite.variable.InputVariable;
 import com.fuzzylite.variable.OutputVariable;
-
 import cz.fit.sin.model.IntersectionPhase;
 import cz.fit.sin.model.intersection.Intersection;
 
@@ -204,6 +204,39 @@ public class IntersectionFuzzyEngine {
 
     public OutputVariable finalDecision = new OutputVariable();
 
+    /**
+     *        /|        |\
+     *       / |        | \
+     *      /  |        |  \
+     *     /___|        |___\
+     *    a    b        b    a
+     *
+     *    a <  b        a >  b
+     */
+    class SawToothTerm extends Ramp {
+
+        public SawToothTerm(String name, double start, double end) {
+            super(name, start, end);
+        }
+
+        @Override
+        public double membership(double x) {
+            if (Double.isNaN(x)) {
+                return Double.NaN;
+            }
+
+            if (Op.isLt(start, end) && (Op.isLE(x, start) || Op.isGE(x, end))) {
+                return 0.0;
+            }
+
+            if (Op.isGt(start, end) && (Op.isLt(x, end) || Op.isGt(x, start))) {
+                return 0.0;
+            }
+
+            return super.membership(x);
+        }
+    }
+
     public IntersectionFuzzyEngine() {
         nextPhaseEngine = new Engine("next-phase-engine");
         greenPhaseEngine = new Engine("green-phase-engine");
@@ -221,7 +254,7 @@ public class IntersectionFuzzyEngine {
         frontNum.setName(FRONT_NUM);
         frontNum.setRange(0.000, MAX);
         frontNum.addTerm(new Constant(ZERO, 0));
-        frontNum.addTerm(new Ramp(S, 7, 0));
+        frontNum.addTerm(new SawToothTerm(S, 7, 0));
         frontNum.addTerm(new Triangle (M, 0, 14));
         frontNum.addTerm(new Triangle (L, 7, 21));
         frontNum.addTerm(new Ramp(VL, 14, 21));
@@ -229,7 +262,7 @@ public class IntersectionFuzzyEngine {
         redTime.setName(RED_TIME);
         redTime.setRange(0.000, MAX);
         redTime.addTerm(new Constant(ZERO, 0));
-        redTime.addTerm(new Ramp(S, 2, 0));
+        redTime.addTerm(new SawToothTerm(S, 2, 0));
         redTime.addTerm(new Triangle (M, 0, 4));
         redTime.addTerm(new Triangle (L, 2, 6));
         redTime.addTerm(new Ramp(VL, 4, 6));
