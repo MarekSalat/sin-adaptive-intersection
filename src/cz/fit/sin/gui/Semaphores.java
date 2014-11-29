@@ -46,4 +46,11 @@ public class Semaphores {
 
 		MAPPING = Collections.unmodifiableMap(mapping);
 	}
+	
+
+	public static final int LEAVE_NORTH   = 0;
+	public static final int LEAVE_SOUTH   = 1;
+	public static final int LEAVE_WEST    = 2;
+	public static final int LEAVE_EAST    = 3;
+	
 }

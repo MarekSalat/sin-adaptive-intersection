@@ -40,6 +40,10 @@ public class GuiRoads extends JFrame{
 	private JLabel		imagephase;
 	private JTextField	roads_x, roads_y;
 	private JLabel  	number_cars;
+	private JLabel  	leave_cars_north;
+	private JLabel  	leave_cars_south;
+	private JLabel  	leave_cars_west;
+	private JLabel  	leave_cars_east;
 
 	public GuiRoads(final CrossroadAgent crossroadAgent) {
 		super();
@@ -201,8 +205,25 @@ public class GuiRoads extends JFrame{
         //JLabel label_1   = new JLabel("Roads - cols:");
         //JLabel label_2   = new JLabel("Roads - rows:");
         JLabel label_3   = new JLabel("Number of cars:");
+        JLabel label_4   = new JLabel("Leave - North:");
+        JLabel label_5   = new JLabel("Leave - South:");
+        JLabel label_6   = new JLabel("Leave - West:");
+        JLabel label_7   = new JLabel("Leave - East:");
+        
         this.number_cars = new JLabel("0");
         this.number_cars.setMinimumSize(new Dimension( 30, 16 ));
+        
+        this.leave_cars_north = new JLabel("0");
+        this.leave_cars_north.setMinimumSize(new Dimension( 30, 16 ));
+        
+        this.leave_cars_south = new JLabel("0");
+        this.leave_cars_south.setMinimumSize(new Dimension( 30, 16 ));
+        
+        this.leave_cars_west = new JLabel("0");
+        this.leave_cars_west.setMinimumSize(new Dimension( 30, 16 ));
+        
+        this.leave_cars_east = new JLabel("0");
+        this.leave_cars_east.setMinimumSize(new Dimension( 30, 16 ));
 
         // do sloupeèku
 
@@ -220,6 +241,50 @@ public class GuiRoads extends JFrame{
 	          		            		  )
 	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 			            		          .addComponent(this.number_cars)
+	         		            		  )
+
+	          		             )
+            		     
+
+            			 .addGroup(layout.createSequentialGroup()
+             		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(label_4)
+	          		            		  )
+	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(this.leave_cars_north)
+	         		            		  )
+
+	          		             )
+            		     
+            		     
+            			 .addGroup(layout.createSequentialGroup()
+             		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(label_5)
+	          		            		  )
+	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(this.leave_cars_south)
+	         		            		  )
+
+	          		             )
+	          		     
+            			 .addGroup(layout.createSequentialGroup()
+             		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(label_6)
+	          		            		  )
+	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(this.leave_cars_west)
+	         		            		  )
+
+	          		             )
+	          		             
+	          		             
+            		     
+            			 .addGroup(layout.createSequentialGroup()
+             		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(label_7)
+	          		            		  )
+	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+			            		          .addComponent(this.leave_cars_east)
 	         		            		  )
 
 	          		             )
@@ -243,6 +308,35 @@ public class GuiRoads extends JFrame{
                     		.addComponent(label_3)
                     		.addComponent(this.number_cars)
                     		)
+                    		)
+                    		
+            .addGroup(layout.createParallelGroup(LEADING)
+
+        	                .addGroup(layout.createParallelGroup(BASELINE)
+        	                		.addComponent(label_4)
+        	                		.addComponent(this.leave_cars_north)
+        	                		)
+        	                		)
+        	                        .addGroup(layout.createParallelGroup(LEADING)
+        	                		
+        	                .addGroup(layout.createParallelGroup(BASELINE)
+        	                		.addComponent(label_5)
+        	                		.addComponent(this.leave_cars_south)
+        	                		)
+        	                		)
+        	                        .addGroup(layout.createParallelGroup(LEADING)
+        	                		
+        	                .addGroup(layout.createParallelGroup(BASELINE)
+        	                		.addComponent(label_6)
+        	                		.addComponent(this.leave_cars_west)
+        	                		)
+        	                		)
+        	                        .addGroup(layout.createParallelGroup(LEADING)
+        	                		
+        	                .addGroup(layout.createParallelGroup(BASELINE)
+        	                		.addComponent(label_7)
+        	                		.addComponent(this.leave_cars_east)
+        	                		)
 
             		)	
         );
@@ -263,6 +357,10 @@ public class GuiRoads extends JFrame{
         
         // stats
 		this.number_cars.setText("0");
+		this.leave_cars_north.setText("0");
+		this.leave_cars_south.setText("0");
+		this.leave_cars_west.setText("0");
+		this.leave_cars_east.setText("0");
 
 		// phase
 		roadsSimpleGen.changeIconPhases(this.imagephase, -1);
@@ -349,6 +447,12 @@ public class GuiRoads extends JFrame{
 				auta[i] = new Random().nextInt(10);
 			}
 			setCars(auta);
+			
+			int leaveauta[] = new int[12];
+			for(int i = 0; i < leaveauta.length; i ++){
+				leaveauta[i] = new Random().nextInt(10);
+			}
+			setLeaveCars(leaveauta);
 			*/
 
 	        try{
@@ -391,9 +495,18 @@ public class GuiRoads extends JFrame{
 		for (int i = 0; i < cars.length; i++){
 			count += cars[i];
 		}
-		
+		 
 		this.number_cars.setText(Integer.toString(count));
-		System.out.println("Cars: " + count);
+	}
+	
+	public void setLeaveCars(int cars[]){
+		roadsSimpleGen.changeLeaveCars(cars);
+		
+
+		this.leave_cars_north.setText(Integer.toString(cars[Semaphores.LEAVE_NORTH]));
+		this.leave_cars_south.setText(Integer.toString(cars[Semaphores.LEAVE_SOUTH]));
+		this.leave_cars_west.setText(Integer.toString(cars[Semaphores.LEAVE_WEST]));
+		this.leave_cars_east.setText(Integer.toString(cars[Semaphores.LEAVE_EAST]));
 	}
 	
 	
