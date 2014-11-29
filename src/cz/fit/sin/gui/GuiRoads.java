@@ -495,7 +495,7 @@ public class GuiRoads extends JFrame{
 		for (int i = 0; i < cars.length; i++){
 			count += cars[i];
 		}
-		
+		 
 		this.number_cars.setText(Integer.toString(count));
 	}
 	
