@@ -41,7 +41,7 @@ public abstract class AbstractPhase  implements IntersectionPhase {
             queueNum += intersection.getIncomingRoadVehicleCount(pair.first, pair.second);
         }
 
-        return queueNum;
+        return (int) Math.ceil(queueNum / (double) getActiveSemaphoresInPhase().size());
     }
 
     public int getFrontNum(Intersection intersection) {
@@ -64,9 +64,11 @@ public abstract class AbstractPhase  implements IntersectionPhase {
 
     public int getRedTime(Intersection intersection) {
         int total = 0;
+        int count = 0;
         // get total number of vehicles on incoming roads
         for (Orientation _orientation : Orientation.values()){
             total += intersection.getIncomingRoadVehicleCount(_orientation);
+            count++;
         }
 
         int onGreen = 0;
@@ -75,6 +77,6 @@ public abstract class AbstractPhase  implements IntersectionPhase {
             onGreen += intersection.getIncomingRoadVehicleCount(pair.first, pair.second);
         }
 
-        return total - onGreen;
+        return (int) Math.ceil((total - onGreen) / (double) (count - getActiveSemaphoresInPhase().size()));
     }
 }
