@@ -13,12 +13,12 @@ public class SpawnCarBehaviour extends OneShotBehaviour {
 
 	@Override
 	public void action() {
-		CrossroadAgent agent = (CrossroadAgent) myAgent;
-
+		CrossroadAgent agent = (CrossroadAgent) myAgent;																				
+																			
 		for (int i = 0; i < 4*3; i++) {
 			Direction direction = getRandomDirection();
 			Orientation orientation = getRandomOrientation();
-
+																				
 			if (!agent.addCarToIncomingRoad(orientation, direction)) {
 				continue;
 			}
@@ -26,7 +26,7 @@ public class SpawnCarBehaviour extends OneShotBehaviour {
 			System.out.println("+ auto");
 			agent.refreshCars();
 			break;
-		}
+		}																			
 	}
 
 	/*nahodny smer*/

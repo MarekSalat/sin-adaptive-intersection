@@ -50,18 +50,14 @@ public class CrossroadAgent extends Agent {
 		phases.add(new SimplePhase(Orientation.EAST));
 		phases.add(new SimplePhase(Orientation.SOUTH));
 		phases.add(new SimplePhase(Orientation.WEST));
-
 		phases.add(new ForwardPhase(Orientation.NORTH));
 		phases.add(new ForwardPhase(Orientation.WEST));
-
 		phases.add(new LeftPhase(Orientation.NORTH));
 		phases.add(new LeftPhase(Orientation.WEST));
-
 		phases.add(new LeftRightPhase(Orientation.NORTH));
 		phases.add(new LeftRightPhase(Orientation.EAST));
 		phases.add(new LeftRightPhase(Orientation.SOUTH));
 		phases.add(new LeftRightPhase(Orientation.WEST));
-
 		phases.add(new RightForwardPhase(Orientation.NORTH));
 		phases.add(new RightForwardPhase(Orientation.WEST));
 
@@ -71,8 +67,8 @@ public class CrossroadAgent extends Agent {
 	/*simulace*/
 	public void startSimulation() {
 		refreshSemaphores();		
-		addBehaviour(new LightsBehaviour(this, 2000));
-		addBehaviour(new MoveCarBehaviour(this, 500));
+		//addBehaviour(new LightsBehaviour(this, 2000));
+		//addBehaviour(new MoveCarBehaviour(this, 500));
 	}
 	
 	/*vygeneruje svet*/
@@ -105,8 +101,23 @@ public class CrossroadAgent extends Agent {
 	public Road getOutgoingRoad(String name, Orientation orientation) {
 		return getIntersection(name).getOutgoingRoadFor(orientation);
 	}
+
+	/*vrati celkovy pocet aut na prijezdovych cestach*/
+	public int getVehicleCountOnAllIncomingRoads(String name) {
+		int cnt = 0;
+		cnt += getIncomingRoad(name, Orientation.SOUTH).getVehiclesCount();
+		cnt += getIncomingRoad(name, Orientation.NORTH).getVehiclesCount();	
+		cnt += getIncomingRoad(name, Orientation.EAST).getVehiclesCount();	
+		cnt += getIncomingRoad(name, Orientation.WEST).getVehiclesCount();					 
+		return cnt;	
+	}
 	
-	/*vrati pocet aut na prichozi ceste*/
+	/*vrati celkovy pocet aut na prichozi ceste*/
+	public int getVehicleCountOnIncomingRoad(String name, Orientation orientation) {
+		return getIncomingRoad(name, orientation).getVehiclesCount();	
+	}
+	
+	/*vrati pocet aut na prichozi ceste v urcitem smeru*/
 	public int getVehicleCountOnIncomingRoad(String name, Orientation orientation, Direction direction) {
 		return getIncomingRoad(name, orientation).getVehiclesCount(direction);
 	}
@@ -183,36 +194,38 @@ public class CrossroadAgent extends Agent {
 		addBehaviour(new SpawnCarBehaviour());
 	}
 
+	/*posune s autem*/
 	public boolean moveCarOnIncomingRoad(Orientation orientation, Direction direction) {
 		IntRoad currentRoad = (IntRoad) getIntersection("Main").getIncomingRoadFor(orientation);
 		IntRoad nextRoad = (IntRoad) getIntersection("Main").getOutgoingRoadFor(orientation.toAbsolute(direction));
-
 		if (direction.equals(Direction.CURRENT) || !isSemaphoreGreen("Main", orientation, direction) || currentRoad.isEmpty(direction) || nextRoad.isFull())
 			return false;
 
 		currentRoad.line.put(direction, currentRoad.line.get(direction)-1);
 		nextRoad.line.put(Direction.FORWARD, nextRoad.line.get(Direction.FORWARD)+1);
-
 		return true;
 	}
 
+	/*odebere auto*/
 	public boolean removeCarFromOutgoingRoad(Orientation orientation, Direction direction) {
 		IntRoad road = (IntRoad) getIntersection("Main").getOutgoingRoadFor(orientation.toAbsolute(direction));
 		if (direction.equals(Direction.CURRENT) || road.isEmpty(Direction.FORWARD))
 			return false;
 
-		road.line.put(Direction.FORWARD, road.line.get(Direction.FORWARD)-1);
-        
+		road.line.put(Direction.FORWARD, road.line.get(Direction.FORWARD)-1);        
 		return true;
 	}
 
+	/*prida auto*/
 	public boolean addCarToIncomingRoad(Orientation orientation, Direction direction) {
 		IntRoad road = (IntRoad) getIncomingRoad("Main", orientation);
 		if (road.isFull() || direction.equals(Direction.CURRENT))
 			return false;
-
+		
+		System.out.println("start:\t" + getVehicleCountOnIncomingRoad("Main", orientation, direction));		/*SMAZAT*/
 		road.line.put(direction, (road.getVehiclesCount() + 1));
-
+		System.out.println("end:\t" + getVehicleCountOnIncomingRoad("Main", orientation, direction));		/*SMAZAT*/
+		
 		return true;
 	}
 }
