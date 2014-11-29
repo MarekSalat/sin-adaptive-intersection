@@ -16,9 +16,9 @@ public class SpawnCarBehaviour extends OneShotBehaviour {
 		CrossroadAgent agent = (CrossroadAgent) myAgent;																				
 																			
 		for (int i = 0; i < 4*3; i++) {
-			Direction direction = getRandomDirection();
 			Orientation orientation = getRandomOrientation();
-																				
+			Direction direction = getRandomDirection();
+
 			if (!agent.addCarToIncomingRoad(orientation, direction)) {
 				continue;
 			}

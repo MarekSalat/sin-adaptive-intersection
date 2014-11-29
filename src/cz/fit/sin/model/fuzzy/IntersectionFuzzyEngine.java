@@ -362,7 +362,6 @@ public class IntersectionFuzzyEngine {
         queueNum.setInputValue(greenPhaseQueueNum);
         frontNum.setInputValue(greenPhaseFrontNum);
 
-
         greenPhaseEngine.process();
         double extendPhase = outExtend.defuzzify();
 
