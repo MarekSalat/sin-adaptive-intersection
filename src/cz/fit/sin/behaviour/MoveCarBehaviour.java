@@ -20,7 +20,9 @@ public class MoveCarBehaviour extends TickerBehaviour {
 		for (Orientation orientation : Orientation.values()) {
 			for (Direction direction : Direction.values()) {
 				if (direction.equals(Direction.CURRENT))
-					agent.removeCarFromOutgoingRoad(orientation, direction);
+					continue;
+
+				agent.removeCarFromOutgoingRoad(orientation, direction);
 			}
 		}
 
