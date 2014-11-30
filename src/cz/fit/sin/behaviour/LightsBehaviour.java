@@ -16,11 +16,11 @@ public class LightsBehaviour extends TickerBehaviour {
 		CrossroadAgent agent = (CrossroadAgent) myAgent;
 		IntersectionPhase newPhase = agent.getEngine().nextPhase(agent.getIntersection("Main"), agent.getIntersectionPhases(), agent.getGreenPhase());
 		if (agent.getGreenPhase() == newPhase) {
-			System.out.println("Semaphore phase unchanged");
+			if (CrossroadAgent.LOG) System.out.println("Semaphore phase unchanged");
 			return;
 		}
 
-		System.out.println("Semaphore phase change");
+		if (CrossroadAgent.LOG) System.out.println("Semaphore phase change");
 		agent.setGreenPhase(newPhase);
 		agent.refreshSemaphores();
 	}

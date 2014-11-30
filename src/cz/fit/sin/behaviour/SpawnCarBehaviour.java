@@ -9,8 +9,8 @@ import java.util.Random;
 
 @SuppressWarnings("serial")
 public class SpawnCarBehaviour extends OneShotBehaviour {
-	Random rand = new Random();
-	private int cnt = 1;	
+	private final int cnt = 5;
+	Random rand = new Random();		
 
 	@Override
 	public void action() {

@@ -37,11 +37,12 @@ import java.util.UUID;
 
 @SuppressWarnings("serial")
 public class CrossroadAgent extends Agent {	
-	public static final int PHASE_CHANGE_PERIOD = 5000;
-	public static final int CAR_MOVE_PERIOD = 1000;
+    public static final boolean LOG = false;		
+	public static final int PHASE_CHANGE_PERIOD = 3800;
+	public static final int CAR_MOVE_PERIOD = 700;
 	public static final int CAR_OUTFLOW = PHASE_CHANGE_PERIOD / CAR_MOVE_PERIOD;
+	
 	private final String carConversationId = UUID.randomUUID().toString();
-
 	private AgentContainer carAgentContainer;
 	private IntersectionPhase greenPhase;
 	private IntersectionFuzzyEngine engine;
@@ -56,7 +57,7 @@ public class CrossroadAgent extends Agent {
 	
 	@Override
 	protected void setup() {
-		System.out.println(getAID().getName() + " is ready");
+		if (LOG) System.out.println(getAID().getName() + " is ready");
 		engine = new IntersectionFuzzyEngine();
 		statistics = new ArrayList<Long>();
 		gui = new GuiRoads(this);
@@ -225,7 +226,7 @@ public class CrossroadAgent extends Agent {
 		currentRoad.removeFirstVehicle(direction);		
 		nextRoad.putVehicle(Direction.FORWARD, vehicle);		
 		sendMessageToCarAgent("car-" + worldBuilder.done().find(vehicle).properties.id);
-		System.out.println("move: " + worldBuilder.done().find(vehicle).properties.id);
+		if (LOG) System.out.println("move: " + worldBuilder.done().find(vehicle).properties.id);
 		
 		return true;
 	}
@@ -239,7 +240,7 @@ public class CrossroadAgent extends Agent {
 		Vehicle vehicle = road.line.get(Direction.FORWARD).getFirst();
 		road.removeFirstVehicle(Direction.FORWARD);		
 		sendMessageToCarAgent("car-" + worldBuilder.done().find(vehicle).properties.id);
-        System.out.println("remove: " + worldBuilder.done().find(vehicle).properties.id);
+		if (LOG) System.out.println("remove: " + worldBuilder.done().find(vehicle).properties.id);
         worldBuilder.done().vehicles.remove(worldBuilder.done().find(vehicle));
 		
 		return true;
@@ -254,7 +255,7 @@ public class CrossroadAgent extends Agent {
 		WorldObject<Vehicle> vehicle = worldBuilder.add(Vehicle.class);		
 		road.putVehicle(direction, vehicle.object);				
 		spawnNewCarAgent(vehicle.properties.id.toString());
-		System.out.println("add: " + vehicle.properties.id);
+		if (LOG) System.out.println("add: " + vehicle.properties.id);
 				
 		return true;
 	}
@@ -302,6 +303,6 @@ public class CrossroadAgent extends Agent {
 	/*aktualizuje statistiky v gui*/
 	public void refreshStatistics() {	
 		gui.setStats(getStatisticalCount(), getStatisticalAverage());
-		System.out.println("[statistiky] pocet: " + getStatisticalCount() + "; prumer: " + getStatisticalAverage());
+		if (LOG) System.out.println("[statistiky] pocet: " + getStatisticalCount() + "; prumer: " + getStatisticalAverage());
 	}
 }

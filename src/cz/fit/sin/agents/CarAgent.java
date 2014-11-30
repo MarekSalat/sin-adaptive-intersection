@@ -28,7 +28,7 @@ public class CarAgent extends Agent {
 		start = System.nanoTime(); 
 		status = Status.WAITING;
 		carConversationId = args[0].toString();
-		System.out.println( "agent: " +  getLocalName());
+		if (CrossroadAgent.LOG) System.out.println( "agent: " +  getLocalName());
 		addBehaviour(new CarMessageListener(carConversationId));
 	}
 	
