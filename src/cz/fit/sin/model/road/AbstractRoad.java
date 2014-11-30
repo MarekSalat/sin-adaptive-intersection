@@ -25,7 +25,12 @@ public abstract class AbstractRoad implements Road {
 
     @Override
     public boolean isFull(){
-        return getVehiclesCount() >= capacity;
+        return isFull(Direction.FORWARD) && isFull(Direction.LEFT) && isFull(Direction.RIGHT);
+    }
+
+    @Override
+    public boolean isFull(Direction direction) {
+        return getVehiclesCount(direction) >= capacity;
     }
 
     @Override

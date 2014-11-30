@@ -9,6 +9,7 @@ import cz.fit.sin.model.intersection.Direction;
  */
 public interface Road {
     boolean isFull();
+    boolean isFull(Direction direction);
     boolean isEmpty();
     boolean isEmpty(Direction forward);
 

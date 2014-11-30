@@ -28,7 +28,7 @@ public class WorldBuilder {
         registerFactory(Road.class, new Factory() {
             @Override
             public Object create() {
-                return new IntRoad(21);
+                return new IntRoad(16);
             }
         });
     }

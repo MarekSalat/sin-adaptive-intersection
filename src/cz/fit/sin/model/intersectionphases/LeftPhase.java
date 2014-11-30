@@ -29,6 +29,10 @@ public class LeftPhase extends AbstractPhase {
         super(orientation);
     }
 
+    public LeftPhase(Orientation orientation, int carFlowPerTimeUnit) {
+        super(orientation, carFlowPerTimeUnit);
+    }
+
     @Override
     public List<Pair<Orientation, Direction>> getActiveSemaphoresInPhase() {
         return activeSemaphores;

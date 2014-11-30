@@ -24,7 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class CrossroadAgent extends Agent {		
+public class CrossroadAgent extends Agent {
+	public static final int PHASE_CHANGE_PERIOD = 2000;
+	public static final int CAR_MOVE_PERIOD = 500;
+	public static final int CAR_FLOW = PHASE_CHANGE_PERIOD / CAR_MOVE_PERIOD;
+
 	private IntersectionFuzzyEngine engine;
 	private List<IntersectionPhase> phases;
 	public IntersectionPhase greenPhase;	
@@ -68,17 +72,32 @@ public class CrossroadAgent extends Agent {
 		setGreenPhase(phases.get(0));	
 	}	
 	
-	/*simulace*/
 	public void startSimulation() {
 		refreshSemaphores();		
-		addBehaviour(new LightsBehaviour(this, 2000));
-		addBehaviour(new MoveCarBehaviour(this, 500));
+		addBehaviour(new LightsBehaviour(this, PHASE_CHANGE_PERIOD));
+		addBehaviour(new MoveCarBehaviour(this, CAR_MOVE_PERIOD));
 	}
 	
-	/*vygeneruje svet*/
 	public void prepareWorld () {
 		this.worldBuilder = new WorldBuilder();
 		WorldObject<Intersection> intersection = worldBuilder.add(Intersection.class);
+
+//		todo: odkometuj pokud chces do sveta davat i auta pres worldBuilder.add(Vehicle.class); :)
+//		worldBuilder.registerFactory(Vehicle.class, new WorldBuilder.Factory() {
+//			@Override
+//			public Object create() {
+//				return new Vehicle();
+//			}
+//		});
+
+//		todo: odkomentuj pokud chces do sveta misto IntRoad davat QueueRoad
+//		worldBuilder.registerFactory(Road.class, new WorldBuilder.Factory() {
+//			@Override
+//			public Object create() {
+//				return new QueueRoad(16);
+//			}
+//		});
+
 		intersection.properties.name = "Main";
 		worldBuilder.addRoadsAt(intersection, Orientation.NORTH);
         worldBuilder.addRoadsAt(intersection, Orientation.SOUTH);
@@ -86,68 +105,55 @@ public class CrossroadAgent extends Agent {
         worldBuilder.addRoadsAt(intersection, Orientation.WEST);
 	}
 		
-	/*vrati svet*/
 	public World getWorld() {
 		return worldBuilder.done();
 	}
 	
-	/*vrati krizovatku*/
 	public Intersection getIntersection(String name) {
 		return getWorld().findByName(Intersection.class, name).object;
 	}
 	
-	/*vrati prichozi cestu*/
 	public Road getIncomingRoad(String name, Orientation orientation) {
 		return getIntersection(name).getIncomingRoadFor(orientation);
 	} 
 	
-	/*vrati odchozi cestu*/
 	public Road getOutgoingRoad(String name, Orientation orientation) {
 		return getIntersection(name).getOutgoingRoadFor(orientation);
 	}
 	
-	/*vrati pocet aut na prichozi ceste*/
 	public int getVehicleCountOnIncomingRoad(String name, Orientation orientation, Direction direction) {
 		return getIncomingRoad(name, orientation).getVehiclesCount(direction);
 	}
 	
-	/*vrati pocet aut na odchozi ceste*/
 	public int getVehicleCountOnOutgoingRoad(String name, Orientation orientation) {
 		return getOutgoingRoad(name, orientation).getVehiclesCount();
 	}
 	
-	/*vrati seznam fazi*/
 	public List<IntersectionPhase> getIntersectionPhases() {
 		return phases;
 	}
 	
-	/*vrati aktualni fazi*/
 	public IntersectionPhase getGreenPhase() {
 		return greenPhase;
 	}
 	
-	/*nastavi fazi*/
 	public void setGreenPhase(IntersectionPhase newPhase) {
 		newPhase.setSemaphoreLights(getIntersection("Main"));
 		greenPhase = newPhase;
 	}
 	
-	/*vrati engine*/
 	public IntersectionFuzzyEngine getEngine() {
 		return engine;
 	}
 	
-	/*je zelena*/
 	public boolean isSemaphoreGreen(String name, Orientation orientation, Direction direction) {
 		return getIntersection(name).getSemaphoreLight(orientation, direction).equals(Light.GREEN);
 	}
 	
-	/*test svetel*/
 	public int getSemaphoreLightIndex(String name, Orientation orientation, Direction direction) {
 		return isSemaphoreGreen(name, orientation, direction) ? 1 : 0;
 	}
 		
-	/*pregeneruje semafory*/
 	public void refreshSemaphores() {
 		for (Integer index : Semaphores.MAPPING.keySet()) {
 			Pair<Orientation, Direction> pair = Semaphores.MAPPING.get(index);
@@ -157,7 +163,6 @@ public class CrossroadAgent extends Agent {
 		gui.setSemaphores(lights, getGreenPhaseIndex());
 	}
 	
-	/*pregeneruje auta*/
 	public void refreshCars() {
 		for (Integer index : Semaphores.MAPPING.keySet()) {
 			Pair<Orientation, Direction> pair = Semaphores.MAPPING.get(index);
@@ -173,13 +178,11 @@ public class CrossroadAgent extends Agent {
 		gui.setLeaveCars(outgoingCars);
 	}	
 
-	/*vrati cislo faze*/
 	public int getGreenPhaseIndex() {
 		return phases.indexOf(greenPhase);
 	}
 				
-	/*prida auto*/
-	public void addCar() {		
+	public void addCar() {
 		addBehaviour(new SpawnCarBehaviour());
 	}
 
@@ -187,7 +190,7 @@ public class CrossroadAgent extends Agent {
 		IntRoad currentRoad = (IntRoad) getIntersection("Main").getIncomingRoadFor(orientation);
 		IntRoad nextRoad = (IntRoad) getIntersection("Main").getOutgoingRoadFor(orientation.toAbsolute(direction));
 
-		if (direction.equals(Direction.CURRENT) || !isSemaphoreGreen("Main", orientation, direction) || currentRoad.isEmpty(direction) || nextRoad.isFull())
+		if (direction.equals(Direction.CURRENT) || !isSemaphoreGreen("Main", orientation, direction) || currentRoad.isEmpty(direction) || nextRoad.isFull(direction))
 			return false;
 
 		currentRoad.line.put(direction, currentRoad.line.get(direction)-1);
@@ -208,10 +211,10 @@ public class CrossroadAgent extends Agent {
 
 	public boolean addCarToIncomingRoad(Orientation orientation, Direction direction) {
 		IntRoad road = (IntRoad) getIncomingRoad("Main", orientation);
-		if (road.isFull() || direction.equals(Direction.CURRENT))
+		if (road.isFull(direction) || direction.equals(Direction.CURRENT))
 			return false;
 
-		road.line.put(direction, (road.getVehiclesCount() + 1));
+		road.line.put(direction, (road.getVehiclesCount(direction) + 1));
 
 		return true;
 	}

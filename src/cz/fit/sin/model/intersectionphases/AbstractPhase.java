@@ -12,11 +12,16 @@ import java.util.List;
  * Time: 13:52
  */
 public abstract class AbstractPhase  implements IntersectionPhase {
-
+    private final int CAR_FLOW_PER_TIME_UNIT;
     private Orientation orientation;
 
     public AbstractPhase(Orientation orientation){
+        this(orientation, 4);
+    }
+
+    public AbstractPhase(Orientation orientation, int carFlowPerTimeUnit){
         this.orientation = orientation;
+        this.CAR_FLOW_PER_TIME_UNIT = carFlowPerTimeUnit;
     }
 
     public Orientation getOrientation(){

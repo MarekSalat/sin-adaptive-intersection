@@ -5,6 +5,6 @@ package cz.fit.sin.model.vehicles;
 * Date: 17.11.14
 * Time: 9:45
 */
-public interface Vehicle {
+public class Vehicle {
 
 }

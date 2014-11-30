@@ -24,8 +24,9 @@ public class QueueRoad extends AbstractRoad{
     }
 
     public boolean putVehicle(Direction direction, Vehicle vehicle){
-        if(getVehiclesCount() >= capacity)
+        if(isFull(direction))
             return false;
+
         line.get(direction).addLast(vehicle);
         return true;
     }
@@ -35,11 +36,12 @@ public class QueueRoad extends AbstractRoad{
     }
 
     public boolean isFirst(Direction direction, Vehicle vehicle){
-        if(line.get(direction).size() <= 0) return false;
-        return line.get(direction).getFirst() == vehicle;
+        return !isEmpty(direction) && line.get(direction).getFirst() == vehicle;
     }
 
     public void removeFirstVehicle(Direction direction){
+        if (isEmpty(direction))
+            return;
         line.get(direction).removeFirst();
     }
 

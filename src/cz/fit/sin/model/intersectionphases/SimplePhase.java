@@ -31,6 +31,10 @@ public class SimplePhase extends AbstractPhase {
         super(orientation);
     }
 
+    public SimplePhase(Orientation orientation, int carFlowPerTimeUnit) {
+        super(orientation, carFlowPerTimeUnit);
+    }
+
     @Override
     public List<Pair<Orientation, Direction>> getActiveSemaphoresInPhase() {
         return activeSemaphores;
