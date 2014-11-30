@@ -243,7 +243,7 @@ public class GuiRoads extends JFrame{
 
                 .addGroup(layout.createParallelGroup(LEADING)
             			 .addComponent(btnStart)
-            			 .addComponent(btnStop)
+            			 //.addComponent(btnStop)
             			 .addComponent(btnAddCar)
             			 .addComponent(this.imagephase)
             			 
@@ -272,7 +272,7 @@ public class GuiRoads extends JFrame{
                 
         );
 
-        layout.linkSize(SwingConstants.HORIZONTAL, btnStart, btnStop, btnAddCar, this.imagephase);
+        layout.linkSize(SwingConstants.HORIZONTAL, btnStart/*, btnStop*/, btnAddCar, this.imagephase);
         layout.linkSize(SwingConstants.HORIZONTAL, this.number_cars, this.leave_cars_north, this.leave_cars_south, this.leave_cars_west, this.leave_cars_east);
  
 
@@ -280,7 +280,7 @@ public class GuiRoads extends JFrame{
 
         layout.setVerticalGroup(layout.createSequentialGroup()
     		.addComponent(btnStart)
-            .addComponent(btnStop)
+            //.addComponent(btnStop)
             .addComponent(btnAddCar)
             .addComponent(this.imagephase)
             .addGroup(layout.createParallelGroup(LEADING)
