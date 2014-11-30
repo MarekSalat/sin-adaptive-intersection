@@ -44,6 +44,8 @@ public class GuiRoads extends JFrame{
 	private JLabel  	leave_cars_south;
 	private JLabel  	leave_cars_west;
 	private JLabel  	leave_cars_east;
+	private JLabel  	count_leave_cars;
+	private JLabel  	average_waiting_time;
 
 	public GuiRoads(final CrossroadAgent crossroadAgent) {
 		super();
@@ -204,11 +206,21 @@ public class GuiRoads extends JFrame{
         // === ADD ELEM TO BOX - jlabel
         //JLabel label_1   = new JLabel("Roads - cols:");
         //JLabel label_2   = new JLabel("Roads - rows:");
-        JLabel label_3   = new JLabel("Number of cars:");
+
+        JLabel label_8   = new JLabel("Number of cars:");
+        JLabel label_9   = new JLabel("Avg waiting time:");
+        
+        JLabel label_3   = new JLabel("Current cars:");
         JLabel label_4   = new JLabel("Leave - North:");
         JLabel label_5   = new JLabel("Leave - South:");
         JLabel label_6   = new JLabel("Leave - West:");
         JLabel label_7   = new JLabel("Leave - East:");
+        
+        this.count_leave_cars = new JLabel("0");
+        this.count_leave_cars.setMinimumSize(new Dimension( 30, 16 ));
+        
+        this.average_waiting_time = new JLabel("0");
+        this.average_waiting_time.setMinimumSize(new Dimension( 30, 16 ));
         
         this.number_cars = new JLabel("0");
         this.number_cars.setMinimumSize(new Dimension( 30, 16 ));
@@ -242,6 +254,8 @@ public class GuiRoads extends JFrame{
 			            		          .addComponent(label_5)
 			            		          .addComponent(label_6)
 			            		          .addComponent(label_7)
+			            		          .addComponent(label_8)
+			            		          .addComponent(label_9)
 	          		            		  )
 	         		            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 			            		          .addComponent(this.number_cars)
@@ -249,6 +263,8 @@ public class GuiRoads extends JFrame{
 			            		          .addComponent(this.leave_cars_south)
 			            		          .addComponent(this.leave_cars_west)
 			            		          .addComponent(this.leave_cars_east)
+			            		          .addComponent(this.count_leave_cars)
+			            		          .addComponent(this.average_waiting_time)
 	         		            		  )
 
 	          		             )
@@ -303,7 +319,23 @@ public class GuiRoads extends JFrame{
 	                		.addComponent(this.leave_cars_east)
 	                		)
 
-           )	
+            )	
+        	.addGroup(layout.createParallelGroup(LEADING)
+        	                		
+	                .addGroup(layout.createParallelGroup(BASELINE)
+	                		.addComponent(label_8)
+	                		.addComponent(this.count_leave_cars)
+	                		)
+
+            )	
+        	.addGroup(layout.createParallelGroup(LEADING)
+        	                		
+	                .addGroup(layout.createParallelGroup(BASELINE)
+	                		.addComponent(label_9)
+	                		.addComponent(this.average_waiting_time)
+	                		)
+
+            )	
         );
  
         pack();
@@ -326,10 +358,11 @@ public class GuiRoads extends JFrame{
 		this.leave_cars_south.setText("0");
 		this.leave_cars_west.setText("0");
 		this.leave_cars_east.setText("0");
+		this.count_leave_cars.setText("0");
+		this.average_waiting_time.setText("0");
 
 		// phase
 		roadsSimpleGen.changeIconPhases(this.imagephase, -1);
-		
 	}
 	
 	/* === Classes for listeners === */
@@ -472,6 +505,23 @@ public class GuiRoads extends JFrame{
 		this.leave_cars_south.setText(Integer.toString(cars[Semaphores.LEAVE_SOUTH]));
 		this.leave_cars_west.setText(Integer.toString(cars[Semaphores.LEAVE_WEST]));
 		this.leave_cars_east.setText(Integer.toString(cars[Semaphores.LEAVE_EAST]));
+	}
+	
+	public void setStats(int count_leave_cars, double average_waiting_time){
+		String count = "0";
+		String avg	 = "0";
+		
+		try{
+			avg   = String.format("%.3f", average_waiting_time);
+			count = Integer.toString(count_leave_cars);
+
+			this.count_leave_cars.setText(count);
+			this.average_waiting_time.setText(avg);
+		}
+		catch(Exception e){
+			this.count_leave_cars.setText("0");
+			this.average_waiting_time.setText("0");
+		}
 	}
 	
 	
