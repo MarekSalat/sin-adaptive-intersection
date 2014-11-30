@@ -5,7 +5,7 @@ import cz.fit.sin.model.intersection.Intersection;
 import cz.fit.sin.model.intersection.Orientation;
 import cz.fit.sin.model.road.QueueRoad;
 import cz.fit.sin.model.road.Road;
-import cz.fit.sin.model.vehicles.Car;
+import cz.fit.sin.model.vehicles.Vehicle;
 import cz.fit.sin.model.world.World;
 import cz.fit.sin.model.world.WorldObject;
 import junit.framework.Assert;
@@ -79,9 +79,9 @@ public class WorldBuilderTest {
         Assert.assertNotNull(wb.getFactory(Road.class));
         QueueRoad road = (QueueRoad) wb.create(Road.class);
 
-        Car car = new Car();
+        Vehicle car = new Vehicle();
         Assert.assertTrue(road.putVehicle(Direction.FORWARD, car));
-        Assert.assertFalse(road.putVehicle(Direction.FORWARD, new Car()));
+        Assert.assertFalse(road.putVehicle(Direction.FORWARD, new Vehicle()));
 
         Assert.assertEquals(1, road.getVehiclesCount());
         Assert.assertEquals(1, road.getVehiclesCount(Direction.FORWARD));

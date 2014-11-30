@@ -27,13 +27,14 @@ import java.util.List;
 public class CrossroadAgent extends Agent {
 	public static final int PHASE_CHANGE_PERIOD = 2000;
 	public static final int CAR_MOVE_PERIOD = 500;
-	public static final int CAR_FLOW = PHASE_CHANGE_PERIOD / CAR_MOVE_PERIOD;
+	public static final int CAR_OUTFLOW = PHASE_CHANGE_PERIOD / CAR_MOVE_PERIOD;
 
+	public IntersectionPhase greenPhase;
 	private IntersectionFuzzyEngine engine;
 	private List<IntersectionPhase> phases;
-	public IntersectionPhase greenPhase;	
 	private WorldBuilder worldBuilder;
 	private GuiRoads gui;
+
 	private int lights[];
 	private int incomingCars[];
 	private int outgoingCars[];
@@ -50,24 +51,24 @@ public class CrossroadAgent extends Agent {
 		
 		/*inicializace fazi*/
 		phases = new ArrayList<>();
-		phases.add(new SimplePhase(Orientation.NORTH));
-		phases.add(new SimplePhase(Orientation.EAST));
-		phases.add(new SimplePhase(Orientation.SOUTH));
-		phases.add(new SimplePhase(Orientation.WEST));
+		phases.add(new SimplePhase(Orientation.NORTH, CAR_OUTFLOW));
+		phases.add(new SimplePhase(Orientation.EAST, CAR_OUTFLOW));
+		phases.add(new SimplePhase(Orientation.SOUTH, CAR_OUTFLOW));
+		phases.add(new SimplePhase(Orientation.WEST, CAR_OUTFLOW));
 
-		phases.add(new ForwardPhase(Orientation.NORTH));
-		phases.add(new ForwardPhase(Orientation.WEST));
+		phases.add(new ForwardPhase(Orientation.NORTH, CAR_OUTFLOW));
+		phases.add(new ForwardPhase(Orientation.WEST, CAR_OUTFLOW));
 
-		phases.add(new LeftPhase(Orientation.NORTH));
-		phases.add(new LeftPhase(Orientation.WEST));
+		phases.add(new LeftPhase(Orientation.NORTH, CAR_OUTFLOW));
+		phases.add(new LeftPhase(Orientation.WEST, CAR_OUTFLOW));
 
-		phases.add(new LeftRightPhase(Orientation.NORTH));
-		phases.add(new LeftRightPhase(Orientation.EAST));
-		phases.add(new LeftRightPhase(Orientation.SOUTH));
-		phases.add(new LeftRightPhase(Orientation.WEST));
+		phases.add(new LeftRightPhase(Orientation.NORTH, CAR_OUTFLOW));
+		phases.add(new LeftRightPhase(Orientation.EAST, CAR_OUTFLOW));
+		phases.add(new LeftRightPhase(Orientation.SOUTH, CAR_OUTFLOW));
+		phases.add(new LeftRightPhase(Orientation.WEST, CAR_OUTFLOW));
 
-		phases.add(new RightForwardPhase(Orientation.NORTH));
-		phases.add(new RightForwardPhase(Orientation.WEST));
+		phases.add(new RightForwardPhase(Orientation.NORTH, CAR_OUTFLOW));
+		phases.add(new RightForwardPhase(Orientation.WEST, CAR_OUTFLOW));
 
 		setGreenPhase(phases.get(0));	
 	}	
@@ -95,7 +96,7 @@ public class CrossroadAgent extends Agent {
 //		worldBuilder.registerFactory(Road.class, new WorldBuilder.Factory() {
 //			@Override
 //			public Object create() {
-//				return new QueueRoad(16);
+//				return new QueueRoad(WorldBuilder.DEFAULT_ROAD_CAPACITY);
 //			}
 //		});
 
@@ -122,13 +123,11 @@ public class CrossroadAgent extends Agent {
 		return getIntersection(name).getOutgoingRoadFor(orientation);
 	}
 
-	/*vrati celkovy pocet aut na prijezdovych cestach*/
 	public int getVehicleCountOnAllIncomingRoads(String name) {
 		int cnt = 0;
-		cnt += getIncomingRoad(name, Orientation.SOUTH).getVehiclesCount();
-		cnt += getIncomingRoad(name, Orientation.NORTH).getVehiclesCount();	
-		cnt += getIncomingRoad(name, Orientation.EAST).getVehiclesCount();	
-		cnt += getIncomingRoad(name, Orientation.WEST).getVehiclesCount();					 
+		for (Orientation orientation : Orientation.values()) {
+			cnt += getIncomingRoad(name, orientation).getVehiclesCount();
+		}
 		return cnt;	
 	}
 	
@@ -173,8 +172,7 @@ public class CrossroadAgent extends Agent {
 
 		gui.setSemaphores(lights, getGreenPhaseIndex());
 	}
-	
-	/*pregeneruje auta*/
+
 	public void refreshCars() {
 		for (Integer index : Semaphores.MAPPING.keySet()) {
 			Pair<Orientation, Direction> pair = Semaphores.MAPPING.get(index);

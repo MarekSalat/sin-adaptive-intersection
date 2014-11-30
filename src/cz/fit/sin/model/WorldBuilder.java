@@ -22,13 +22,15 @@ import java.util.Map;
  * Time: 10:16
  */
 public class WorldBuilder {
+    public static final int DEFAULT_ROAD_CAPACITY = 16;
+
     private final World world = new World();
 
     public WorldBuilder(){
         registerFactory(Road.class, new Factory() {
             @Override
             public Object create() {
-                return new IntRoad(16);
+                return new IntRoad(DEFAULT_ROAD_CAPACITY);
             }
         });
     }
@@ -192,13 +194,6 @@ public class WorldBuilder {
      */
     public static World createSimpleWorld(){
         WorldBuilder wb = new WorldBuilder();
-
-        wb.registerFactory(Road.class, new Factory() {
-            @Override
-            public Object create() {
-                return new IntRoad(22);
-            }
-        });
 
         WorldObject<Intersection> a = wb.add(Intersection.class);
         a.properties.name = "A";

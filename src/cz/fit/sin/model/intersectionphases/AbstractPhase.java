@@ -12,16 +12,18 @@ import java.util.List;
  * Time: 13:52
  */
 public abstract class AbstractPhase  implements IntersectionPhase {
-    private final int CAR_FLOW_PER_TIME_UNIT;
+    private final int CAR_OUTFLOW;
+    private final boolean OPTIMIZE = false;
+
     private Orientation orientation;
 
     public AbstractPhase(Orientation orientation){
-        this(orientation, 4);
+        this(orientation, Integer.MAX_VALUE-1);
     }
 
-    public AbstractPhase(Orientation orientation, int carFlowPerTimeUnit){
+    public AbstractPhase(Orientation orientation, int carOutflowPerTimeUnit){
         this.orientation = orientation;
-        this.CAR_FLOW_PER_TIME_UNIT = carFlowPerTimeUnit;
+        this.CAR_OUTFLOW = carOutflowPerTimeUnit;
     }
 
     public Orientation getOrientation(){
@@ -40,13 +42,14 @@ public abstract class AbstractPhase  implements IntersectionPhase {
     }
 
     public int getQueueNum(Intersection intersection) {
-        int queueNum = 0;
+        int finalQueueNum = 0;
 
         for (Pair<Orientation, Direction> pair : getActiveSemaphoresInPhase()) {
-            queueNum += intersection.getIncomingRoadVehicleCount(pair.first, pair.second);
+            int queueNum = intersection.getIncomingRoadVehicleCount(pair.first, pair.second);
+            finalQueueNum += OPTIMIZE && queueNum > CAR_OUTFLOW ? CAR_OUTFLOW : queueNum;
         }
 
-        return (int) Math.ceil(queueNum / (double) getActiveSemaphoresInPhase().size());
+        return finalQueueNum;
     }
 
     public int getFrontNum(Intersection intersection) {
@@ -69,19 +72,12 @@ public abstract class AbstractPhase  implements IntersectionPhase {
 
     public int getRedTime(Intersection intersection) {
         int total = 0;
-        int count = 0;
         // get total number of vehicles on incoming roads
         for (Orientation _orientation : Orientation.values()){
-            total += intersection.getIncomingRoadVehicleCount(_orientation);
-            count++;
+            int count = intersection.getIncomingRoadVehicleCount(_orientation);
+            total += OPTIMIZE && count > CAR_OUTFLOW ? CAR_OUTFLOW : count;
         }
 
-        int onGreen = 0;
-        // get number of vehicles on incoming roads for green phase
-        for (Pair<Orientation, Direction> pair : getActiveSemaphoresInPhase()) {
-            onGreen += intersection.getIncomingRoadVehicleCount(pair.first, pair.second);
-        }
-
-        return (int) Math.ceil((total - onGreen) / (double) (count - getActiveSemaphoresInPhase().size()));
+        return total - getQueueNum(intersection);
     }
 }
