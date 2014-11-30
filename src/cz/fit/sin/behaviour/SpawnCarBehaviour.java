@@ -10,22 +10,22 @@ import java.util.Random;
 @SuppressWarnings("serial")
 public class SpawnCarBehaviour extends OneShotBehaviour {
 	Random rand = new Random();
+	private int cnt = 5;	
 
 	@Override
 	public void action() {
-		CrossroadAgent agent = (CrossroadAgent) myAgent;																				
+		CrossroadAgent agent = (CrossroadAgent) myAgent;													
 
 		int added = 0;
-		for (int i = 0; i < 4*3 && added < 5; i++) {
+		for (int i = 0; i < 4*3 && added < cnt; i++) {
 			Orientation orientation = getRandomOrientation();
 			Direction direction = getRandomDirection();
 
 			if (!agent.addCarToIncomingRoad(orientation, direction)) {
 				continue;
 			}
+			
 			added++;
-
-			System.out.println("+ auto");
 			agent.refreshCars();
 		}																			
 	}

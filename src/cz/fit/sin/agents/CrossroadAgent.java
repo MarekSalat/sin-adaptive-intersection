@@ -14,21 +14,28 @@ import cz.fit.sin.model.intersection.Light;
 import cz.fit.sin.model.intersection.Orientation;
 import cz.fit.sin.model.intersectionphases.*;
 import cz.fit.sin.model.road.IntRoad;
+import cz.fit.sin.model.road.QueueRoad;
 import cz.fit.sin.model.road.Road;
+import cz.fit.sin.model.vehicles.Vehicle;
 import cz.fit.sin.model.world.World;
 import cz.fit.sin.model.world.WorldObject;
 import cz.fit.sin.utils.Pair;
 import jade.core.Agent;
+import jade.core.Profile;
+import jade.core.ProfileImpl;
+import jade.core.Runtime;
+import jade.wrapper.AgentContainer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("serial")
 public class CrossroadAgent extends Agent {
-	public static final int PHASE_CHANGE_PERIOD = 2000;
-	public static final int CAR_MOVE_PERIOD = 500;
+	public static final int PHASE_CHANGE_PERIOD = 5000;
+	public static final int CAR_MOVE_PERIOD = 1000;
 	public static final int CAR_OUTFLOW = PHASE_CHANGE_PERIOD / CAR_MOVE_PERIOD;
 
+	private AgentContainer carAgentContainer;
 	public IntersectionPhase greenPhase;
 	private IntersectionFuzzyEngine engine;
 	private List<IntersectionPhase> phases;
@@ -55,24 +62,24 @@ public class CrossroadAgent extends Agent {
 		phases.add(new SimplePhase(Orientation.EAST, CAR_OUTFLOW));
 		phases.add(new SimplePhase(Orientation.SOUTH, CAR_OUTFLOW));
 		phases.add(new SimplePhase(Orientation.WEST, CAR_OUTFLOW));
-
 		phases.add(new ForwardPhase(Orientation.NORTH, CAR_OUTFLOW));
 		phases.add(new ForwardPhase(Orientation.WEST, CAR_OUTFLOW));
-
 		phases.add(new LeftPhase(Orientation.NORTH, CAR_OUTFLOW));
 		phases.add(new LeftPhase(Orientation.WEST, CAR_OUTFLOW));
-
 		phases.add(new LeftRightPhase(Orientation.NORTH, CAR_OUTFLOW));
 		phases.add(new LeftRightPhase(Orientation.EAST, CAR_OUTFLOW));
 		phases.add(new LeftRightPhase(Orientation.SOUTH, CAR_OUTFLOW));
 		phases.add(new LeftRightPhase(Orientation.WEST, CAR_OUTFLOW));
-
 		phases.add(new RightForwardPhase(Orientation.NORTH, CAR_OUTFLOW));
 		phases.add(new RightForwardPhase(Orientation.WEST, CAR_OUTFLOW));
-
 		setGreenPhase(phases.get(0));	
+		
+		/*kontejner na auta*/
+		Profile profile = new ProfileImpl();
+		carAgentContainer = Runtime.instance().createAgentContainer(profile);
 	}	
 	
+	/*simulace*/
 	public void startSimulation() {
 		refreshSemaphores();		
 		addBehaviour(new LightsBehaviour(this, PHASE_CHANGE_PERIOD));
@@ -84,21 +91,21 @@ public class CrossroadAgent extends Agent {
 		this.worldBuilder = new WorldBuilder();
 		WorldObject<Intersection> intersection = worldBuilder.add(Intersection.class);
 
-//		todo: odkometuj pokud chces do sveta davat i auta pres worldBuilder.add(Vehicle.class); :)
-//		worldBuilder.registerFactory(Vehicle.class, new WorldBuilder.Factory() {
-//			@Override
-//			public Object create() {
-//				return new Vehicle();
-//			}
-//		});
+		/*odkometuj pokud chces do sveta davat i auta pres worldBuilder.add(Vehicle.class); */
+		worldBuilder.registerFactory(Vehicle.class, new WorldBuilder.Factory() {
+			@Override
+			public Object create() {
+				return new Vehicle();
+			}
+		});
 
-//		todo: odkomentuj pokud chces do sveta misto IntRoad davat QueueRoad
-//		worldBuilder.registerFactory(Road.class, new WorldBuilder.Factory() {
-//			@Override
-//			public Object create() {
-//				return new QueueRoad(WorldBuilder.DEFAULT_ROAD_CAPACITY);
-//			}
-//		});
+		/*odkomentuj pokud chces do sveta misto IntRoad davat QueueRoad*/
+		worldBuilder.registerFactory(Road.class, new WorldBuilder.Factory() {
+			@Override
+			public Object create() {
+				return new QueueRoad(WorldBuilder.DEFAULT_ROAD_CAPACITY);
+			}
+		});
 
 		intersection.properties.name = "Main";
 		worldBuilder.addRoadsAt(intersection, Orientation.NORTH);
@@ -196,36 +203,45 @@ public class CrossroadAgent extends Agent {
 		addBehaviour(new SpawnCarBehaviour());
 	}
 
+	/*posunuti auta*/
 	public boolean moveCarOnIncomingRoad(Orientation orientation, Direction direction) {
-		IntRoad currentRoad = (IntRoad) getIntersection("Main").getIncomingRoadFor(orientation);
-		IntRoad nextRoad = (IntRoad) getIntersection("Main").getOutgoingRoadFor(orientation.toAbsolute(direction));
-
+		QueueRoad currentRoad = (QueueRoad) getIntersection("Main").getIncomingRoadFor(orientation);
+		QueueRoad nextRoad = (QueueRoad) getIntersection("Main").getOutgoingRoadFor(orientation.toAbsolute(direction));
 		if (direction.equals(Direction.CURRENT) || !isSemaphoreGreen("Main", orientation, direction) || currentRoad.isEmpty(direction) || nextRoad.isFull(direction))
 			return false;
 
-		currentRoad.line.put(direction, currentRoad.line.get(direction)-1);
-		nextRoad.line.put(Direction.FORWARD, nextRoad.line.get(Direction.FORWARD)+1);
-
+		Vehicle vehicle = currentRoad.line.get(direction).getFirst();
+		currentRoad.removeFirstVehicle(direction);		
+		nextRoad.putVehicle(Direction.FORWARD, vehicle);
+		System.out.println("move: " + worldBuilder.done().find(vehicle).properties.id);
+		
 		return true;
 	}
 
+	/*odebrani auta*/
 	public boolean removeCarFromOutgoingRoad(Orientation orientation, Direction direction) {
-		IntRoad road = (IntRoad) getIntersection("Main").getOutgoingRoadFor(orientation.toAbsolute(direction));
+		QueueRoad road = (QueueRoad) getIntersection("Main").getOutgoingRoadFor(orientation.toAbsolute(direction));
 		if (direction.equals(Direction.CURRENT) || road.isEmpty(Direction.FORWARD))
 			return false;
 
-		road.line.put(Direction.FORWARD, road.line.get(Direction.FORWARD)-1);
-        
+		Vehicle vehicle = road.line.get(Direction.FORWARD).getFirst();
+		road.removeFirstVehicle(Direction.FORWARD);		
+        System.out.println("remove: " + worldBuilder.done().find(vehicle).properties.id);
+        worldBuilder.done().vehicles.remove(worldBuilder.done().find(vehicle));
+		
 		return true;
 	}
 
+	/*pridani auta*/
 	public boolean addCarToIncomingRoad(Orientation orientation, Direction direction) {
-		IntRoad road = (IntRoad) getIncomingRoad("Main", orientation);
+		QueueRoad road = (QueueRoad) getIncomingRoad("Main", orientation);
 		if (road.isFull(direction) || direction.equals(Direction.CURRENT))
 			return false;
 
-		road.line.put(direction, (road.getVehiclesCount(direction) + 1));
-
+		WorldObject<Vehicle> vehicle = worldBuilder.add(Vehicle.class);		
+		road.putVehicle(direction, vehicle.object);		
+		System.out.println("add: " + vehicle.properties.id.toString()); //SMAZAT
+		
 		return true;
 	}
 }
