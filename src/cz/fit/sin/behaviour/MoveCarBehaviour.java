@@ -36,11 +36,12 @@ public class MoveCarBehaviour extends TickerBehaviour {
 			}
 		}
 
+		/*
         System.out.print(agent.getVehicleCountOnOutgoingRoad("Main", Orientation.NORTH) + "-");
         System.out.print(agent.getVehicleCountOnOutgoingRoad("Main", Orientation.EAST) + "-");
         System.out.print(agent.getVehicleCountOnOutgoingRoad("Main", Orientation.SOUTH) + "-");
         System.out.println(agent.getVehicleCountOnOutgoingRoad("Main", Orientation.WEST));
-		
+		*/
 		agent.refreshCars();
 	}
 }

@@ -78,6 +78,7 @@ public class CrossroadAgent extends Agent {
 		addBehaviour(new MoveCarBehaviour(this, CAR_MOVE_PERIOD));
 	}
 	
+	/*vygeneruje svet*/
 	public void prepareWorld () {
 		this.worldBuilder = new WorldBuilder();
 		WorldObject<Intersection> intersection = worldBuilder.add(Intersection.class);
@@ -119,6 +120,16 @@ public class CrossroadAgent extends Agent {
 	
 	public Road getOutgoingRoad(String name, Orientation orientation) {
 		return getIntersection(name).getOutgoingRoadFor(orientation);
+	}
+
+	/*vrati celkovy pocet aut na prijezdovych cestach*/
+	public int getVehicleCountOnAllIncomingRoads(String name) {
+		int cnt = 0;
+		cnt += getIncomingRoad(name, Orientation.SOUTH).getVehiclesCount();
+		cnt += getIncomingRoad(name, Orientation.NORTH).getVehiclesCount();	
+		cnt += getIncomingRoad(name, Orientation.EAST).getVehiclesCount();	
+		cnt += getIncomingRoad(name, Orientation.WEST).getVehiclesCount();					 
+		return cnt;	
 	}
 	
 	public int getVehicleCountOnIncomingRoad(String name, Orientation orientation, Direction direction) {
@@ -163,6 +174,7 @@ public class CrossroadAgent extends Agent {
 		gui.setSemaphores(lights, getGreenPhaseIndex());
 	}
 	
+	/*pregeneruje auta*/
 	public void refreshCars() {
 		for (Integer index : Semaphores.MAPPING.keySet()) {
 			Pair<Orientation, Direction> pair = Semaphores.MAPPING.get(index);
