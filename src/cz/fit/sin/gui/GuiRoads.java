@@ -359,7 +359,7 @@ public class GuiRoads extends JFrame{
 		this.leave_cars_west.setText("0");
 		this.leave_cars_east.setText("0");
 		this.count_leave_cars.setText("0");
-		this.average_waiting_time.setText("0");
+		this.average_waiting_time.setText("0 s");
 
 		// phase
 		roadsSimpleGen.changeIconPhases(this.imagephase, -1);
@@ -516,11 +516,11 @@ public class GuiRoads extends JFrame{
 			count = Integer.toString(count_leave_cars);
 
 			this.count_leave_cars.setText(count);
-			this.average_waiting_time.setText(avg);
+			this.average_waiting_time.setText(avg + " s");
 		}
 		catch(Exception e){
 			this.count_leave_cars.setText("0");
-			this.average_waiting_time.setText("0");
+			this.average_waiting_time.setText("0 s");
 		}
 	}
 	
