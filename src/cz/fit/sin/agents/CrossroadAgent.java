@@ -3,6 +3,7 @@ package cz.fit.sin.agents;
 import cz.fit.sin.behaviour.LightsBehaviour;
 import cz.fit.sin.behaviour.MoveCarBehaviour;
 import cz.fit.sin.behaviour.SpawnCarBehaviour;
+import cz.fit.sin.behaviour.CrossroadMessageListener;
 import cz.fit.sin.gui.GuiRoads;
 import cz.fit.sin.gui.Semaphores;
 import cz.fit.sin.model.IntersectionPhase;
@@ -13,33 +14,40 @@ import cz.fit.sin.model.intersection.Intersection;
 import cz.fit.sin.model.intersection.Light;
 import cz.fit.sin.model.intersection.Orientation;
 import cz.fit.sin.model.intersectionphases.*;
-import cz.fit.sin.model.road.IntRoad;
 import cz.fit.sin.model.road.QueueRoad;
 import cz.fit.sin.model.road.Road;
 import cz.fit.sin.model.vehicles.Vehicle;
 import cz.fit.sin.model.world.World;
 import cz.fit.sin.model.world.WorldObject;
 import cz.fit.sin.utils.Pair;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
+import jade.lang.acl.ACLMessage;
 import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 
 @SuppressWarnings("serial")
-public class CrossroadAgent extends Agent {
+public class CrossroadAgent extends Agent {	
 	public static final int PHASE_CHANGE_PERIOD = 5000;
 	public static final int CAR_MOVE_PERIOD = 1000;
 	public static final int CAR_OUTFLOW = PHASE_CHANGE_PERIOD / CAR_MOVE_PERIOD;
+	private final String carConversationId = UUID.randomUUID().toString();
 
 	private AgentContainer carAgentContainer;
-	public IntersectionPhase greenPhase;
+	private IntersectionPhase greenPhase;
 	private IntersectionFuzzyEngine engine;
 	private List<IntersectionPhase> phases;
-	private WorldBuilder worldBuilder;
+	private WorldBuilder worldBuilder;	
+	private List<Long> statistics;
 	private GuiRoads gui;
 
 	private int lights[];
@@ -50,6 +58,7 @@ public class CrossroadAgent extends Agent {
 	protected void setup() {
 		System.out.println(getAID().getName() + " is ready");
 		engine = new IntersectionFuzzyEngine();
+		statistics = new ArrayList<Long>();
 		gui = new GuiRoads(this);
 		lights = new int[12];
 		incomingCars = new int[12];
@@ -81,7 +90,8 @@ public class CrossroadAgent extends Agent {
 	
 	/*simulace*/
 	public void startSimulation() {
-		refreshSemaphores();		
+		refreshSemaphores();
+		addBehaviour(new CrossroadMessageListener(carConversationId));
 		addBehaviour(new LightsBehaviour(this, PHASE_CHANGE_PERIOD));
 		addBehaviour(new MoveCarBehaviour(this, CAR_MOVE_PERIOD));
 	}
@@ -198,7 +208,8 @@ public class CrossroadAgent extends Agent {
 	public int getGreenPhaseIndex() {
 		return phases.indexOf(greenPhase);
 	}
-				
+	
+	/*pridani auta z gui*/
 	public void addCar() {
 		addBehaviour(new SpawnCarBehaviour());
 	}
@@ -212,7 +223,8 @@ public class CrossroadAgent extends Agent {
 
 		Vehicle vehicle = currentRoad.line.get(direction).getFirst();
 		currentRoad.removeFirstVehicle(direction);		
-		nextRoad.putVehicle(Direction.FORWARD, vehicle);
+		nextRoad.putVehicle(Direction.FORWARD, vehicle);		
+		sendMessageToCarAgent("car-" + worldBuilder.done().find(vehicle).properties.id);
 		System.out.println("move: " + worldBuilder.done().find(vehicle).properties.id);
 		
 		return true;
@@ -226,6 +238,7 @@ public class CrossroadAgent extends Agent {
 
 		Vehicle vehicle = road.line.get(Direction.FORWARD).getFirst();
 		road.removeFirstVehicle(Direction.FORWARD);		
+		sendMessageToCarAgent("car-" + worldBuilder.done().find(vehicle).properties.id);
         System.out.println("remove: " + worldBuilder.done().find(vehicle).properties.id);
         worldBuilder.done().vehicles.remove(worldBuilder.done().find(vehicle));
 		
@@ -239,9 +252,56 @@ public class CrossroadAgent extends Agent {
 			return false;
 
 		WorldObject<Vehicle> vehicle = worldBuilder.add(Vehicle.class);		
-		road.putVehicle(direction, vehicle.object);		
-		System.out.println("add: " + vehicle.properties.id.toString()); //SMAZAT
-		
+		road.putVehicle(direction, vehicle.object);				
+		spawnNewCarAgent(vehicle.properties.id.toString());
+		System.out.println("add: " + vehicle.properties.id);
+				
 		return true;
+	}
+	
+	/*vypusti agenta auta*/
+	public void spawnNewCarAgent(String id) {
+		try {
+			String args[] = {carConversationId};
+			AgentController agent = carAgentContainer.createNewAgent("car-" + id, CarAgent.class.getCanonicalName(), args);
+			agent.start();
+		} catch (StaleProxyException e) {
+			System.err.println("Error creating car agents");
+			e.printStackTrace();
+		}
+	}
+	
+	/*posle zpravu agentovi auta*/
+	public void sendMessageToCarAgent(String name) {
+		ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
+		request.setConversationId(carConversationId);
+		request.setSender(getAID());
+		request.addReceiver(new AID(name, AID.ISLOCALNAME));
+		send(request);
+	}
+	
+	/*zapise nove statistiky*/
+	public void writeNewStatistics(long time) {
+		statistics.add(time);
+	}
+	
+	/*vrati pocet projetych aut*/
+	public int getStatisticalCount() {
+		return statistics.size();
+	}
+	
+	/*vrati prumerny cas cekani na svetlech*/
+	public double getStatisticalAverage() {
+		if (statistics.isEmpty()) return 0l;
+		double sum = 0.0;
+		int cnt = statistics.size();
+		for (int i = 0; i < cnt; i++) sum += (statistics.get(i) / 1000000000.0);
+		return sum / cnt;
+	}
+	
+	/*aktualizuje statistiky v gui*/
+	public void refreshStatistics() {	
+		gui.setStats(getStatisticalCount(), getStatisticalAverage());
+		System.out.println("[statistiky] pocet: " + getStatisticalCount() + "; prumer: " + getStatisticalAverage());
 	}
 }

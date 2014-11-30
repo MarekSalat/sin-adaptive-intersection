@@ -10,7 +10,7 @@ import java.util.Random;
 @SuppressWarnings("serial")
 public class SpawnCarBehaviour extends OneShotBehaviour {
 	Random rand = new Random();
-	private int cnt = 5;	
+	private int cnt = 1;	
 
 	@Override
 	public void action() {
