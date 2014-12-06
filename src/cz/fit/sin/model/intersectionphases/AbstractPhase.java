@@ -41,6 +41,7 @@ public abstract class AbstractPhase  implements IntersectionPhase {
         }
     }
 
+    @Override
     public int getQueueNum(Intersection intersection) {
         int finalQueueNum = 0;
 
@@ -52,6 +53,7 @@ public abstract class AbstractPhase  implements IntersectionPhase {
         return finalQueueNum;
     }
 
+    @Override
     public int getFrontNum(Intersection intersection) {
         int frontNum = 0;
 
@@ -70,6 +72,7 @@ public abstract class AbstractPhase  implements IntersectionPhase {
         return frontNum;
     }
 
+    @Override
     public int getRedTime(Intersection intersection) {
         int total = 0;
         // get total number of vehicles on incoming roads

@@ -1,10 +1,9 @@
 package cz.fit.sin.agents;
 
+import cz.fit.sin.behaviour.CarMessageListener;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
-import cz.fit.sin.behaviour.CarMessageListener;
 
 @SuppressWarnings("serial")
 public class CarAgent extends Agent {
